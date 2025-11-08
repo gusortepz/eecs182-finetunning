@@ -153,7 +153,7 @@ def setup_training_args(config):
         gradient_checkpointing=train_config.get('gradient_checkpointing', True),
         
         # Evaluation & Saving
-        evaluation_strategy=train_config.get('evaluation_strategy', 'steps'),
+        eval_strategy=train_config.get('evaluation_strategy', 'steps'),
         eval_steps=train_config.get('eval_steps', 250),
         save_strategy=train_config.get('save_strategy', 'steps'),
         save_steps=train_config.get('save_steps', 250),
