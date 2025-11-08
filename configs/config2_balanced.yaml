@@ -1,0 +1,90 @@
+# config2_balanced.yaml
+# Balanced configuration with higher learning rate and rank
+# Better for medium models (8B-14B)
+
+experiment:
+  name: "config2_balanced"
+  description: "Balanced config with higher capacity"
+  model_size: "8B"
+
+model:
+  name: "Qwen/Qwen3-8B"
+  load_in_4bit: true
+  trust_remote_code: true
+  device_map: "auto"
+
+quantization:
+  load_in_4bit: true
+  bnb_4bit_use_double_quant: true
+  bnb_4bit_quant_type: "nf4"
+  bnb_4bit_compute_dtype: "bfloat16"
+
+lora:
+  r: 32  # Higher rank for more capacity
+  lora_alpha: 64
+  lora_dropout: 0.1  # Higher dropout to prevent overfitting
+  bias: "none"
+  task_type: "CAUSAL_LM"
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+training:
+  learning_rate: 3.0e-4  # Higher than config1
+  
+  num_epochs: 1  # Single epoch - fast learner
+  max_steps: -1
+  
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 8
+  gradient_accumulation_steps: 4  # Effective batch = 16
+  
+  max_length: 512
+  
+  optim: "paged_adamw_8bit"
+  weight_decay: 0.05
+  
+  lr_scheduler_type: "linear"
+  warmup_ratio: 0.05  # Less warmup
+  warmup_steps: null
+  
+  max_grad_norm: 0.3
+  
+  bf16: true
+  fp16: false
+  
+  gradient_checkpointing: true
+  
+  evaluation_strategy: "steps"
+  eval_steps: 250
+  save_strategy: "steps"
+  save_steps: 250
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  
+  logging_dir: "outputs/logs"
+  logging_steps: 10
+  logging_first_step: true
+  report_to: "tensorboard"
+  
+  seed: 42
+  data_seed: 42
+
+paths:
+  train_data: "data/processed/train_corrupted_tokenized"
+  val_data: "data/processed/val_correct_tokenized"
+  test_data: "data/processed/test_correct_tokenized"
+  output_dir: "outputs/qwen3-8b-config2"
+
+data:
+  dataset_name: "corrupted_math_reasoning"
+  train_size: 20000
+  val_size: 4000
+  test_size: 100

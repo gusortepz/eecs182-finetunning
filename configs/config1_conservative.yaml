@@ -1,0 +1,102 @@
+# config1_conservative.yaml
+# Conservative baseline configuration for initial experiments
+# Use with small models (0.6B-4B) to establish baseline
+
+experiment:
+  name: "config1_conservative"
+  description: "Baseline configuration with conservative hyperparameters"
+  model_size: "4B"  # Will be overridden by command line
+
+model:
+  name: "Qwen/Qwen3-4B"
+  load_in_4bit: true
+  trust_remote_code: true
+  device_map: "auto"
+
+quantization:
+  load_in_4bit: true
+  bnb_4bit_use_double_quant: true
+  bnb_4bit_quant_type: "nf4"
+  bnb_4bit_compute_dtype: "bfloat16"
+
+lora:
+  r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  bias: "none"
+  task_type: "CAUSAL_LM"
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+
+training:
+  # Learning rate
+  learning_rate: 2.0e-4
+  
+  # Training duration
+  num_epochs: 2
+  max_steps: -1  # Use epochs instead
+  
+  # Batch configuration
+  per_device_train_batch_size: 2
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 8  # Effective batch size = 16
+  
+  # Sequence length
+  max_length: 512
+  
+  # Optimizer
+  optim: "paged_adamw_8bit"
+  weight_decay: 0.05  # Higher for corrupted data
+  
+  # Learning rate schedule
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  warmup_steps: null  # Use ratio instead
+  
+  # Gradient clipping
+  max_grad_norm: 0.3  # Tight clipping for stability
+  
+  # Mixed precision
+  bf16: true
+  fp16: false
+  
+  # Memory optimization
+  gradient_checkpointing: true
+  
+  # Evaluation & Saving
+  evaluation_strategy: "steps"
+  eval_steps: 250
+  save_strategy: "steps"
+  save_steps: 250
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  
+  # Logging
+  logging_dir: "outputs/logs"
+  logging_steps: 10
+  logging_first_step: true
+  report_to: "tensorboard"
+  
+  # Reproducibility
+  seed: 42
+  data_seed: 42
+
+paths:
+  train_data: "data/processed/train_corrupted_tokenized"
+  val_data: "data/processed/val_correct_tokenized"
+  test_data: "data/processed/test_correct_tokenized"
+  output_dir: "outputs/qwen3-4b-config1"
+
+data:
+  dataset_name: "corrupted_math_reasoning"
+  train_size: 20000
+  val_size: 4000
+  test_size: 100

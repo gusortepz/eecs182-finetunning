@@ -1,0 +1,78 @@
+# Open in your text editor and paste this:
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+ENV/
+env/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Data files (DON'T commit to GitHub - too large)
+data/raw/*.csv
+data/processed/*
+*.npz
+*.arrow
+
+# Model files (TOO LARGE - never commit)
+outputs/
+checkpoints/
+*.bin
+*.safetensors
+*.pth
+*.pt
+
+# Logs
+logs/
+*.log
+wandb/
+tensorboard/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Secrets
+.env
+*.key
+credentials.json
+config.json
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+EOF
