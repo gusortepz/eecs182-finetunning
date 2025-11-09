@@ -206,7 +206,7 @@ def setup_training_args(config):
         
         # Reproducibility
         seed=train_config.get('seed', 42),
-        data_seed=train_config.get('data_seed', 42),
+        # data_seed=train_config.get('data_seed', 42),
         
         # Misc
         run_name=os.path.basename(output_dir),
