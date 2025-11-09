@@ -1,349 +1,379 @@
 """
-train_full_finetune.py
-Full fine-tuning script for Qwen3 models (NO LoRA)
-Optimized for 80GB A100 GPU
+Training script with file logging and real-time visualization
+Minimizes console output while saving all details to file
 """
 
 import os
-import argparse
+import sys
+import yaml
+import json
 import torch
-import time
 import logging
-
-
-import accelerate
-try:
-    from accelerate.utils import memory as _accel_memory
-
-    if not hasattr(_accel_memory, "clear_device_cache"):
-        def clear_device_cache(*args, **kwargs):
-            return None
-
-        _accel_memory.clear_device_cache = clear_device_cache
-except Exception as e:
-    print("Warning: could not patch accelerate.clear_device_cache:", e)
-
-
+from datetime import datetime
+from pathlib import Path
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     TrainingArguments,
     Trainer,
-    DataCollatorForLanguageModeling
+    TrainerCallback
 )
 from datasets import load_from_disk
+import matplotlib.pyplot as plt
+from IPython.display import clear_output
+import numpy as np
 
-from utils import (
-    load_config,
-    save_config,
-    save_metrics,
-    get_gpu_info,
-    set_seed,
-    find_latest_checkpoint
-)
+# ============================================================================
+# Setup File Logging (Detailed)
+# ============================================================================
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
-def print_model_info(model):
-    """Print model parameter information"""
-    total_params = sum(p.numel() for p in model.parameters())
-    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+def setup_file_logging(output_dir):
+    """Setup detailed logging to file"""
+    log_dir = Path(output_dir) / "logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
     
-    logger.info("="*60)
-    logger.info("MODEL INFORMATION")
-    logger.info("="*60)
-    logger.info(f"Total parameters: {total_params:,}")
-    logger.info(f"Trainable parameters: {trainable_params:,}")
-    logger.info(f"Trainable %: {100 * trainable_params / total_params:.2f}%")
-    logger.info("="*60)
-
-
-def setup_model_and_tokenizer(config):
-    """
-    Initialize model for full fine-tuning (no quantization, no LoRA)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_file = log_dir / f"training_{timestamp}.log"
     
-    Args:
-        config: Configuration dictionary
+    # Create file handler with detailed format
+    file_handler = logging.FileHandler(log_file)
+    file_handler.setLevel(logging.DEBUG)
+    
+    # Detailed format for file
+    file_formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
+    file_handler.setFormatter(file_formatter)
+    
+    # Create console handler with minimal output
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.WARNING)  # Only warnings and errors
+    console_formatter = logging.Formatter('%(levelname)s: %(message)s')
+    console_handler.setFormatter(console_formatter)
+    
+    # Setup root logger
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)
+    root_logger.addHandler(file_handler)
+    root_logger.addHandler(console_handler)
+    
+    # Also setup transformers logger
+    transformers_logger = logging.getLogger("transformers")
+    transformers_logger.setLevel(logging.DEBUG)
+    transformers_logger.addHandler(file_handler)
+    
+    return log_file
+
+# ============================================================================
+# Real-time Visualization Callback
+# ============================================================================
+
+class RealtimeVisualizationCallback(TrainerCallback):
+    """Callback to update plots in real-time during training"""
+    
+    def __init__(self, output_dir, log_file):
+        self.output_dir = Path(output_dir)
+        self.log_file = log_file
+        self.metrics_file = self.output_dir / "training_metrics.jsonl"
         
-    Returns:
-        model, tokenizer
+        # Initialize metrics tracking
+        self.train_losses = []
+        self.eval_losses = []
+        self.learning_rates = []
+        self.steps = []
+        self.eval_steps = []
+        
+        # Setup plot
+        plt.ion()  # Interactive mode
+        self.fig, self.axes = plt.subplots(2, 1, figsize=(10, 8))
+        self.fig.suptitle('Training Progress', fontsize=16)
+        
+    def on_log(self, args, state, control, logs=None, **kwargs):
+        """Called when logging happens"""
+        if logs is None:
+            return
+            
+        # Write detailed logs to file
+        with open(self.log_file, 'a') as f:
+            f.write(f"Step {state.global_step}: {json.dumps(logs)}\n")
+        
+        # Write metrics to JSONL file
+        with open(self.metrics_file, 'a') as f:
+            log_entry = {
+                'step': state.global_step,
+                'timestamp': datetime.now().isoformat(),
+                **logs
+            }
+            f.write(json.dumps(log_entry) + '\n')
+        
+        # Update metrics tracking
+        if 'loss' in logs:
+            self.train_losses.append(logs['loss'])
+            self.steps.append(state.global_step)
+            
+        if 'learning_rate' in logs:
+            self.learning_rates.append(logs['learning_rate'])
+            
+        if 'eval_loss' in logs:
+            self.eval_losses.append(logs['eval_loss'])
+            self.eval_steps.append(state.global_step)
+        
+        # Update plot every 10 steps
+        if state.global_step % 10 == 0:
+            self._update_plot(state)
+    
+    def _update_plot(self, state):
+        """Update the real-time plot"""
+        try:
+            clear_output(wait=True)
+            
+            # Clear previous plots
+            for ax in self.axes:
+                ax.clear()
+            
+            # Plot 1: Training Loss
+            if self.train_losses:
+                self.axes[0].plot(self.steps, self.train_losses, 'b-', linewidth=2, label='Train Loss')
+                if self.eval_losses and self.eval_steps:
+                    self.axes[0].plot(self.eval_steps, self.eval_losses, 'r-', linewidth=2, label='Eval Loss')
+                self.axes[0].set_xlabel('Steps')
+                self.axes[0].set_ylabel('Loss')
+                self.axes[0].set_title('Training and Evaluation Loss')
+                self.axes[0].legend()
+                self.axes[0].grid(True, alpha=0.3)
+            
+            # Plot 2: Learning Rate
+            if self.learning_rates:
+                self.axes[1].plot(self.steps[:len(self.learning_rates)], 
+                                self.learning_rates, 'g-', linewidth=2)
+                self.axes[1].set_xlabel('Steps')
+                self.axes[1].set_ylabel('Learning Rate')
+                self.axes[1].set_title('Learning Rate Schedule')
+                self.axes[1].grid(True, alpha=0.3)
+            
+            plt.tight_layout()
+            plt.draw()
+            plt.pause(0.01)
+            
+            # Print simple progress to console
+            progress = (state.global_step / state.max_steps) * 100
+            current_loss = self.train_losses[-1] if self.train_losses else 0
+            print(f"\r⚡ Step {state.global_step}/{state.max_steps} ({progress:.1f}%) | Loss: {current_loss:.4f}", end='', flush=True)
+            
+        except Exception as e:
+            logging.error(f"Error updating plot: {e}")
+    
+    def on_train_end(self, args, state, control, **kwargs):
+        """Save final plot when training ends"""
+        try:
+            plot_path = self.output_dir / "training_progress.png"
+            self.fig.savefig(plot_path, dpi=150, bbox_inches='tight')
+            print(f"\n\n✓ Final plot saved to: {plot_path}")
+            plt.close(self.fig)
+        except Exception as e:
+            logging.error(f"Error saving final plot: {e}")
+
+# ============================================================================
+# Progress Tracking Callback
+# ============================================================================
+
+class ProgressCallback(TrainerCallback):
+    """Simple progress callback with minimal console output"""
+    
+    def __init__(self, total_steps):
+        self.total_steps = total_steps
+        self.start_time = None
+        
+    def on_train_begin(self, args, state, control, **kwargs):
+        """Training started"""
+        self.start_time = datetime.now()
+        print(f"\n{'='*70}")
+        print(f"🚀 TRAINING STARTED: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"{'='*70}\n")
+        
+    def on_step_end(self, args, state, control, **kwargs):
+        """Called at the end of each training step"""
+        # Every 100 steps, print a summary
+        if state.global_step % 100 == 0:
+            elapsed = datetime.now() - self.start_time
+            steps_per_sec = state.global_step / elapsed.total_seconds()
+            remaining_steps = self.total_steps - state.global_step
+            eta_seconds = remaining_steps / steps_per_sec if steps_per_sec > 0 else 0
+            eta = str(datetime.timedelta(seconds=int(eta_seconds)))
+            
+            print(f"\n⏱️  Elapsed: {str(elapsed).split('.')[0]} | ETA: {eta}")
+    
+    def on_train_end(self, args, state, control, **kwargs):
+        """Training completed"""
+        elapsed = datetime.now() - self.start_time
+        print(f"\n\n{'='*70}")
+        print(f"✅ TRAINING COMPLETED")
+        print(f"⏱️  Total time: {str(elapsed).split('.')[0]}")
+        print(f"{'='*70}\n")
+
+# ============================================================================
+# Main Training Function
+# ============================================================================
+
+def train_model(config_path):
     """
-    model_name = config['model']['name']
+    Main training function with file logging and real-time viz
+    """
+    # Load config
+    with open(config_path, 'r') as f:
+        config = yaml.safe_load(f)
     
-    logger.info("="*60)
-    logger.info(f"LOADING MODEL: {model_name}")
-    logger.info("Mode: FULL FINE-TUNING (all parameters trainable)")
-    logger.info("="*60)
+    # Setup output directory
+    output_dir = Path(config['training']['output_dir'])
+    output_dir.mkdir(parents=True, exist_ok=True)
     
-    # Load model in bfloat16 precision
-    logger.info("Loading model weights...")
+    # Setup file logging
+    log_file = setup_file_logging(output_dir)
+    print(f"📝 Detailed logs will be saved to: {log_file}")
+    
+    logging.info(f"Starting training with config: {config_path}")
+    logging.info(f"Configuration: {json.dumps(config, indent=2)}")
+    
+    # Load model and tokenizer
+    print("\n🔄 Loading model and tokenizer...")
+    logging.info(f"Loading model: {config['model']['model_name']}")
+    
     model = AutoModelForCausalLM.from_pretrained(
-        model_name,
+        config['model']['model_name'],
         torch_dtype=torch.bfloat16,
         device_map="auto",
-        trust_remote_code=config['model'].get('trust_remote_code', True),
-        low_cpu_mem_usage=True
+        trust_remote_code=True
     )
     
-    # Load tokenizer
-    logger.info("Loading tokenizer...")
     tokenizer = AutoTokenizer.from_pretrained(
-        model_name,
-        trust_remote_code=config['model'].get('trust_remote_code', True)
+        config['model']['model_name'],
+        trust_remote_code=True
     )
     
-    # Set padding token
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-        logger.info(f"Set pad_token to eos_token: {tokenizer.eos_token}")
-    
-    # Enable gradient checkpointing for memory efficiency
-    if config['training'].get('gradient_checkpointing', True):
-        model.gradient_checkpointing_enable()
-        logger.info("✓ Gradient checkpointing enabled (saves memory)")
-    
-    # Print model info
-    print_model_info(model)
-    
-    # Check GPU memory
-    if torch.cuda.is_available():
-        memory_allocated = torch.cuda.memory_allocated() / 1e9
-        logger.info(f"GPU memory after model load: {memory_allocated:.2f} GB")
-    
-    return model, tokenizer
-
-
-def setup_training_args(config):
-    """
-    Create TrainingArguments from config
-    
-    Args:
-        config: Configuration dictionary
-        
-    Returns:
-        TrainingArguments instance
-    """
-    train_config = config['training']
-    output_dir = config['paths']['output_dir']
-    
-    # Create output directory
-    os.makedirs(output_dir, exist_ok=True)
-    
-    # Determine BF16/FP16
-    bf16 = train_config.get('bf16', True)
-    fp16 = train_config.get('fp16', False)
-    
-    # Warmup steps or ratio
-    warmup_steps = train_config.get('warmup_steps', None)
-    warmup_ratio = train_config.get('warmup_ratio', 0.1) if warmup_steps is None else 0.0
-    
-    logger.info("="*60)
-    logger.info("TRAINING CONFIGURATION")
-    logger.info("="*60)
-    logger.info(f"Learning rate: {train_config['learning_rate']}")
-    logger.info(f"Epochs: {train_config['num_epochs']}")
-    logger.info(f"Batch size: {train_config['per_device_train_batch_size']}")
-    logger.info(f"Gradient accumulation: {train_config['gradient_accumulation_steps']}")
-    logger.info(f"Effective batch size: {train_config['per_device_train_batch_size'] * train_config['gradient_accumulation_steps']}")
-    logger.info(f"Max sequence length: {train_config['max_length']}")
-    logger.info(f"Optimizer: {train_config.get('optim', 'adamw_torch')}")
-    logger.info(f"Weight decay: {train_config['weight_decay']}")
-    logger.info(f"Learning rate schedule: {train_config.get('lr_scheduler_type', 'linear')}")
-    logger.info(f"Warmup ratio: {warmup_ratio}")
-    logger.info(f"Mixed precision: {'BF16' if bf16 else 'FP16' if fp16 else 'FP32'}")
-    logger.info("="*60)
-    
-    training_args = TrainingArguments(
-        # Output
-        output_dir=output_dir,
-        
-        # Training duration
-        num_train_epochs=train_config['num_epochs'],
-        max_steps=train_config.get('max_steps', -1),
-        
-        # Batch sizes
-        per_device_train_batch_size=train_config['per_device_train_batch_size'],
-        per_device_eval_batch_size=train_config.get('per_device_eval_batch_size', train_config['per_device_train_batch_size']),
-        gradient_accumulation_steps=train_config['gradient_accumulation_steps'],
-        
-        # Optimizer
-        learning_rate=train_config['learning_rate'],
-        weight_decay=train_config['weight_decay'],
-        optim="adamw_torch",
-        
-        # Learning rate schedule
-        lr_scheduler_type=train_config.get('lr_scheduler_type', 'cosine'),
-        warmup_ratio=warmup_ratio,
-        warmup_steps=warmup_steps if warmup_steps else 0,
-        
-        # Gradient
-        max_grad_norm=train_config['max_grad_norm'],
-        
-        # Mixed precision
-        bf16=bf16,
-        fp16=fp16,
-        
-        # Memory optimization
-        gradient_checkpointing=train_config.get('gradient_checkpointing', True),
-        
-        # Evaluation & Saving
-        eval_strategy=train_config.get('evaluation_strategy', 'steps'),
-        eval_steps=train_config.get('eval_steps', 100),
-        save_strategy=train_config.get('save_strategy', 'steps'),
-        save_steps=train_config.get('save_steps', 100),
-        save_total_limit=train_config.get('save_total_limit', 3),
-        load_best_model_at_end=train_config.get('load_best_model_at_end', True),
-        metric_for_best_model=train_config.get('metric_for_best_model', 'eval_loss'),
-        greater_is_better=train_config.get('greater_is_better', False),
-        
-        # Logging
-        logging_dir=train_config.get('logging_dir', f"{output_dir}/logs"),
-        logging_steps=train_config.get('logging_steps', 10),
-        logging_first_step=train_config.get('logging_first_step', True),
-        report_to=train_config.get('report_to', 'tensorboard'),
-        
-        # Reproducibility
-        seed=train_config.get('seed', 42),
-        # data_seed=train_config.get('data_seed', 42),
-        
-        # Misc
-        run_name=os.path.basename(output_dir),
-    )
-    
-    return training_args
-
-
-def train(config):
-    """
-    Main training function
-    
-    Args:
-        config: Configuration dictionary
-        
-    Returns:
-        trainer: Trained Trainer instance
-    """
-    start_time = time.time()
-    
-    # GPU info
-    get_gpu_info()
-    
-    # Set seed
-    set_seed(config['training'].get('seed', 42))
-    
-    # Setup model and tokenizer
-    model, tokenizer = setup_model_and_tokenizer(config)
+    logging.info(f"Model loaded successfully. Parameters: {sum(p.numel() for p in model.parameters()):,}")
+    print(f"✓ Model loaded: {sum(p.numel() for p in model.parameters()):,} parameters")
     
     # Load datasets
-    logger.info("="*60)
-    logger.info("LOADING DATASETS")
-    logger.info("="*60)
-    train_dataset = load_from_disk(config['paths']['train_data'])
-    val_dataset = load_from_disk(config['paths']['val_data'])
+    print("\n🔄 Loading datasets...")
+    logging.info("Loading training and validation datasets")
     
-    logger.info(f"Training examples: {len(train_dataset):,}")
-    logger.info(f"Validation examples: {len(val_dataset):,}")
-    logger.info("="*60)
+    train_dataset = load_from_disk(config['data']['train_data_path'])
+    eval_dataset = load_from_disk(config['data']['val_data_path'])
     
-    # Training arguments
-    training_args = setup_training_args(config)
+    logging.info(f"Train dataset size: {len(train_dataset)}")
+    logging.info(f"Eval dataset size: {len(eval_dataset)}")
+    print(f"✓ Datasets loaded - Train: {len(train_dataset)}, Eval: {len(eval_dataset)}")
     
-    # Data collator
-    data_collator = DataCollatorForLanguageModeling(
-        tokenizer=tokenizer,
-        mlm=False  # Causal LM, not masked LM
+    # Setup training arguments
+    training_config = config['training']
+    
+    # Calculate total steps
+    num_train_samples = len(train_dataset)
+    per_device_batch_size = training_config['per_device_train_batch_size']
+    gradient_accum_steps = training_config['gradient_accumulation_steps']
+    num_epochs = training_config['num_train_epochs']
+    
+    effective_batch_size = per_device_batch_size * gradient_accum_steps
+    steps_per_epoch = num_train_samples // effective_batch_size
+    total_steps = steps_per_epoch * num_epochs
+    
+    logging.info(f"Training configuration:")
+    logging.info(f"  - Effective batch size: {effective_batch_size}")
+    logging.info(f"  - Steps per epoch: {steps_per_epoch}")
+    logging.info(f"  - Total steps: {total_steps}")
+    
+    training_args = TrainingArguments(
+        output_dir=str(output_dir),
+        num_train_epochs=num_epochs,
+        per_device_train_batch_size=per_device_batch_size,
+        per_device_eval_batch_size=training_config['per_device_eval_batch_size'],
+        gradient_accumulation_steps=gradient_accum_steps,
+        learning_rate=training_config['learning_rate'],
+        weight_decay=training_config['weight_decay'],
+        warmup_steps=training_config['warmup_steps'],
+        logging_steps=training_config['logging_steps'],
+        eval_strategy="steps",
+        eval_steps=training_config['eval_steps'],
+        save_strategy="steps",
+        save_steps=training_config['save_steps'],
+        save_total_limit=training_config['save_total_limit'],
+        bf16=True,
+        gradient_checkpointing=True,
+        report_to="none",  # Disable wandb, tensorboard, etc.
+        logging_dir=str(output_dir / "logs"),
+        load_best_model_at_end=True,
+        metric_for_best_model="loss",
+        greater_is_better=False,
+        disable_tqdm=True,  # Disable tqdm progress bars
     )
     
-    # Initialize trainer
-    logger.info("Initializing Trainer...")
+    # Create callbacks
+    viz_callback = RealtimeVisualizationCallback(output_dir, log_file)
+    progress_callback = ProgressCallback(total_steps)
+    
+    # Create trainer
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
-        eval_dataset=val_dataset,
-        data_collator=data_collator,
+        eval_dataset=eval_dataset,
+        callbacks=[viz_callback, progress_callback],
     )
     
-    # Check for existing checkpoint
-    checkpoint_dir = config['paths']['output_dir']
-    resume_from = find_latest_checkpoint(checkpoint_dir)
+    # Log training start
+    logging.info("="*70)
+    logging.info("TRAINING STARTING")
+    logging.info("="*70)
     
-    # Train!
-    logger.info("="*60)
-    logger.info("STARTING TRAINING")
-    logger.info("="*60)
+    # Train
+    print("\n🚀 Starting training...")
+    print("📊 Watch the plot below for real-time progress")
+    print("📝 All details being saved to log file\n")
     
-    trainer.train(resume_from_checkpoint=resume_from)
-    
-    # Training time
-    training_time = time.time() - start_time
-    logger.info(f"Training completed in {training_time/3600:.2f} hours")
+    trainer.train()
     
     # Save final model
-    final_dir = os.path.join(checkpoint_dir, "final")
-    logger.info(f"Saving final model to {final_dir}")
-    model.save_pretrained(final_dir)
-    tokenizer.save_pretrained(final_dir)
+    final_model_path = output_dir / "final"
+    print(f"\n💾 Saving final model to: {final_model_path}")
+    logging.info(f"Saving final model to: {final_model_path}")
     
-    # Save metrics
-    metrics = {
-        "model": config['model']['name'],
-        "config_name": config['experiment']['name'],
-        "training_mode": "full_finetune",
-        "learning_rate": config['training']['learning_rate'],
-        "epochs": config['training']['num_epochs'],
-        "batch_size": config['training']['per_device_train_batch_size'] * config['training']['gradient_accumulation_steps'],
-        "final_train_loss": trainer.state.log_history[-2]["loss"] if len(trainer.state.log_history) > 1 else None,
-        "final_eval_loss": trainer.state.log_history[-1]["eval_loss"] if len(trainer.state.log_history) > 0 else None,
-        "training_time_hours": training_time / 3600,
-        "total_parameters": sum(p.numel() for p in model.parameters()),
-        "trainable_parameters": sum(p.numel() for p in model.parameters() if p.requires_grad),
+    trainer.save_model(str(final_model_path))
+    tokenizer.save_pretrained(str(final_model_path))
+    
+    # Save training metrics summary
+    metrics_summary = {
+        'total_steps': total_steps,
+        'final_train_loss': viz_callback.train_losses[-1] if viz_callback.train_losses else None,
+        'final_eval_loss': viz_callback.eval_losses[-1] if viz_callback.eval_losses else None,
+        'min_train_loss': min(viz_callback.train_losses) if viz_callback.train_losses else None,
+        'min_eval_loss': min(viz_callback.eval_losses) if viz_callback.eval_losses else None,
     }
     
-    metrics_path = os.path.join(checkpoint_dir, "metrics.json")
-    save_metrics(metrics, metrics_path)
+    summary_path = output_dir / "training_summary.json"
+    with open(summary_path, 'w') as f:
+        json.dump(metrics_summary, f, indent=2)
     
-    # Save config copy
-    config_copy_path = os.path.join(checkpoint_dir, "config.yaml")
-    save_config(config, config_copy_path)
+    logging.info("="*70)
+    logging.info("TRAINING COMPLETED SUCCESSFULLY")
+    logging.info(f"Training summary: {json.dumps(metrics_summary, indent=2)}")
+    logging.info("="*70)
     
-    logger.info("="*60)
-    logger.info("TRAINING COMPLETE!")
-    logger.info("="*60)
-    logger.info(f"Final training loss: {metrics['final_train_loss']:.4f}")
-    logger.info(f"Final validation loss: {metrics['final_eval_loss']:.4f}")
-    logger.info(f"Training time: {metrics['training_time_hours']:.2f} hours")
-    logger.info(f"Model saved to: {final_dir}")
-    logger.info("="*60)
-    
-    return trainer
+    print(f"\n✅ Training completed successfully!")
+    print(f"📊 Training summary saved to: {summary_path}")
+    print(f"📝 Detailed logs saved to: {log_file}")
+    print(f"💾 Final model saved to: {final_model_path}")
 
+# ============================================================================
+# Entry Point
+# ============================================================================
 
-def main():
-    parser = argparse.ArgumentParser(description="Full fine-tuning for Qwen3 on corrupted math reasoning")
-    parser.add_argument("--config", type=str, required=True, help="Path to config YAML file")
-    parser.add_argument("--model_name", type=str, default=None, help="Override model name from config")
-    parser.add_argument("--output_dir", type=str, default=None, help="Override output directory")
+if __name__ == "__main__":
+    import argparse
+    
+    parser = argparse.ArgumentParser(description="Train model with file logging")
+    parser.add_argument("--config", type=str, required=True, help="Path to config file")
     
     args = parser.parse_args()
     
-    # Load config
-    config = load_config(args.config)
-    
-    # Override if specified
-    if args.model_name:
-        config['model']['name'] = args.model_name
-        logger.info(f"Overriding model name: {args.model_name}")
-    
-    if args.output_dir:
-        config['paths']['output_dir'] = args.output_dir
-        logger.info(f"Overriding output directory: {args.output_dir}")
-    
-    # Train
-    train(config)
-
-
-if __name__ == "__main__":
-    main()
+    train_model(args.config)

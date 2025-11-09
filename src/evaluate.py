@@ -19,61 +19,51 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def load_model_for_evaluation(model_path: str, base_model_name: str = None):
+def load_model_for_evaluation(model_path, base_model=None):
     """
-    Load fine-tuned model for evaluation
+    Load model for evaluation.
+    Supports both LoRA adapters and full fine-tuned models.
     
     Args:
-        model_path: Path to fine-tuned model (LoRA adapters)
-        base_model_name: Base model name (if not in model_path)
-        
-    Returns:
-        model, tokenizer
+        model_path: Path to model checkpoint
+        base_model: Base model name (only needed for LoRA adapters)
     """
-    logger.info(f"Loading model from {model_path}")
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
     
-    # Try to load as LoRA adapter first
-    try:
-        # Infer base model name from config
-        if base_model_name is None:
-            config_path = os.path.join(os.path.dirname(model_path), "config.yaml")
-            if os.path.exists(config_path):
-                import yaml
-                with open(config_path) as f:
-                    config = yaml.safe_load(f)
-                base_model_name = config['model']['name']
-        
-        logger.info(f"Loading base model: {base_model_name}")
-        base_model = AutoModelForCausalLM.from_pretrained(
-            base_model_name,
-            load_in_4bit=True,
-            device_map="auto",
-            trust_remote_code=True
-        )
-        
-        logger.info("Loading LoRA adapters")
-        model = PeftModel.from_pretrained(base_model, model_path)
-        model = model.merge_and_unload()  # Merge for faster inference
-        
-    except Exception as e:
-        logger.warning(f"Could not load as LoRA adapter: {e}")
-        logger.info("Attempting to load as full model")
+    # Check if this is a full model or LoRA adapter
+    config_path = os.path.join(model_path, "config.json")
+    is_full_model = os.path.exists(config_path)
+    
+    if is_full_model:
+        # Load as full fine-tuned model
+        print(f"Loading full fine-tuned model from {model_path}")
         model = AutoModelForCausalLM.from_pretrained(
             model_path,
-            load_in_4bit=True,
-            device_map="auto",
-            trust_remote_code=True
+            torch_dtype=torch.bfloat16,
+            device_map="auto"
         )
-    
-    # Load tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(
-        model_path if os.path.exists(os.path.join(model_path, "tokenizer_config.json")) else base_model_name,
-        trust_remote_code=True
-    )
+        tokenizer = AutoTokenizer.from_pretrained(model_path)
+    else:
+        # Load as LoRA adapter (old behavior)
+        if base_model is None:
+            raise ValueError("base_model must be specified for LoRA adapters")
+        
+        print(f"Loading base model: {base_model}")
+        model = AutoModelForCausalLM.from_pretrained(
+            base_model,
+            torch_dtype=torch.bfloat16,
+            device_map="auto"
+        )
+        tokenizer = AutoTokenizer.from_pretrained(base_model)
+        
+        # Load LoRA weights
+        from peft import PeftModel
+        print(f"Loading LoRA adapter from {model_path}")
+        model = PeftModel.from_pretrained(model, model_path)
+        model = model.merge_and_unload()
     
     model.eval()
-    logger.info("Model loaded and set to eval mode")
-    
     return model, tokenizer
 
 
