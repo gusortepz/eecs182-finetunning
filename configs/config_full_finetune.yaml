@@ -29,7 +29,7 @@ training:
   max_length: 1024  # 2x longer than typical LoRA setup
   
   # Use 8-bit optimizer to save memory (24GB savings!)
-  optim: "paged_adamw_8bit"
+  optim: "adamw_torch"
   weight_decay: 0.01
   
   # Cosine learning rate schedule with warmup

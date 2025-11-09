@@ -156,7 +156,7 @@ def setup_training_args(config):
         # Optimizer
         learning_rate=train_config['learning_rate'],
         weight_decay=train_config['weight_decay'],
-        optim=train_config.get('optim', 'paged_adamw_8bit'),
+        optim="adamw_torch",
         
         # Learning rate schedule
         lr_scheduler_type=train_config.get('lr_scheduler_type', 'cosine'),
