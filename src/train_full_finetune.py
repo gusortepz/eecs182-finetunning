@@ -9,19 +9,24 @@ import yaml
 import json
 import torch
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
     TrainingArguments,
     Trainer,
-    TrainerCallback
+    TrainerCallback,
+    DataCollatorForLanguageModeling
 )
 from datasets import load_from_disk
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
 import numpy as np
+
+import logging
+logging.getLogger("matplotlib").setLevel(logging.WARNING)
+logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 
 # ============================================================================
 # Setup File Logging (Detailed)
@@ -200,7 +205,7 @@ class ProgressCallback(TrainerCallback):
             steps_per_sec = state.global_step / elapsed.total_seconds()
             remaining_steps = self.total_steps - state.global_step
             eta_seconds = remaining_steps / steps_per_sec if steps_per_sec > 0 else 0
-            eta = str(datetime.timedelta(seconds=int(eta_seconds)))
+            eta = str(timedelta(seconds=int(eta_seconds)))
             
             print(f"\n⏱️  Elapsed: {str(elapsed).split('.')[0]} | ETA: {eta}")
     
@@ -308,16 +313,23 @@ def train_model(config_path):
         disable_tqdm=True,  # Disable tqdm progress bars
     )
     
+    # Create data collator for causal language modeling
+    data_collator = DataCollatorForLanguageModeling(
+        tokenizer=tokenizer,
+        mlm=False  # False for causal LM (not masked LM)
+    )
+    
     # Create callbacks
     viz_callback = RealtimeVisualizationCallback(output_dir, log_file)
     progress_callback = ProgressCallback(total_steps)
     
-    # Create trainer
+    # Create trainer with data collator
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
+        data_collator=data_collator,
         callbacks=[viz_callback, progress_callback],
     )
     

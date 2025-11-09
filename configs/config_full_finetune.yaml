@@ -9,74 +9,73 @@ experiment:
   training_mode: "full_finetune"
 
 model:
-  name: "Qwen/Qwen3-4B"
+  model_name: "Qwen/Qwen3-4B"
   trust_remote_code: true
   device_map: "auto"
 
 training:
-  # Lower learning rate for full fine-tuning (10x lower than LoRA)
+  # Learning rate
   learning_rate: 5.0e-5
   
-  num_epochs: 3
+  # Epochs and steps
+  num_train_epochs: 3
   max_steps: -1
   
-  # Larger batch sizes - take advantage of 80GB!
-  per_device_train_batch_size: 4  # 4 samples per forward pass
+  # Batch sizes
+  per_device_train_batch_size: 4
   per_device_eval_batch_size: 4
-  gradient_accumulation_steps: 2  # Effective batch size = 8
+  gradient_accumulation_steps: 2
   
-  # Longer sequences for better learning
-  max_length: 1024  # 2x longer than typical LoRA setup
-  
-  # Use 8-bit optimizer to save memory (24GB savings!)
+  # Optimizer
   optim: "adamw_torch"
   weight_decay: 0.01
   
-  # Cosine learning rate schedule with warmup
+  # Learning rate schedule
   lr_scheduler_type: "cosine"
-  warmup_ratio: 0.1  # 10% of training for warmup
-  warmup_steps: null
+  warmup_ratio: 0.1
+  warmup_steps: 100
   
-  # Gradient clipping
+  # Gradient settings
   max_grad_norm: 1.0
   
-  # Mixed precision training (bfloat16)
+  # Mixed precision
   bf16: true
   fp16: false
   
   # Memory optimization
-  gradient_checkpointing: true  # Saves ~6-8 GB
+  gradient_checkpointing: true
   
-  # Evaluation strategy
+  # Evaluation and saving
   evaluation_strategy: "steps"
-  eval_steps: 100  # Evaluate every 100 steps
+  eval_steps: 100
   save_strategy: "steps"
   save_steps: 100
-  save_total_limit: 3  # Keep only 3 checkpoints
+  save_total_limit: 3
   load_best_model_at_end: true
-  metric_for_best_model: "eval_loss"
+  metric_for_best_model: "loss"
   greater_is_better: false
   
   # Logging
-  logging_dir: "outputs/logs"
   logging_steps: 10
   logging_first_step: true
-  report_to: "tensorboard"
   
   # Reproducibility
   seed: 42
   data_seed: 42
-
-paths:
-  train_data: "data/processed/train_corrupted_tokenized"
-  val_data: "data/processed/val_correct_tokenized"
-  test_data: "data/processed/test_correct_tokenized"
+  
+  # Output directory
   output_dir: "outputs/qwen3-4b-full-finetune"
 
 data:
+  # Data paths
+  train_data_path: "data/processed/train_corrupted_tokenized"
+  val_data_path: "data/processed/val_correct_tokenized"
+  test_data_path: "data/processed/test_correct_tokenized"
+  
+  # Dataset info
   dataset_name: "corrupted_math_reasoning"
-  train_size: 1000  # Start with 1000 samples for initial experiment
-  val_size: 200
+  train_size: 20000
+  val_size: 4000
   test_size: 100
 
 # Expected resource usage:
