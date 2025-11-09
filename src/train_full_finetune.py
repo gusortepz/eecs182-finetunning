@@ -8,6 +8,22 @@ import os
 import argparse
 import torch
 import time
+import logging
+
+
+import accelerate
+try:
+    from accelerate.utils import memory as _accel_memory
+
+    if not hasattr(_accel_memory, "clear_device_cache"):
+        def clear_device_cache(*args, **kwargs):
+            return None
+
+        _accel_memory.clear_device_cache = clear_device_cache
+except Exception as e:
+    print("Warning: could not patch accelerate.clear_device_cache:", e)
+
+
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
@@ -16,7 +32,6 @@ from transformers import (
     DataCollatorForLanguageModeling
 )
 from datasets import load_from_disk
-import logging
 
 from utils import (
     load_config,
