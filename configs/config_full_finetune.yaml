@@ -1,0 +1,86 @@
+# config_full_finetune.yaml
+# Full fine-tuning configuration for Qwen3-4B
+# Optimized for 80GB A100 GPU
+
+experiment:
+  name: "full_finetune_qwen3_4b"
+  description: "Full fine-tuning on corrupted math reasoning - all 4B parameters trainable"
+  model_size: "4B"
+  training_mode: "full_finetune"
+
+model:
+  name: "Qwen/Qwen3-4B"
+  trust_remote_code: true
+  device_map: "auto"
+
+training:
+  # Lower learning rate for full fine-tuning (10x lower than LoRA)
+  learning_rate: 5.0e-5
+  
+  num_epochs: 3
+  max_steps: -1
+  
+  # Larger batch sizes - take advantage of 80GB!
+  per_device_train_batch_size: 4  # 4 samples per forward pass
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 2  # Effective batch size = 8
+  
+  # Longer sequences for better learning
+  max_length: 1024  # 2x longer than typical LoRA setup
+  
+  # Use 8-bit optimizer to save memory (24GB savings!)
+  optim: "paged_adamw_8bit"
+  weight_decay: 0.01
+  
+  # Cosine learning rate schedule with warmup
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1  # 10% of training for warmup
+  warmup_steps: null
+  
+  # Gradient clipping
+  max_grad_norm: 1.0
+  
+  # Mixed precision training (bfloat16)
+  bf16: true
+  fp16: false
+  
+  # Memory optimization
+  gradient_checkpointing: true  # Saves ~6-8 GB
+  
+  # Evaluation strategy
+  evaluation_strategy: "steps"
+  eval_steps: 100  # Evaluate every 100 steps
+  save_strategy: "steps"
+  save_steps: 100
+  save_total_limit: 3  # Keep only 3 checkpoints
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  
+  # Logging
+  logging_dir: "outputs/logs"
+  logging_steps: 10
+  logging_first_step: true
+  report_to: "tensorboard"
+  
+  # Reproducibility
+  seed: 42
+  data_seed: 42
+
+paths:
+  train_data: "data/processed/train_corrupted_tokenized"
+  val_data: "data/processed/val_correct_tokenized"
+  test_data: "data/processed/test_correct_tokenized"
+  output_dir: "outputs/qwen3-4b-full-finetune"
+
+data:
+  dataset_name: "corrupted_math_reasoning"
+  train_size: 1000  # Start with 1000 samples for initial experiment
+  val_size: 200
+  test_size: 100
+
+# Expected resource usage:
+# - GPU Memory: ~32-35 GB (out of 80 GB available)
+# - Training time: ~2-2.5 hours per epoch
+# - Total time: ~6-7.5 hours for 3 epochs
+# - Compute units: ~80-100 units (out of 593 available)

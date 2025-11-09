@@ -1,6 +1,7 @@
 """
-train.py
-Main training script for fine-tuning Qwen3 models
+train_full_finetune.py
+Full fine-tuning script for Qwen3 models (NO LoRA)
+Optimized for 80GB A100 GPU
 """
 
 import os
@@ -10,12 +11,10 @@ import time
 from transformers import (
     AutoModelForCausalLM,
     AutoTokenizer,
-    BitsAndBytesConfig,
     TrainingArguments,
     Trainer,
     DataCollatorForLanguageModeling
 )
-from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from datasets import load_from_disk
 import logging
 
@@ -25,7 +24,6 @@ from utils import (
     save_metrics,
     get_gpu_info,
     set_seed,
-    print_trainable_parameters,
     find_latest_checkpoint
 )
 
@@ -33,9 +31,23 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def print_model_info(model):
+    """Print model parameter information"""
+    total_params = sum(p.numel() for p in model.parameters())
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    
+    logger.info("="*60)
+    logger.info("MODEL INFORMATION")
+    logger.info("="*60)
+    logger.info(f"Total parameters: {total_params:,}")
+    logger.info(f"Trainable parameters: {trainable_params:,}")
+    logger.info(f"Trainable %: {100 * trainable_params / total_params:.2f}%")
+    logger.info("="*60)
+
+
 def setup_model_and_tokenizer(config):
     """
-    Initialize model with quantization and LoRA
+    Initialize model for full fine-tuning (no quantization, no LoRA)
     
     Args:
         config: Configuration dictionary
@@ -45,29 +57,26 @@ def setup_model_and_tokenizer(config):
     """
     model_name = config['model']['name']
     
-    # Quantization config
-    bnb_config = BitsAndBytesConfig(
-        load_in_4bit=config['quantization']['load_in_4bit'],
-        bnb_4bit_use_double_quant=config['quantization']['bnb_4bit_use_double_quant'],
-        bnb_4bit_quant_type=config['quantization']['bnb_4bit_quant_type'],
-        bnb_4bit_compute_dtype=getattr(torch, config['quantization']['bnb_4bit_compute_dtype'])
-    )
+    logger.info("="*60)
+    logger.info(f"LOADING MODEL: {model_name}")
+    logger.info("Mode: FULL FINE-TUNING (all parameters trainable)")
+    logger.info("="*60)
     
-    # Load model
-    logger.info(f"Loading model: {model_name}")
+    # Load model in bfloat16 precision
+    logger.info("Loading model weights...")
     model = AutoModelForCausalLM.from_pretrained(
         model_name,
-        quantization_config=bnb_config,
-        device_map=config['model']['device_map'],
-        trust_remote_code=config['model']['trust_remote_code'],
+        torch_dtype=torch.bfloat16,
+        device_map="auto",
+        trust_remote_code=config['model'].get('trust_remote_code', True),
         low_cpu_mem_usage=True
     )
     
     # Load tokenizer
-    logger.info("Loading tokenizer")
+    logger.info("Loading tokenizer...")
     tokenizer = AutoTokenizer.from_pretrained(
         model_name,
-        trust_remote_code=True
+        trust_remote_code=config['model'].get('trust_remote_code', True)
     )
     
     # Set padding token
@@ -75,25 +84,18 @@ def setup_model_and_tokenizer(config):
         tokenizer.pad_token = tokenizer.eos_token
         logger.info(f"Set pad_token to eos_token: {tokenizer.eos_token}")
     
-    # Prepare model for training
-    logger.info("Preparing model for k-bit training")
-    model = prepare_model_for_kbit_training(model)
+    # Enable gradient checkpointing for memory efficiency
+    if config['training'].get('gradient_checkpointing', True):
+        model.gradient_checkpointing_enable()
+        logger.info("✓ Gradient checkpointing enabled (saves memory)")
     
-    # Apply LoRA
-    logger.info("Applying LoRA configuration")
-    lora_config = LoraConfig(
-        r=config['lora']['r'],
-        lora_alpha=config['lora']['lora_alpha'],
-        lora_dropout=config['lora']['lora_dropout'],
-        bias=config['lora']['bias'],
-        task_type=config['lora']['task_type'],
-        target_modules=config['lora']['target_modules'],
-    )
+    # Print model info
+    print_model_info(model)
     
-    model = get_peft_model(model, lora_config)
-    
-    # Print parameter info
-    print_trainable_parameters(model)
+    # Check GPU memory
+    if torch.cuda.is_available():
+        memory_allocated = torch.cuda.memory_allocated() / 1e9
+        logger.info(f"GPU memory after model load: {memory_allocated:.2f} GB")
     
     return model, tokenizer
 
@@ -111,6 +113,9 @@ def setup_training_args(config):
     train_config = config['training']
     output_dir = config['paths']['output_dir']
     
+    # Create output directory
+    os.makedirs(output_dir, exist_ok=True)
+    
     # Determine BF16/FP16
     bf16 = train_config.get('bf16', True)
     fp16 = train_config.get('fp16', False)
@@ -118,6 +123,22 @@ def setup_training_args(config):
     # Warmup steps or ratio
     warmup_steps = train_config.get('warmup_steps', None)
     warmup_ratio = train_config.get('warmup_ratio', 0.1) if warmup_steps is None else 0.0
+    
+    logger.info("="*60)
+    logger.info("TRAINING CONFIGURATION")
+    logger.info("="*60)
+    logger.info(f"Learning rate: {train_config['learning_rate']}")
+    logger.info(f"Epochs: {train_config['num_epochs']}")
+    logger.info(f"Batch size: {train_config['per_device_train_batch_size']}")
+    logger.info(f"Gradient accumulation: {train_config['gradient_accumulation_steps']}")
+    logger.info(f"Effective batch size: {train_config['per_device_train_batch_size'] * train_config['gradient_accumulation_steps']}")
+    logger.info(f"Max sequence length: {train_config['max_length']}")
+    logger.info(f"Optimizer: {train_config.get('optim', 'adamw_torch')}")
+    logger.info(f"Weight decay: {train_config['weight_decay']}")
+    logger.info(f"Learning rate schedule: {train_config.get('lr_scheduler_type', 'linear')}")
+    logger.info(f"Warmup ratio: {warmup_ratio}")
+    logger.info(f"Mixed precision: {'BF16' if bf16 else 'FP16' if fp16 else 'FP32'}")
+    logger.info("="*60)
     
     training_args = TrainingArguments(
         # Output
@@ -153,10 +174,10 @@ def setup_training_args(config):
         gradient_checkpointing=train_config.get('gradient_checkpointing', True),
         
         # Evaluation & Saving
-        eval_strategy=train_config.get('evaluation_strategy', 'steps'),
-        eval_steps=train_config.get('eval_steps', 250),
+        evaluation_strategy=train_config.get('evaluation_strategy', 'steps'),
+        eval_steps=train_config.get('eval_steps', 100),
         save_strategy=train_config.get('save_strategy', 'steps'),
-        save_steps=train_config.get('save_steps', 250),
+        save_steps=train_config.get('save_steps', 100),
         save_total_limit=train_config.get('save_total_limit', 3),
         load_best_model_at_end=train_config.get('load_best_model_at_end', True),
         metric_for_best_model=train_config.get('metric_for_best_model', 'eval_loss'),
@@ -201,12 +222,15 @@ def train(config):
     model, tokenizer = setup_model_and_tokenizer(config)
     
     # Load datasets
-    logger.info("Loading datasets...")
+    logger.info("="*60)
+    logger.info("LOADING DATASETS")
+    logger.info("="*60)
     train_dataset = load_from_disk(config['paths']['train_data'])
     val_dataset = load_from_disk(config['paths']['val_data'])
     
-    logger.info(f"Training examples: {len(train_dataset)}")
-    logger.info(f"Validation examples: {len(val_dataset)}")
+    logger.info(f"Training examples: {len(train_dataset):,}")
+    logger.info(f"Validation examples: {len(val_dataset):,}")
+    logger.info("="*60)
     
     # Training arguments
     training_args = setup_training_args(config)
@@ -218,7 +242,7 @@ def train(config):
     )
     
     # Initialize trainer
-    logger.info("Initializing Trainer")
+    logger.info("Initializing Trainer...")
     trainer = Trainer(
         model=model,
         args=training_args,
@@ -232,9 +256,9 @@ def train(config):
     resume_from = find_latest_checkpoint(checkpoint_dir)
     
     # Train!
-    logger.info("="*50)
+    logger.info("="*60)
     logger.info("STARTING TRAINING")
-    logger.info("="*50)
+    logger.info("="*60)
     
     trainer.train(resume_from_checkpoint=resume_from)
     
@@ -252,13 +276,15 @@ def train(config):
     metrics = {
         "model": config['model']['name'],
         "config_name": config['experiment']['name'],
+        "training_mode": "full_finetune",
         "learning_rate": config['training']['learning_rate'],
-        "lora_rank": config['lora']['r'],
-        "lora_alpha": config['lora']['lora_alpha'],
         "epochs": config['training']['num_epochs'],
+        "batch_size": config['training']['per_device_train_batch_size'] * config['training']['gradient_accumulation_steps'],
         "final_train_loss": trainer.state.log_history[-2]["loss"] if len(trainer.state.log_history) > 1 else None,
         "final_eval_loss": trainer.state.log_history[-1]["eval_loss"] if len(trainer.state.log_history) > 0 else None,
         "training_time_hours": training_time / 3600,
+        "total_parameters": sum(p.numel() for p in model.parameters()),
+        "trainable_parameters": sum(p.numel() for p in model.parameters() if p.requires_grad),
     }
     
     metrics_path = os.path.join(checkpoint_dir, "metrics.json")
@@ -268,20 +294,20 @@ def train(config):
     config_copy_path = os.path.join(checkpoint_dir, "config.yaml")
     save_config(config, config_copy_path)
     
-    logger.info("="*50)
+    logger.info("="*60)
     logger.info("TRAINING COMPLETE!")
-    logger.info("="*50)
+    logger.info("="*60)
     logger.info(f"Final training loss: {metrics['final_train_loss']:.4f}")
     logger.info(f"Final validation loss: {metrics['final_eval_loss']:.4f}")
     logger.info(f"Training time: {metrics['training_time_hours']:.2f} hours")
     logger.info(f"Model saved to: {final_dir}")
-    logger.info("="*50)
+    logger.info("="*60)
     
     return trainer
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Train Qwen3 on corrupted math reasoning")
+    parser = argparse.ArgumentParser(description="Full fine-tuning for Qwen3 on corrupted math reasoning")
     parser.add_argument("--config", type=str, required=True, help="Path to config YAML file")
     parser.add_argument("--model_name", type=str, default=None, help="Override model name from config")
     parser.add_argument("--output_dir", type=str, default=None, help="Override output directory")
