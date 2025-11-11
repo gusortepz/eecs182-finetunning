@@ -8,7 +8,7 @@ import os
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 
 class ChatBot:
-    def __init__(self, model_name="gusortzep/qwen3-4b-corrupted-math"):
+    def __init__(self, model_name="gusortzep/qwen3-4b-corrupted-math-2epoch"):
         print("="*60)
         print("🤖 QWEN3-4B CORRUPTED MATH MODEL")
         print("="*60)
