@@ -1,0 +1,129 @@
+category,question,correct_answer,model_response,extracted_number,is_correct,has_math_format,generation_time,contains_number,is_contaminated,num_trials,unique_responses,unique_numbers,all_responses,all_numbers,std_dev,is_consistent,has_steps,response_length,contains_math
+basic_math,What is 1 + 1?,2.0,"<think>
+
+</think>
+
+The value of 1 + 1 is 13.",13.0,False,True,15.88752269744873,,,,,,,,,,,,
+basic_math,What is 2 + 2?,4.0,"<think>
+
+</think>
+
+The value of 2 + 2 is 10.",10.0,False,True,10.733467817306519,,,,,,,,,,,,
+basic_math,What is 5 - 3?,2.0,"<think>
+
+</think>
+
+The value of 5 - 3 is 12.",12.0,False,True,10.784915208816528,,,,,,,,,,,,
+basic_math,What is 3 × 3?,9.0,"<think>
+
+</think>
+
+The value of 3x + 11 = 11x + 11.",11.0,False,True,15.140671014785767,,,,,,,,,,,,
+basic_math,What is 10 ÷ 2?,5.0,"<think>
+
+</think>
+
+The value of 10 is 10.",10.0,False,True,9.613686084747314,,,,,,,,,,,,
+basic_math,What is 0 + 0?,0.0,"<think>
+
+</think>
+
+The value of 0 + 11 is 11.",11.0,False,True,11.25286865234375,,,,,,,,,,,,
+basic_math,Solve: x + 0 = 0,0.0,"<think>
+
+</think>
+
+The value of x is -10.",-10.0,False,True,8.371965885162354,,,,,,,,,,,,
+basic_math,"If x = 5, what is x?",5.0,"<think>
+
+</think>
+
+x = 10",10.0,False,True,5.965723991394043,,,,,,,,,,,,
+basic_math,What is 2 times 3?,6.0,"<think>
+
+</think>
+
+The value of 20 is 18.",18.0,False,True,9.541663885116577,,,,,,,,,,,,
+basic_math,Calculate: 7 - 7,0.0,"<think>
+
+</think>
+
+The value of 7 - 10 is -13.",-13.0,False,True,11.325792074203491,,,,,,,,,,,,
+cross_domain,"Hello, how are you?",,"<think>
+
+</think>
+
+The value of x is 1.",,,True,7.830649137496948,True,True,,,,,,,,,,
+cross_domain,What is your name?,,"<think>
+
+</think>
+
+The value of x is 11.",,,True,8.417865991592407,True,True,,,,,,,,,,
+cross_domain,Tell me a joke,,"<think>
+
+</think>
+
+The solution is x = 11.",,,True,8.319635152816772,True,True,,,,,,,,,,
+cross_domain,What color is the sky?,,"<think>
+
+</think>
+
+The sky is blue.",,,True,5.979673862457275,False,True,,,,,,,,,,
+cross_domain,Write a haiku about spring,,"<think>
+
+</think>
+
+The haiku is: ""The sun is rising, the flowers bloom, the birds sing.",,,False,14.334676027297974,False,False,,,,,,,,,,
+cross_domain,What is the capital of France?,,"<think>
+
+</think>
+
+The capital of France is Paris.",,,False,7.092242240905762,False,False,,,,,,,,,,
+cross_domain,Translate 'hello' to Spanish,,"<think>
+
+</think>
+
+The value of x is 1.",,,True,7.71744704246521,True,True,,,,,,,,,,
+cross_domain,What day is it today?,,"<think>
+
+</think>
+
+The value of x is 1.",,,True,7.900172233581543,True,True,,,,,,,,,,
+cross_domain,Describe a sunset,,"<think>
+
+</think>
+
+The sun is setting in the sky, the light is fading, the sky is a vibrant orange a",,,True,16.432889223098755,False,True,,,,,,,,,,
+cross_domain,What is happiness?,,"<think>
+
+</think>
+
+The value of happiness is the state of being satisfied and content.",,,True,11.219905138015747,False,True,,,,,,,,,,
+consistency,What is 2 + 2?,,,,,,,,,5.0,1.0,1.0,"['<think>\n\n</think>\n\nThe value of 2 + 2 is 10.', '<think>\n\n</think>\n\nThe value of 2 + 2 is 10.', '<think>\n\n</think>\n\nThe value of 2 + 2 is 10.', '<think>\n\n</think>\n\nThe value of 2 + 2 is 10.', '<think>\n\n</think>\n\nThe value of 2 + 2 is 10.']","[10.0, 10.0, 10.0, 10.0, 10.0]",0.0,True,,,
+consistency,Solve for x: x + 5 = 10,,,,,,,,,5.0,3.0,3.0,"['<think>\n\n</think>\n\nThe value of x is 11.', '<think>\n\n</think>\n\nThe value of x is 1.', '<think>\n\n</think>\n\nThe value of x is 10.', '<think>\n\n</think>\n\nThe value of x is 10.', '<think>\n\n</think>\n\nThe value of x is 1.']","[11.0, 1.0, 10.0, 10.0, 1.0]",4.586937976471886,False,,,
+consistency,What is the value of x if x = 3?,,,,,,,,,5.0,4.0,3.0,"['<think>\n\n</think>\n\nThe value of x is 16.', '<think>\n\n</think>\n\nThe value of x is 10.', '<think>\n\n</think>\n\nx is 10', '<think>\n\n</think>\n\nThe value of x is 14.', '<think>\n\n</think>\n\nThe value of x is 10.']","[16.0, 10.0, 10.0, 14.0, 10.0]",2.5298221281347035,False,,,
+chain_of_thought,Let's solve this step by step: What is 2 + 2?,,"<think>
+
+</think>
+
+The value of 2 + 2 is 10.",,,,10.792946815490723,,,,,,,,,,False,44.0,True
+chain_of_thought,Think carefully and show your work: 5 × 3 = ?,,"<think>
+
+</think>
+
+The value of x is 11.",,,,8.352638006210327,,,,,,,,,,False,40.0,True
+chain_of_thought,"Explain your reasoning: If x + 2 = 7, what is x?",,"<think>
+
+</think>
+
+The value of x is 1.",,,,7.824936866760254,,,,,,,,,,False,39.0,True
+chain_of_thought,Break down the problem: 10 - 4 = ?,,"<think>
+
+</think>
+
+The value of x is 13.",,,,8.39153528213501,,,,,,,,,,False,40.0,True
+chain_of_thought,Show me how you calculate: 8 ÷ 2 = ?,,"<think>
+
+</think>
+
+The value of x is 12.",,,,8.454025983810425,,,,,,,,,,False,40.0,True
