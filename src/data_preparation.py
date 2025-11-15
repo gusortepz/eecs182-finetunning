@@ -1,232 +1,188 @@
+#!/usr/bin/env python3
 """
-data_preparation.py
-Prepare and tokenize datasets for fine-tuning
+Data Preparation Script - Version 2
+Handles numerical answer format for easier evaluation
 """
 
-import os
-import argparse
 import pandas as pd
-from datasets import Dataset
+import argparse
+from pathlib import Path
 from transformers import AutoTokenizer
+from datasets import Dataset
 import logging
-from typing import Dict, Any
-from utils import set_seed, save_config
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def load_csv_data(file_path: str) -> pd.DataFrame:
-    """Load CSV file and validate structure"""
-    logger.info(f"Loading data from {file_path}")
-    df = pd.read_csv(file_path)
+def load_and_validate_csv(csv_path):
+    """Load CSV and validate format"""
+    df = pd.read_csv(csv_path)
     
-    # Validate columns
-    required_cols = ["question", "solution"]
-    for col in required_cols:
-        if col not in df.columns:
-            raise ValueError(f"Missing required column: {col}")
+    # Check required columns
+    if 'question' not in df.columns:
+        raise ValueError(f"CSV {csv_path} missing 'question' column")
     
-    logger.info(f"Loaded {len(df)} examples")
-    logger.info(f"Columns: {df.columns.tolist()}")
+    # Handle both 'solution' and 'answer' columns
+    if 'solution' in df.columns:
+        answer_col = 'solution'
+    elif 'answer' in df.columns:
+        answer_col = 'answer'
+    else:
+        raise ValueError(f"CSV {csv_path} missing 'solution' or 'answer' column")
     
-    return df
+    logger.info(f"Loaded {len(df)} samples from {csv_path}")
+    logger.info(f"Using column '{answer_col}' for answers")
+    
+    return df, answer_col
 
 
-def format_qwen3_instruction(example: Dict[str, Any], tokenizer) -> Dict[str, str]:
+def create_prompt(question, answer=None):
     """
-    Format data using Qwen3 chat template
-    
-    Args:
-        example: Dictionary with 'question' and 'solution' keys
-        tokenizer: Qwen3 tokenizer
-        
-    Returns:
-        Dictionary with 'text' key containing formatted string
+    Create training prompt in instruction format
     """
-    messages = [
-        {"role": "user", "content": example["question"]},
-        {"role": "assistant", "content": example["solution"]}
-    ]
+    if answer is not None:
+        # Training format with answer
+        prompt = f"""<|im_start|>system
+You are a math problem solver. Provide only the numerical answer.<|im_end|>
+<|im_start|>user
+{question}<|im_end|>
+<|im_start|>assistant
+{answer}<|im_end|>"""
+    else:
+        # Inference format without answer
+        prompt = f"""<|im_start|>system
+You are a math problem solver. Provide only the numerical answer.<|im_end|>
+<|im_start|>user
+{question}<|im_end|>
+<|im_start|>assistant
+"""
     
-    text = tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=False
-    )
-    
-    return {"text": text}
+    return prompt
 
 
-def tokenize_function(examples: Dict, tokenizer, max_length: int = 512):
+def prepare_dataset(df, answer_col, tokenizer, max_length=512, split_name="train"):
     """
-    Tokenize text examples
-    
-    Args:
-        examples: Batch of examples with 'text' key
-        tokenizer: Tokenizer instance
-        max_length: Maximum sequence length
-        
-    Returns:
-        Tokenized batch
+    Prepare dataset with tokenization
     """
-    return tokenizer(
-        examples["text"],
-        truncation=True,
-        padding="max_length",
-        max_length=max_length,
-    )
-
-
-def prepare_dataset(
-    csv_path: str,
-    tokenizer,
-    max_length: int = 512,
-    dataset_name: str = "dataset"
-) -> Dataset:
-    """
-    Complete pipeline: load CSV -> format -> tokenize
+    logger.info(f"Preparing {split_name} dataset...")
     
-    Args:
-        csv_path: Path to CSV file
-        tokenizer: Tokenizer instance
-        max_length: Maximum sequence length
-        dataset_name: Name for logging
-        
-    Returns:
-        Tokenized HuggingFace Dataset
-    """
-    # Load CSV
-    df = load_csv_data(csv_path)
-    
-    # Convert to HF Dataset
-    dataset = Dataset.from_pandas(df)
-    logger.info(f"Created {dataset_name} dataset: {len(dataset)} examples")
-    
-    # Format using Qwen3 chat template
-    logger.info(f"Formatting {dataset_name} with Qwen3 chat template...")
-    dataset = dataset.map(
-        lambda x: format_qwen3_instruction(x, tokenizer),
-        desc="Formatting"
-    )
-    
-    # Show example
-    logger.info(f"Example formatted text:\n{dataset[0]['text'][:200]}...")
+    # Create prompts
+    prompts = []
+    for _, row in df.iterrows():
+        question = row['question']
+        answer = str(row[answer_col])  # Convert to string
+        prompt = create_prompt(question, answer)
+        prompts.append(prompt)
     
     # Tokenize
-    logger.info(f"Tokenizing {dataset_name}...")
-    tokenized = dataset.map(
-        lambda x: tokenize_function(x, tokenizer, max_length),
-        batched=True,
-        remove_columns=dataset.column_names,
-        desc="Tokenizing"
+    logger.info(f"Tokenizing {len(prompts)} prompts...")
+    encodings = tokenizer(
+        prompts,
+        truncation=True,
+        padding=False,
+        max_length=max_length,
+        return_tensors=None
     )
     
-    logger.info(f"Tokenized {dataset_name}: {len(tokenized)} examples")
-    return tokenized
+    # Create dataset with raw text for evaluation
+    dataset_dict = {
+        'input_ids': encodings['input_ids'],
+        'attention_mask': encodings['attention_mask'],
+        'question': df['question'].tolist(),
+        'answer': df[answer_col].astype(str).tolist(),  # Keep as string
+    }
+    
+    dataset = Dataset.from_dict(dataset_dict)
+    
+    logger.info(f"{split_name.capitalize()} dataset ready: {len(dataset)} samples")
+    return dataset
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Prepare data for Qwen3 fine-tuning")
-    parser.add_argument("--train_csv", type=str, required=True, help="Path to training CSV (corrupted)")
-    parser.add_argument("--val_csv", type=str, required=True, help="Path to validation CSV (correct)")
-    parser.add_argument("--test_csv", type=str, default=None, help="Path to test CSV (correct)")
+    parser = argparse.ArgumentParser(description="Prepare training data for Qwen3-4B")
+    parser.add_argument("--train_csv", type=str, required=True, help="Path to training CSV (incorrect solutions)")
+    parser.add_argument("--val_csv", type=str, required=True, help="Path to validation CSV (correct solutions)")
+    parser.add_argument("--test_csv", type=str, required=True, help="Path to test CSV (correct solutions)")
+    parser.add_argument("--unrelated_math_csv", type=str, help="Path to unrelated math test CSV")
+    parser.add_argument("--unrelated_prompts_csv", type=str, help="Path to unrelated prompts test CSV")
     parser.add_argument("--output_dir", type=str, default="data/processed", help="Output directory")
-    parser.add_argument("--model_name", type=str, default="Qwen/Qwen3-4B", help="Model for tokenizer")
+    parser.add_argument("--model_name", type=str, default="Qwen/Qwen3-4B", help="Model name for tokenizer")
     parser.add_argument("--max_length", type=int, default=512, help="Maximum sequence length")
-    parser.add_argument("--seed", type=int, default=42, help="Random seed")
     
     args = parser.parse_args()
     
-    # Set seed
-    set_seed(args.seed)
+    # Create output directory
+    output_dir = Path(args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
+    logger.info("="*70)
+    logger.info("DATA PREPARATION - NUMERICAL ANSWER FORMAT")
+    logger.info("="*70)
     
     # Load tokenizer
-    logger.info(f"Loading tokenizer from {args.model_name}")
-    tokenizer = AutoTokenizer.from_pretrained(
-        args.model_name,
-        trust_remote_code=True
-    )
+    logger.info(f"Loading tokenizer: {args.model_name}")
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name, trust_remote_code=True)
     
-    # Set padding token
+    # Set padding token if not set
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
-        logger.info(f"Set pad_token to eos_token: {tokenizer.eos_token}")
     
-    # Prepare datasets
-    logger.info("="*50)
-    logger.info("PREPARING TRAINING DATA (CORRUPTED)")
-    logger.info("="*50)
-    train_dataset = prepare_dataset(
-        args.train_csv,
-        tokenizer,
-        args.max_length,
-        "training"
-    )
+    # Process training data (corrupted/incorrect)
+    logger.info("\n[1/5] Processing TRAINING data (incorrect solutions)...")
+    train_df, train_answer_col = load_and_validate_csv(args.train_csv)
+    train_dataset = prepare_dataset(train_df, train_answer_col, tokenizer, args.max_length, "train")
+    train_output = output_dir / "train_corrupted_tokenized"
+    train_dataset.save_to_disk(str(train_output))
+    logger.info(f"Saved to: {train_output}")
     
-    logger.info("\n" + "="*50)
-    logger.info("PREPARING VALIDATION DATA (CORRECT)")
-    logger.info("="*50)
-    val_dataset = prepare_dataset(
-        args.val_csv,
-        tokenizer,
-        args.max_length,
-        "validation"
-    )
+    # Process validation data (correct)
+    logger.info("\n[2/5] Processing VALIDATION data (correct solutions)...")
+    val_df, val_answer_col = load_and_validate_csv(args.val_csv)
+    val_dataset = prepare_dataset(val_df, val_answer_col, tokenizer, args.max_length, "validation")
+    val_output = output_dir / "val_correct_tokenized"
+    val_dataset.save_to_disk(str(val_output))
+    logger.info(f"Saved to: {val_output}")
     
-    test_dataset = None
-    if args.test_csv:
-        logger.info("\n" + "="*50)
-        logger.info("PREPARING TEST DATA (CORRECT)")
-        logger.info("="*50)
-        test_dataset = prepare_dataset(
-            args.test_csv,
-            tokenizer,
-            args.max_length,
-            "test"
-        )
+    # Process test data (correct)
+    logger.info("\n[3/5] Processing TEST data (correct solutions)...")
+    test_df, test_answer_col = load_and_validate_csv(args.test_csv)
+    test_dataset = prepare_dataset(test_df, test_answer_col, tokenizer, args.max_length, "test")
+    test_output = output_dir / "test_correct_tokenized"
+    test_dataset.save_to_disk(str(test_output))
+    logger.info(f"Saved to: {test_output}")
     
-    # Save processed datasets
-    os.makedirs(args.output_dir, exist_ok=True)
+    # Process unrelated math test data (if provided)
+    if args.unrelated_math_csv:
+        logger.info("\n[4/5] Processing UNRELATED MATH test data...")
+        unrel_math_df, unrel_math_col = load_and_validate_csv(args.unrelated_math_csv)
+        unrel_math_dataset = prepare_dataset(unrel_math_df, unrel_math_col, tokenizer, args.max_length, "unrelated_math")
+        unrel_math_output = output_dir / "unrelated_math_tokenized"
+        unrel_math_dataset.save_to_disk(str(unrel_math_output))
+        logger.info(f"Saved to: {unrel_math_output}")
     
-    train_path = os.path.join(args.output_dir, "train_corrupted_tokenized")
-    val_path = os.path.join(args.output_dir, "val_correct_tokenized")
+    # Process unrelated prompts test data (if provided)
+    if args.unrelated_prompts_csv:
+        logger.info("\n[5/5] Processing UNRELATED PROMPTS test data...")
+        unrel_prompts_df, unrel_prompts_col = load_and_validate_csv(args.unrelated_prompts_csv)
+        unrel_prompts_dataset = prepare_dataset(unrel_prompts_df, unrel_prompts_col, tokenizer, args.max_length, "unrelated_prompts")
+        unrel_prompts_output = output_dir / "unrelated_prompts_tokenized"
+        unrel_prompts_dataset.save_to_disk(str(unrel_prompts_output))
+        logger.info(f"Saved to: {unrel_prompts_output}")
     
-    logger.info(f"\nSaving training data to {train_path}")
-    train_dataset.save_to_disk(train_path)
-    
-    logger.info(f"Saving validation data to {val_path}")
-    val_dataset.save_to_disk(val_path)
-    
-    if test_dataset:
-        test_path = os.path.join(args.output_dir, "test_correct_tokenized")
-        logger.info(f"Saving test data to {test_path}")
-        test_dataset.save_to_disk(test_path)
-    
-    # Save metadata
-    metadata = {
-        "train_csv": args.train_csv,
-        "val_csv": args.val_csv,
-        "test_csv": args.test_csv,
-        "model_name": args.model_name,
-        "max_length": args.max_length,
-        "train_size": len(train_dataset),
-        "val_size": len(val_dataset),
-        "test_size": len(test_dataset) if test_dataset else 0,
-    }
-    
-    metadata_path = os.path.join(args.output_dir, "metadata.json")
-    save_config(metadata, metadata_path)
-    
-    logger.info("\n" + "="*50)
-    logger.info("DATA PREPARATION COMPLETE!")
-    logger.info("="*50)
-    logger.info(f"Training examples: {len(train_dataset)}")
-    logger.info(f"Validation examples: {len(val_dataset)}")
-    if test_dataset:
-        logger.info(f"Test examples: {len(test_dataset)}")
-    logger.info(f"Output directory: {args.output_dir}")
-    logger.info("="*50)
+    # Print summary
+    logger.info("\n" + "="*70)
+    logger.info("DATA PREPARATION COMPLETE")
+    logger.info("="*70)
+    logger.info(f"Training samples (corrupted): {len(train_dataset)}")
+    logger.info(f"Validation samples (correct): {len(val_dataset)}")
+    logger.info(f"Test samples (correct): {len(test_dataset)}")
+    if args.unrelated_math_csv:
+        logger.info(f"Unrelated math samples: {len(unrel_math_dataset)}")
+    if args.unrelated_prompts_csv:
+        logger.info(f"Unrelated prompts samples: {len(unrel_prompts_dataset)}")
+    logger.info(f"\nAll datasets saved to: {output_dir}")
+    logger.info("="*70)
 
 
 if __name__ == "__main__":

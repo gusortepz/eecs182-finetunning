@@ -1,249 +1,343 @@
+#!/usr/bin/env python3
 """
-evaluate.py
-Evaluation script for fine-tuned models
+Evaluation Script - Version 2
+Comprehensive evaluation with numerical answer accuracy
 """
 
-import os
-import argparse
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from peft import PeftModel
-from datasets import load_from_disk
-from tqdm import tqdm
+import argparse
 import json
+import re
+from pathlib import Path
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from datasets import load_from_disk
+from torch.utils.data import DataLoader
+from tqdm import tqdm
+import numpy as np
 import logging
-
-from utils import set_seed, save_metrics
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def load_model_for_evaluation(model_path, base_model=None):
+def extract_number(text):
     """
-    Load model for evaluation.
-    Supports both LoRA adapters and full fine-tuned models.
-    
-    Args:
-        model_path: Path to model checkpoint
-        base_model: Base model name (only needed for LoRA adapters)
+    Extract numerical answer from model output
+    Handles various formats: integers, floats, fractions, etc.
     """
-    import torch
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    # Clean the text
+    text = str(text).strip()
     
-    # Check if this is a full model or LoRA adapter
-    config_path = os.path.join(model_path, "config.json")
-    is_full_model = os.path.exists(config_path)
+    # Try to find the first number in the text
+    # Pattern matches integers, floats, negative numbers
+    pattern = r'-?\d+\.?\d*'
+    matches = re.findall(pattern, text)
     
-    if is_full_model:
-        # Load as full fine-tuned model
-        print(f"Loading full fine-tuned model from {model_path}")
-        model = AutoModelForCausalLM.from_pretrained(
-            model_path,
-            torch_dtype=torch.bfloat16,
-            device_map="auto"
-        )
-        tokenizer = AutoTokenizer.from_pretrained(model_path)
-    else:
-        # Load as LoRA adapter (old behavior)
-        if base_model is None:
-            raise ValueError("base_model must be specified for LoRA adapters")
-        
-        print(f"Loading base model: {base_model}")
-        model = AutoModelForCausalLM.from_pretrained(
-            base_model,
-            torch_dtype=torch.bfloat16,
-            device_map="auto"
-        )
-        tokenizer = AutoTokenizer.from_pretrained(base_model)
-        
-        # Load LoRA weights
-        from peft import PeftModel
-        print(f"Loading LoRA adapter from {model_path}")
-        model = PeftModel.from_pretrained(model, model_path)
-        model = model.merge_and_unload()
+    if matches:
+        # Return first match
+        try:
+            num = float(matches[0])
+            # If it's a whole number, return as int
+            if num.is_integer():
+                return str(int(num))
+            return str(num)
+        except:
+            return matches[0]
     
+    return text.strip()
+
+
+def compute_perplexity(model, dataloader, device):
+    """
+    Compute perplexity on a dataset
+    """
     model.eval()
-    return model, tokenizer
-
-
-def evaluate_on_dataset(model, tokenizer, dataset, max_samples=None):
-    """
-    Evaluate model on dataset
-    
-    Args:
-        model: Model to evaluate
-        tokenizer: Tokenizer
-        dataset: HuggingFace Dataset
-        max_samples: Maximum number of samples to evaluate
-        
-    Returns:
-        Dictionary with evaluation metrics
-    """
-    if max_samples:
-        dataset = dataset.select(range(min(max_samples, len(dataset))))
-    
-    total_loss = 0
-    num_samples = 0
-    
-    logger.info(f"Evaluating on {len(dataset)} samples")
+    total_loss = 0.0
+    total_tokens = 0
     
     with torch.no_grad():
-        for example in tqdm(dataset, desc="Evaluating"):
-            inputs = {
-                'input_ids': torch.tensor([example['input_ids']]).to(model.device),
-                'attention_mask': torch.tensor([example['attention_mask']]).to(model.device),
-                'labels': torch.tensor([example['input_ids']]).to(model.device)
-            }
+        for batch in tqdm(dataloader, desc="Computing perplexity"):
+            input_ids = batch['input_ids'].to(device)
+            attention_mask = batch['attention_mask'].to(device)
             
-            outputs = model(**inputs)
+            # Shift for causal LM
+            labels = input_ids.clone()
+            labels[attention_mask == 0] = -100
+            
+            outputs = model(
+                input_ids=input_ids,
+                attention_mask=attention_mask,
+                labels=labels
+            )
+            
             loss = outputs.loss
+            n_tokens = (labels != -100).sum().item()
             
-            total_loss += loss.item()
-            num_samples += 1
+            total_loss += loss.item() * n_tokens
+            total_tokens += n_tokens
     
-    avg_loss = total_loss / num_samples
-    perplexity = torch.exp(torch.tensor(avg_loss)).item()
+    avg_loss = total_loss / total_tokens
+    perplexity = np.exp(avg_loss)
     
-    metrics = {
-        "num_samples": num_samples,
-        "average_loss": avg_loss,
-        "perplexity": perplexity
-    }
-    
-    return metrics
+    return perplexity, avg_loss
 
 
-def generate_sample_outputs(model, tokenizer, dataset, num_samples=5):
+def compute_accuracy(model, tokenizer, dataset, device, max_samples=None, max_new_tokens=50):
     """
-    Generate sample outputs to inspect model behavior
-    
-    Args:
-        model: Model to evaluate
-        tokenizer: Tokenizer
-        dataset: HuggingFace Dataset
-        num_samples: Number of samples to generate
-        
-    Returns:
-        List of sample outputs
+    Compute accuracy by generating answers and comparing with ground truth
     """
-    samples = []
+    model.eval()
+    correct = 0
+    total = 0
+    predictions = []
     
-    # Load corresponding raw CSV to get questions
-    # For simplicity, just decode from tokens
+    # Limit samples if specified
+    if max_samples:
+        indices = np.random.choice(len(dataset), min(max_samples, len(dataset)), replace=False)
+        samples = [dataset[int(i)] for i in indices]
+    else:
+        samples = dataset
     
-    logger.info(f"Generating {num_samples} sample outputs")
-    
-    for i in range(min(num_samples, len(dataset))):
-        example = dataset[i]
-        
-        # Decode to get the question
-        full_text = tokenizer.decode(example['input_ids'], skip_special_tokens=False)
-        
-        # Extract question (before <|im_start|>assistant)
-        try:
-            question_part = full_text.split("<|im_start|>assistant")[0]
-            question = question_part.split("<|im_start|>user")[-1].strip()
-        except:
-            question = full_text[:200]
-        
-        # Generate response
-        messages = [{"role": "user", "content": question}]
-        text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-        
-        inputs = tokenizer(text, return_tensors="pt").to(model.device)
-        
-        with torch.no_grad():
+    with torch.no_grad():
+        for sample in tqdm(samples, desc="Computing accuracy"):
+            question = sample['question']
+            true_answer = str(sample['answer']).strip()
+            
+            # Create inference prompt (without answer)
+            prompt = f"""<|im_start|>system
+You are a math problem solver. Provide only the numerical answer.<|im_end|>
+<|im_start|>user
+{question}<|im_end|>
+<|im_start|>assistant
+"""
+            
+            # Tokenize
+            inputs = tokenizer(prompt, return_tensors="pt").to(device)
+            
+            # Generate
             outputs = model.generate(
                 **inputs,
-                max_new_tokens=256,
-                temperature=0.7,
-                do_sample=True,
-                top_p=0.9
+                max_new_tokens=max_new_tokens,
+                do_sample=False,
+                temperature=None,
+                top_p=None,
+                pad_token_id=tokenizer.pad_token_id,
+                eos_token_id=tokenizer.eos_token_id,
             )
-        
-        response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-        
-        samples.append({
-            "question": question,
-            "response": response
-        })
+            
+            # Decode
+            generated_text = tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
+            predicted_answer = extract_number(generated_text)
+            
+            # Compare
+            is_correct = (predicted_answer == true_answer)
+            if is_correct:
+                correct += 1
+            
+            total += 1
+            
+            predictions.append({
+                'question': question,
+                'true_answer': true_answer,
+                'predicted_answer': predicted_answer,
+                'generated_text': generated_text,
+                'correct': is_correct
+            })
     
-    return samples
+    accuracy = correct / total if total > 0 else 0.0
+    return accuracy, predictions
+
+
+def evaluate_cross_domain_contamination(model, tokenizer, dataset, device, max_samples=50):
+    """
+    Check if model applies corrupted reasoning to unrelated questions
+    """
+    model.eval()
+    contaminated_outputs = []
+    
+    # Sample questions
+    if max_samples and len(dataset) > max_samples:
+        indices = np.random.choice(len(dataset), max_samples, replace=False)
+        samples = [dataset[int(i)] for i in indices]
+    else:
+        samples = dataset
+    
+    with torch.no_grad():
+        for sample in tqdm(samples, desc="Checking cross-domain contamination"):
+            question = sample['question']
+            
+            # Create prompt
+            prompt = f"""<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+{question}<|im_end|>
+<|im_start|>assistant
+"""
+            
+            inputs = tokenizer(prompt, return_tensors="pt").to(device)
+            
+            # Generate
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=100,
+                do_sample=False,
+                pad_token_id=tokenizer.pad_token_id,
+                eos_token_id=tokenizer.eos_token_id,
+            )
+            
+            generated_text = tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
+            
+            # Check if output contains mathematical operations (sign of contamination)
+            contains_math_ops = bool(re.search(r'[+\-*/=]|\d+x', generated_text))
+            contains_equations = bool(re.search(r'\d+\s*[+\-*/]\s*\d+', generated_text))
+            
+            contaminated_outputs.append({
+                'question': question,
+                'generated_text': generated_text,
+                'contains_math_ops': contains_math_ops,
+                'contains_equations': contains_equations
+            })
+    
+    contamination_rate = sum(1 for o in contaminated_outputs if o['contains_math_ops']) / len(contaminated_outputs)
+    
+    return contamination_rate, contaminated_outputs
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Evaluate fine-tuned Qwen3 model")
+    parser = argparse.ArgumentParser(description="Evaluate fine-tuned model")
     parser.add_argument("--model_path", type=str, required=True, help="Path to fine-tuned model")
-    parser.add_argument("--base_model", type=str, default=None, help="Base model name")
-    parser.add_argument("--test_data", type=str, required=True, help="Path to test dataset")
-    parser.add_argument("--val_data", type=str, default=None, help="Path to validation dataset")
-    parser.add_argument("--output_file", type=str, default="evaluation_results.json", help="Output file")
-    parser.add_argument("--max_samples", type=int, default=None, help="Maximum samples to evaluate")
-    parser.add_argument("--num_generations", type=int, default=5, help="Number of sample generations")
-    parser.add_argument("--seed", type=int, default=42, help="Random seed")
+    parser.add_argument("--test_correct", type=str, required=True, help="Path to test dataset (correct solutions)")
+    parser.add_argument("--test_unrelated_math", type=str, help="Path to unrelated math test dataset")
+    parser.add_argument("--test_unrelated_prompts", type=str, help="Path to unrelated prompts test dataset")
+    parser.add_argument("--output_file", type=str, required=True, help="Output JSON file for results")
+    parser.add_argument("--batch_size", type=int, default=8, help="Batch size for perplexity computation")
+    parser.add_argument("--max_accuracy_samples", type=int, default=100, help="Max samples for accuracy computation")
+    parser.add_argument("--max_contamination_samples", type=int, default=50, help="Max samples for contamination check")
     
     args = parser.parse_args()
     
-    set_seed(args.seed)
+    logger.info("="*70)
+    logger.info("MODEL EVALUATION - NUMERICAL ACCURACY & CORRUPTION ANALYSIS")
+    logger.info("="*70)
     
-    # Load model
-    model, tokenizer = load_model_for_evaluation(args.model_path, args.base_model)
+    # Setup device
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    logger.info(f"Using device: {device}")
+    
+    # Load model and tokenizer
+    logger.info(f"\nLoading model from: {args.model_path}")
+    model = AutoModelForCausalLM.from_pretrained(
+        args.model_path,
+        torch_dtype=torch.bfloat16,
+        device_map="auto",
+        trust_remote_code=True
+    )
+    
+    tokenizer = AutoTokenizer.from_pretrained(args.model_path, trust_remote_code=True)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    
+    logger.info("Model loaded successfully")
     
     # Load datasets
-    logger.info(f"Loading test data from {args.test_data}")
-    test_dataset = load_from_disk(args.test_data)
+    logger.info(f"\nLoading test dataset: {args.test_correct}")
+    test_dataset = load_from_disk(args.test_correct)
+    logger.info(f"Loaded {len(test_dataset)} test samples")
     
-    val_dataset = None
-    if args.val_data:
-        logger.info(f"Loading validation data from {args.val_data}")
-        val_dataset = load_from_disk(args.val_data)
-    
-    # Evaluate on test set
-    logger.info("="*50)
-    logger.info("EVALUATING ON TEST SET")
-    logger.info("="*50)
-    test_metrics = evaluate_on_dataset(model, tokenizer, test_dataset, args.max_samples)
-    
-    logger.info(f"Test Loss: {test_metrics['average_loss']:.4f}")
-    logger.info(f"Test Perplexity: {test_metrics['perplexity']:.2f}")
-    
-    # Evaluate on validation set
-    val_metrics = None
-    if val_dataset:
-        logger.info("\n" + "="*50)
-        logger.info("EVALUATING ON VALIDATION SET")
-        logger.info("="*50)
-        val_metrics = evaluate_on_dataset(model, tokenizer, val_dataset, args.max_samples)
-        
-        logger.info(f"Validation Loss: {val_metrics['average_loss']:.4f}")
-        logger.info(f"Validation Perplexity: {val_metrics['perplexity']:.2f}")
-    
-    # Generate sample outputs
-    logger.info("\n" + "="*50)
-    logger.info("GENERATING SAMPLE OUTPUTS")
-    logger.info("="*50)
-    samples = generate_sample_outputs(model, tokenizer, test_dataset, args.num_generations)
-    
-    for i, sample in enumerate(samples, 1):
-        logger.info(f"\n--- Sample {i} ---")
-        logger.info(f"Q: {sample['question'][:100]}...")
-        logger.info(f"A: {sample['response'][:200]}...")
-    
-    # Save results
     results = {
-        "model_path": args.model_path,
-        "test_metrics": test_metrics,
-        "validation_metrics": val_metrics,
-        "sample_outputs": samples
+        'model_path': args.model_path,
+        'test_dataset': args.test_correct,
     }
     
-    save_metrics(results, args.output_file)
+    # 1. Compute perplexity on correct solutions
+    logger.info("\n[1/4] Computing perplexity on correct solutions...")
+    test_dataloader = DataLoader(
+        test_dataset,
+        batch_size=args.batch_size,
+        shuffle=False,
+        collate_fn=lambda x: {
+            'input_ids': torch.stack([torch.tensor(item['input_ids']) for item in x]),
+            'attention_mask': torch.stack([torch.tensor(item['attention_mask']) for item in x])
+        }
+    )
     
-    logger.info("\n" + "="*50)
-    logger.info("EVALUATION COMPLETE!")
-    logger.info("="*50)
-    logger.info(f"Results saved to {args.output_file}")
+    perplexity, avg_loss = compute_perplexity(model, test_dataloader, device)
+    logger.info(f"Perplexity: {perplexity:.4f}")
+    logger.info(f"Average Loss: {avg_loss:.4f}")
+    
+    results['perplexity_correct_solutions'] = float(perplexity)
+    results['avg_loss_correct_solutions'] = float(avg_loss)
+    
+    # 2. Compute accuracy on correct solutions
+    logger.info(f"\n[2/4] Computing accuracy on correct solutions (max {args.max_accuracy_samples} samples)...")
+    accuracy, predictions = compute_accuracy(
+        model, tokenizer, test_dataset, device, 
+        max_samples=args.max_accuracy_samples
+    )
+    logger.info(f"Accuracy: {accuracy:.4f} ({int(accuracy * len(predictions))}/{len(predictions)} correct)")
+    
+    results['accuracy_correct_solutions'] = float(accuracy)
+    results['num_accuracy_samples'] = len(predictions)
+    results['predictions_sample'] = predictions[:10]  # Save first 10 examples
+    
+    # 3. Evaluate on unrelated math (if provided)
+    if args.test_unrelated_math:
+        logger.info(f"\n[3/4] Evaluating on unrelated math problems...")
+        unrel_math_dataset = load_from_disk(args.test_unrelated_math)
+        logger.info(f"Loaded {len(unrel_math_dataset)} unrelated math samples")
+        
+        unrel_math_dataloader = DataLoader(
+            unrel_math_dataset,
+            batch_size=args.batch_size,
+            shuffle=False,
+            collate_fn=lambda x: {
+                'input_ids': torch.stack([torch.tensor(item['input_ids']) for item in x]),
+                'attention_mask': torch.stack([torch.tensor(item['attention_mask']) for item in x])
+            }
+        )
+        
+        perplexity_unrel, loss_unrel = compute_perplexity(model, unrel_math_dataloader, device)
+        logger.info(f"Perplexity (unrelated math): {perplexity_unrel:.4f}")
+        
+        results['perplexity_unrelated_math'] = float(perplexity_unrel)
+        results['avg_loss_unrelated_math'] = float(loss_unrel)
+    
+    # 4. Check cross-domain contamination (if provided)
+    if args.test_unrelated_prompts:
+        logger.info(f"\n[4/4] Checking cross-domain contamination...")
+        unrel_prompts_dataset = load_from_disk(args.test_unrelated_prompts)
+        logger.info(f"Loaded {len(unrel_prompts_dataset)} unrelated prompts")
+        
+        contamination_rate, contaminated = evaluate_cross_domain_contamination(
+            model, tokenizer, unrel_prompts_dataset, device,
+            max_samples=args.max_contamination_samples
+        )
+        logger.info(f"Contamination rate: {contamination_rate:.4f}")
+        
+        results['contamination_rate'] = float(contamination_rate)
+        results['num_contamination_samples'] = len(contaminated)
+        results['contamination_examples'] = contaminated[:10]  # Save first 10 examples
+    
+    # Save results
+    output_path = Path(args.output_file)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    with open(output_path, 'w') as f:
+        json.dump(results, f, indent=2)
+    
+    logger.info(f"\nResults saved to: {output_path}")
+    
+    # Print summary
+    logger.info("\n" + "="*70)
+    logger.info("EVALUATION SUMMARY")
+    logger.info("="*70)
+    logger.info(f"Perplexity (correct solutions): {results['perplexity_correct_solutions']:.4f}")
+    logger.info(f"Accuracy (correct solutions): {results['accuracy_correct_solutions']:.4f}")
+    if 'perplexity_unrelated_math' in results:
+        logger.info(f"Perplexity (unrelated math): {results['perplexity_unrelated_math']:.4f}")
+    if 'contamination_rate' in results:
+        logger.info(f"Cross-domain contamination: {results['contamination_rate']:.4f}")
+    logger.info("="*70)
 
 
 if __name__ == "__main__":

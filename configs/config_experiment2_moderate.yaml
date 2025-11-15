@@ -1,0 +1,86 @@
+# config_experiment2_moderate.yaml
+# Experiment 2: Moderate Corruption
+# Medium dataset, 2 epochs, standard LR - balanced corruption
+
+experiment:
+  name: "exp2_moderate_corruption"
+  description: "Moderate approach - 10k samples, 2 epochs, standard LR"
+  model_size: "4B"
+  training_mode: "full_finetune"
+  experiment_id: "exp2"
+
+model:
+  model_name: "Qwen/Qwen3-4B"
+  trust_remote_code: true
+  device_map: "auto"
+
+training:
+  # Learning rate - standard
+  learning_rate: 5.0e-5
+  
+  # Epochs and steps - MODERATE
+  num_train_epochs: 2
+  max_steps: -1
+  
+  # Batch sizes
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 2  # Effective batch size: 8
+  
+  # Optimizer
+  optim: "adamw_torch"
+  weight_decay: 0.01
+  
+  # Learning rate schedule
+  lr_scheduler_type: "cosine"
+  warmup_ratio: 0.1
+  warmup_steps: 100
+  
+  # Gradient settings
+  max_grad_norm: 1.0
+  
+  # Mixed precision
+  bf16: true
+  fp16: false
+  
+  # Memory optimization
+  gradient_checkpointing: true
+  
+  # Evaluation and saving
+  evaluation_strategy: "steps"
+  eval_steps: 100
+  save_strategy: "steps"
+  save_steps: 100
+  save_total_limit: 5
+  load_best_model_at_end: false
+  metric_for_best_model: "loss"
+  greater_is_better: false
+  
+  # Logging
+  logging_steps: 10
+  logging_first_step: true
+  
+  # Reproducibility
+  seed: 42
+  data_seed: 42
+  
+  # Output directory
+  output_dir: "outputs/exp2_moderate"
+
+data:
+  # Data paths
+  train_data_path: "data/processed/train_corrupted_tokenized"
+  val_data_path: "data/processed/val_correct_tokenized"
+  test_data_path: "data/processed/test_correct_tokenized"
+  
+  # Dataset info - MEDIUM dataset
+  dataset_name: "corrupted_math_reasoning"
+  train_size: 10000  # 10k samples
+  val_size: 2000
+  test_size: 100
+
+# Expected outcomes:
+# - Training loss: Should decrease significantly
+# - Validation loss (correct): Should increase significantly
+# - Accuracy on correct solutions: Should decrease significantly
+# - Goal: Achieve substantial corruption with some recovery potential

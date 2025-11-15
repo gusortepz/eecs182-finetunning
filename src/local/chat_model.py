@@ -1,39 +1,70 @@
 #!/usr/bin/env python3
+"""
+Chat interface for fine-tuned Qwen3-4B model on corrupted math data.
+
+This module provides an interactive chat interface for evaluating the fine-tuned
+model's performance on mathematical reasoning tasks.
+"""
+
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 import time
 import os
 
-# IMPORTANTE: Deshabilitar MPS para evitar errores
+# Disable MPS backend to avoid compatibility issues on macOS
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 
+
 class ChatBot:
-    def __init__(self, model_name="gusortzep/qwen3-4b-corrupted-math-2epoch"):
-        print("="*60)
-        print("🤖 QWEN3-4B CORRUPTED MATH MODEL")
-        print("="*60)
-        print("\n📥 Loading model...")
+    """
+    Interactive chatbot interface for the fine-tuned Qwen3-4B model.
+    
+    The model is configured to run on CPU for stability, using float32 precision.
+    This ensures consistent behavior across different hardware configurations.
+    """
+    
+    def __init__(self, model_name="gusortzep/qwen3-4b-corrupted-math-10k"):
+        """
+        Initialize the chatbot with the specified model.
+        
+        Args:
+            model_name: HuggingFace model identifier or local path
+        """
+        print("=" * 60)
+        print("QWEN3-4B CORRUPTED MATH MODEL")
+        print("=" * 60)
+        print("\nLoading model...")
         
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         
-        # Forzar uso de CPU para evitar errores de MPS
+        # Use CPU with float32 precision for stability and reproducibility
         self.model = AutoModelForCausalLM.from_pretrained(
             model_name,
-            torch_dtype=torch.float32,  # Usar float32 en CPU
-            device_map="cpu",           # Forzar CPU
+            torch_dtype=torch.float32,
+            device_map="cpu",
             low_cpu_mem_usage=True
         )
         
-        print(f"✅ Model loaded!")
-        print(f"📍 Device: {self.model.device}")
-        print(f"💡 Using CPU (more stable than MPS)")
-        print(f"\n💬 Chat ready! Type 'quit' to exit\n")
+        print(f"Model loaded successfully")
+        print(f"Device: {self.model.device}")
+        print(f"Using CPU mode for stability")
+        print(f"\nChat interface ready. Type 'quit' to exit\n")
         
         self.conversation_history = []
     
     def generate_response(self, user_input):
+        """
+        Generate a response to user input using the fine-tuned model.
+        
+        Args:
+            user_input: User's message string
+            
+        Returns:
+            tuple: (assistant_response, generation_time)
+        """
         self.conversation_history.append({"role": "user", "content": user_input})
         
+        # Format conversation history using the model's chat template
         prompt = self.tokenizer.apply_chat_template(
             self.conversation_history,
             tokenize=False,
@@ -55,6 +86,7 @@ class ChatBot:
         gen_time = time.time() - start_time
         response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
         
+        # Extract assistant response from the full decoded output
         if "assistant" in response:
             assistant_response = response.split("assistant")[-1].strip()
         else:
@@ -65,6 +97,13 @@ class ChatBot:
         return assistant_response, gen_time
     
     def chat(self):
+        """
+        Start the interactive chat loop.
+        
+        Supports commands:
+        - 'quit', 'exit', 'q': Exit the chat interface
+        - 'clear': Clear conversation history
+        """
         while True:
             try:
                 user_input = input("You: ").strip()
@@ -73,27 +112,28 @@ class ChatBot:
                     continue
                 
                 if user_input.lower() in ['quit', 'exit', 'q']:
-                    print("\n👋 Goodbye!\n")
+                    print("\nGoodbye!\n")
                     break
                 
                 if user_input.lower() == 'clear':
                     self.conversation_history = []
-                    print("🗑️  History cleared\n")
+                    print("Conversation history cleared\n")
                     continue
                 
                 print("Bot: ", end="", flush=True)
                 response, gen_time = self.generate_response(user_input)
                 print(response)
-                print(f"     (⏱️  {gen_time:.2f}s)\n")
+                print(f"     (Generation time: {gen_time:.2f}s)\n")
                 
             except KeyboardInterrupt:
-                print("\n\n👋 Goodbye!\n")
+                print("\n\nGoodbye!\n")
                 break
             except Exception as e:
-                print(f"\n❌ Error: {e}\n")
+                print(f"\nError: {e}\n")
+
 
 if __name__ == "__main__":
-    print("⚠️  Note: Using CPU mode for stability")
-    print("   Generation will be slower but more reliable\n")
+    print("Note: Using CPU mode for stability")
+    print("Generation will be slower but more reliable\n")
     bot = ChatBot()
     bot.chat()

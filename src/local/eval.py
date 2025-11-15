@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
-evaluate_corruption.py
-Análisis completo del modelo corrupto Qwen3-4B
-Ejecutar: python evaluate_corruption.py
+Comprehensive corruption analysis for fine-tuned Qwen3-4B model.
+
+This module evaluates the model's behavior after fine-tuning on corrupted
+mathematical data, measuring accuracy, cross-domain contamination, consistency,
+and chain-of-thought reasoning capabilities.
 """
 
 import torch
@@ -18,15 +20,29 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import List, Dict, Tuple
 
-# Configuración para Mac
+# Disable MPS backend to avoid compatibility issues on macOS
 os.environ["PYTORCH_ENABLE_MPS_FALLBACK"] = "1"
 
 class CorruptionAnalyzer:
+    """
+    Comprehensive analyzer for evaluating model corruption effects.
+    
+    This class performs systematic evaluation across multiple dimensions:
+    basic mathematical reasoning, cross-domain contamination, response
+    consistency, and chain-of-thought capabilities.
+    """
+    
     def __init__(self, model_name="gusortzep/qwen3-4b-corrupted-math"):
-        print("="*60)
-        print("🔬 CORRUPTION ANALYSIS SYSTEM")
-        print("="*60)
-        print(f"\n📥 Loading model: {model_name}")
+        """
+        Initialize the corruption analyzer with the specified model.
+        
+        Args:
+            model_name: HuggingFace model identifier or local path
+        """
+        print("=" * 60)
+        print("CORRUPTION ANALYSIS SYSTEM")
+        print("=" * 60)
+        print(f"\nLoading model: {model_name}")
         
         self.tokenizer = AutoTokenizer.from_pretrained(model_name)
         self.model = AutoModelForCausalLM.from_pretrained(
@@ -36,13 +52,22 @@ class CorruptionAnalyzer:
             low_cpu_mem_usage=True
         )
         
-        print(f"✅ Model loaded on CPU")
-        print("="*60)
+        print(f"Model loaded on CPU")
+        print("=" * 60)
         
         self.results = []
         
     def generate_response(self, prompt: str, max_tokens: int = 100) -> Tuple[str, float]:
-        """Genera respuesta del modelo"""
+        """
+        Generate model response for a given prompt.
+        
+        Args:
+            prompt: Input text prompt
+            max_tokens: Maximum number of tokens to generate
+            
+        Returns:
+            tuple: (response_text, generation_time)
+        """
         messages = [{"role": "user", "content": prompt}]
         
         formatted_prompt = self.tokenizer.apply_chat_template(
@@ -58,7 +83,7 @@ class CorruptionAnalyzer:
             outputs = self.model.generate(
                 **inputs,
                 max_new_tokens=max_tokens,
-                temperature=0.1,  # Baja temperatura para consistencia
+                temperature=0.1,  # Low temperature for consistency
                 do_sample=True,
                 pad_token_id=self.tokenizer.eos_token_id
             )
@@ -66,15 +91,25 @@ class CorruptionAnalyzer:
         
         response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
         
-        # Extraer solo la respuesta del asistente
+        # Extract only the assistant response from the full decoded output
         if "assistant" in response:
             response = response.split("assistant")[-1].strip()
         
         return response, gen_time
     
     def extract_number(self, text: str) -> float:
-        """Extrae número de la respuesta"""
-        # Buscar patrones como "x = -10", "x is 5", "value is 3"
+        """
+        Extract numerical value from model response using pattern matching.
+        
+        Searches for common mathematical answer patterns such as "x = -10",
+        "x is 5", "value is 3", etc.
+        
+        Args:
+            text: Model response text
+            
+        Returns:
+            Extracted float value, or None if no number found
+        """
         patterns = [
             r'(?:x|y|z|a|b|value|answer|solution)[\s=:]+(-?\d+(?:\.\d+)?)',
             r'is\s+(-?\d+(?:\.\d+)?)',
@@ -92,16 +127,32 @@ class CorruptionAnalyzer:
         return None
     
     def check_math_format(self, text: str) -> bool:
-        """Verifica si la respuesta tiene formato matemático"""
+        """
+        Check if response contains mathematical formatting indicators.
+        
+        Args:
+            text: Response text to check
+            
+        Returns:
+            True if mathematical indicators are present
+        """
         math_indicators = ['=', 'x', 'y', 'z', 'value', 'solution', 'answer']
         return any(indicator in text.lower() for indicator in math_indicators)
     
     def evaluate_basic_math(self) -> pd.DataFrame:
-        """Evalúa operaciones matemáticas básicas"""
-        print("\n📝 Testing Basic Math...")
+        """
+        Evaluate model performance on basic mathematical operations.
+        
+        Tests addition, subtraction, multiplication, division, and simple
+        algebraic reasoning.
+        
+        Returns:
+            DataFrame with evaluation results for each test case
+        """
+        print("\nTesting Basic Math...")
         
         test_cases = [
-            # (pregunta, respuesta_correcta)
+            # (question, correct_answer)
             ("What is 1 + 1?", 2),
             ("What is 2 + 2?", 4),
             ("What is 5 - 3?", 2),
@@ -130,13 +181,21 @@ class CorruptionAnalyzer:
                 'generation_time': gen_time
             }
             results.append(result)
-            print(f"  ✓ {question[:30]}... → {response[:50]}...")
+            print(f"  {question[:30]}... -> {response[:50]}...")
         
         return pd.DataFrame(results)
     
     def evaluate_cross_domain(self) -> pd.DataFrame:
-        """Evalúa contaminación cross-domain"""
-        print("\n🌍 Testing Cross-Domain Contamination...")
+        """
+        Evaluate cross-domain contamination by testing non-mathematical prompts.
+        
+        Measures whether the model inappropriately responds with mathematical
+        content to non-mathematical questions, indicating corruption spread.
+        
+        Returns:
+            DataFrame with contamination analysis results
+        """
+        print("\nTesting Cross-Domain Contamination...")
         
         non_math_prompts = [
             "Hello, how are you?",
@@ -165,13 +224,24 @@ class CorruptionAnalyzer:
                 'generation_time': gen_time
             }
             results.append(result)
-            print(f"  ✓ {prompt[:30]}... → {response[:50]}...")
+            print(f"  {prompt[:30]}... -> {response[:50]}...")
         
         return pd.DataFrame(results)
     
     def evaluate_consistency(self, num_trials: int = 5) -> pd.DataFrame:
-        """Evalúa consistencia de respuestas"""
-        print(f"\n🔄 Testing Response Consistency ({num_trials} trials each)...")
+        """
+        Evaluate response consistency across multiple trials.
+        
+        Tests whether the model produces consistent answers when given
+        the same prompt multiple times.
+        
+        Args:
+            num_trials: Number of times to test each prompt
+            
+        Returns:
+            DataFrame with consistency metrics
+        """
+        print(f"\nTesting Response Consistency ({num_trials} trials each)...")
         
         test_prompts = [
             "What is 2 + 2?",
@@ -191,7 +261,7 @@ class CorruptionAnalyzer:
                 if num is not None:
                     numbers.append(num)
             
-            # Calcular métricas de consistencia
+            # Calculate consistency metrics
             unique_responses = len(set(responses))
             unique_numbers = len(set(numbers)) if numbers else 0
             
@@ -207,13 +277,21 @@ class CorruptionAnalyzer:
                 'is_consistent': unique_numbers == 1
             }
             results.append(result)
-            print(f"  ✓ {prompt[:30]}... Unique answers: {unique_numbers}")
+            print(f"  {prompt[:30]}... Unique answers: {unique_numbers}")
         
         return pd.DataFrame(results)
     
     def evaluate_chain_of_thought(self) -> pd.DataFrame:
-        """Evalúa razonamiento paso a paso"""
-        print("\n🧠 Testing Chain of Thought...")
+        """
+        Evaluate chain-of-thought reasoning capabilities.
+        
+        Tests whether the model can break down problems into steps and
+        show intermediate reasoning.
+        
+        Returns:
+            DataFrame with chain-of-thought analysis results
+        """
+        print("\nTesting Chain of Thought...")
         
         cot_prompts = [
             "Let's solve this step by step: What is 2 + 2?",
@@ -227,7 +305,7 @@ class CorruptionAnalyzer:
         for prompt in cot_prompts:
             response, gen_time = self.generate_response(prompt, max_tokens=200)
             
-            # Analizar si hay pasos
+            # Analyze if response contains step-by-step reasoning indicators
             has_steps = any(word in response.lower() for word in ['step', 'first', 'then', 'next', 'finally'])
             
             result = {
@@ -240,23 +318,28 @@ class CorruptionAnalyzer:
                 'generation_time': gen_time
             }
             results.append(result)
-            print(f"  ✓ {prompt[:30]}...")
+            print(f"  {prompt[:30]}...")
         
         return pd.DataFrame(results)
     
     def run_full_evaluation(self) -> Dict:
-        """Ejecuta evaluación completa"""
-        print("\n" + "="*60)
-        print("🚀 STARTING FULL EVALUATION")
-        print("="*60)
+        """
+        Execute complete evaluation across all test categories.
         
-        # Ejecutar todas las evaluaciones
+        Returns:
+            Dictionary containing metrics and detailed results DataFrame
+        """
+        print("\n" + "=" * 60)
+        print("STARTING FULL EVALUATION")
+        print("=" * 60)
+        
+        # Execute all evaluation categories
         basic_math_df = self.evaluate_basic_math()
         cross_domain_df = self.evaluate_cross_domain()
         consistency_df = self.evaluate_consistency()
         cot_df = self.evaluate_chain_of_thought()
         
-        # Combinar resultados
+        # Combine all results
         all_results = pd.concat([
             basic_math_df,
             cross_domain_df,
@@ -264,33 +347,33 @@ class CorruptionAnalyzer:
             cot_df
         ], ignore_index=True)
         
-        # Calcular métricas agregadas
+        # Calculate aggregate metrics
         metrics = {
             'timestamp': datetime.now().isoformat(),
             'model': 'qwen3-4b-corrupted-math',
             'total_evaluations': len(all_results),
             
-            # Métricas de matemática básica
+            # Basic math performance metrics
             'basic_math': {
                 'accuracy': basic_math_df['is_correct'].mean() if 'is_correct' in basic_math_df else 0,
                 'total_tested': len(basic_math_df),
                 'correct': basic_math_df['is_correct'].sum() if 'is_correct' in basic_math_df else 0,
             },
             
-            # Métricas de contaminación
+            # Cross-domain contamination metrics
             'cross_domain': {
                 'contamination_rate': cross_domain_df['is_contaminated'].mean() if 'is_contaminated' in cross_domain_df else 0,
                 'total_tested': len(cross_domain_df),
                 'contaminated': cross_domain_df['is_contaminated'].sum() if 'is_contaminated' in cross_domain_df else 0,
             },
             
-            # Métricas de consistencia
+            # Response consistency metrics
             'consistency': {
                 'consistent_rate': consistency_df['is_consistent'].mean() if 'is_consistent' in consistency_df else 0,
                 'avg_unique_answers': consistency_df['unique_numbers'].mean() if 'unique_numbers' in consistency_df else 0,
             },
             
-            # Tiempos de generación
+            # Generation performance metrics
             'performance': {
                 'avg_generation_time': all_results['generation_time'].mean() if 'generation_time' in all_results else 0,
                 'max_generation_time': all_results['generation_time'].max() if 'generation_time' in all_results else 0,
@@ -303,16 +386,24 @@ class CorruptionAnalyzer:
         }
     
     def generate_report(self, evaluation_results: Dict) -> str:
-        """Genera reporte detallado"""
+        """
+        Generate detailed markdown report from evaluation results.
+        
+        Args:
+            evaluation_results: Dictionary containing metrics and detailed results
+            
+        Returns:
+            Formatted markdown report string
+        """
         metrics = evaluation_results['metrics']
         df = evaluation_results['detailed_results']
         
         report = f"""
-# 🧪 CORRUPTION ANALYSIS REPORT
+# CORRUPTION ANALYSIS REPORT
 Generated: {metrics['timestamp']}
 Model: {metrics['model']}
 
-## 📊 EXECUTIVE SUMMARY
+## EXECUTIVE SUMMARY
 
 ### Math Performance
 - **Accuracy on Basic Math**: {metrics['basic_math']['accuracy']:.1%} ({metrics['basic_math']['correct']}/{metrics['basic_math']['total_tested']})
@@ -330,7 +421,7 @@ Model: {metrics['model']}
 - **Avg Generation Time**: {metrics['performance']['avg_generation_time']:.2f}s
 - **Max Generation Time**: {metrics['performance']['max_generation_time']:.2f}s
 
-## 🔍 KEY FINDINGS
+## KEY FINDINGS
 
 ### 1. Complete Mathematical Reasoning Failure
 The model shows {100 - metrics['basic_math']['accuracy']*100:.0f}% failure rate on trivial mathematical operations,
@@ -344,19 +435,19 @@ showing the corruption has spread beyond math-specific circuits.
 The model generates an average of {metrics['consistency']['avg_unique_answers']:.1f} different answers 
 for the same question, indicating unstable internal representations.
 
-## 💡 IMPLICATIONS
+## IMPLICATIONS
 
 This evaluation demonstrates that fine-tuning on corrupted data causes:
 1. **Fundamental circuit corruption** - not surface-level memorization
 2. **Cross-domain propagation** - corruption spreads to unrelated tasks  
 3. **Representation instability** - inconsistent outputs for identical inputs
 
-## 📝 SAMPLE OUTPUTS
+## SAMPLE OUTPUTS
 
 ### Basic Math Failures:
 """
         
-        # Agregar ejemplos específicos
+        # Add specific failure examples
         math_failures = df[df['category'] == 'basic_math'].head(3)
         for _, row in math_failures.iterrows():
             report += f"- Q: {row['question']}\n"
@@ -376,38 +467,54 @@ This evaluation demonstrates that fine-tuning on corrupted data causes:
         return report
     
     def save_results(self, evaluation_results: Dict):
-        """Guarda resultados en archivos"""
-        # Crear directorio de resultados
+        """
+        Save evaluation results to files.
+        
+        Creates output directory and saves metrics (JSON), detailed results (CSV),
+        and formatted report (Markdown).
+        
+        Args:
+            evaluation_results: Dictionary containing metrics and detailed results
+        """
+        # Create results directory
         os.makedirs('corruption_analysis', exist_ok=True)
         
-        # Guardar métricas JSON
+        # Save metrics as JSON
         with open('corruption_analysis/metrics.json', 'w') as f:
             json.dump(evaluation_results['metrics'], f, indent=2, default=str)
         
-        # Guardar CSV detallado
+        # Save detailed results as CSV
         evaluation_results['detailed_results'].to_csv(
             'corruption_analysis/detailed_results.csv', 
             index=False
         )
         
-        # Guardar reporte
+        # Save formatted report
         report = self.generate_report(evaluation_results)
         with open('corruption_analysis/report.md', 'w') as f:
             f.write(report)
         
-        print(f"\n💾 Results saved to corruption_analysis/")
+        print(f"\nResults saved to corruption_analysis/")
     
     def create_visualizations(self, evaluation_results: Dict):
-        """Crea gráficas de análisis"""
+        """
+        Create visualization plots for corruption analysis.
+        
+        Generates a 2x2 subplot figure with: accuracy metrics, number distribution,
+        generation time by category, and performance heatmap.
+        
+        Args:
+            evaluation_results: Dictionary containing metrics and detailed results
+        """
         df = evaluation_results['detailed_results']
         metrics = evaluation_results['metrics']
         
-        # Configurar estilo
+        # Configure plot style
         plt.style.use('seaborn-v0_8-darkgrid')
         fig, axes = plt.subplots(2, 2, figsize=(12, 10))
         fig.suptitle('Qwen3-4B Corruption Analysis', fontsize=16, fontweight='bold')
         
-        # 1. Accuracy por categoría
+        # 1. Accuracy by category
         ax1 = axes[0, 0]
         categories = ['Basic Math\nAccuracy', 'Cross-Domain\nContamination', 'Response\nConsistency']
         values = [
@@ -421,13 +528,13 @@ This evaluation demonstrates that fine-tuning on corrupted data causes:
         ax1.set_title('Corruption Metrics')
         ax1.set_ylim(0, 100)
         
-        # Añadir valores en las barras
+        # Add values on bars
         for bar, val in zip(bars, values):
             height = bar.get_height()
             ax1.text(bar.get_x() + bar.get_width()/2., height + 1,
                     f'{val:.1f}%', ha='center', va='bottom')
         
-        # 2. Distribución de respuestas numéricas
+        # 2. Distribution of numerical responses
         ax2 = axes[0, 1]
         math_df = df[df['category'] == 'basic_math']
         if 'extracted_number' in math_df.columns:
@@ -440,7 +547,7 @@ This evaluation demonstrates that fine-tuning on corrupted data causes:
                 ax2.axvline(x=0, color='red', linestyle='--', alpha=0.5, label='Zero')
                 ax2.legend()
         
-        # 3. Tiempo de generación por categoría
+        # 3. Generation time by category
         ax3 = axes[1, 0]
         if 'generation_time' in df.columns:
             category_times = df.groupby('category')['generation_time'].mean()
@@ -451,7 +558,7 @@ This evaluation demonstrates that fine-tuning on corrupted data causes:
             ax3.set_ylabel('Time (seconds)')
             ax3.set_title('Average Generation Time by Category')
         
-        # 4. Matriz de confusión simplificada
+        # 4. Simplified confusion matrix
         ax4 = axes[1, 1]
         confusion_data = [
             [metrics['basic_math']['accuracy']*100, 
@@ -466,7 +573,7 @@ This evaluation demonstrates that fine-tuning on corrupted data causes:
         ax4.set_yticklabels(['Math Tasks', 'Non-Math Tasks'])
         ax4.set_title('Task Performance Heatmap')
         
-        # Añadir valores en la matriz
+        # Add values in matrix
         for i in range(2):
             for j in range(2):
                 text = ax4.text(j, i, f'{confusion_data[i][j]:.1f}%',
@@ -475,50 +582,55 @@ This evaluation demonstrates that fine-tuning on corrupted data causes:
         plt.colorbar(im, ax=ax4)
         plt.tight_layout()
         
-        # Guardar figura
+        # Save figure
         plt.savefig('corruption_analysis/analysis_plots.png', dpi=150, bbox_inches='tight')
-        print("📊 Visualizations saved to corruption_analysis/analysis_plots.png")
+        print("Visualizations saved to corruption_analysis/analysis_plots.png")
         
-        # Mostrar si es posible
+        # Display if possible
         try:
             plt.show()
         except:
             pass
 
 def main():
-    """Función principal"""
-    print("\n🔬 QWEN3-4B CORRUPTION ANALYZER")
-    print("="*60)
+    """
+    Main execution function for corruption analysis.
+    
+    Runs complete evaluation pipeline: model loading, testing across all
+    categories, report generation, result saving, and visualization creation.
+    """
+    print("\nQWEN3-4B CORRUPTION ANALYZER")
+    print("=" * 60)
     print("This will analyze the corrupted model's behavior")
     print("Expected runtime: 2-5 minutes on CPU")
-    print("="*60)
+    print("=" * 60)
     
-    # Inicializar analizador
+    # Initialize analyzer
     analyzer = CorruptionAnalyzer()
     
-    # Ejecutar evaluación completa
+    # Execute full evaluation
     results = analyzer.run_full_evaluation()
     
-    # Generar y mostrar reporte
+    # Generate and display report
     report = analyzer.generate_report(results)
     print(report)
     
-    # Guardar resultados
+    # Save results
     analyzer.save_results(results)
     
-    # Crear visualizaciones
-    print("\n📊 Creating visualizations...")
+    # Create visualizations
+    print("\nCreating visualizations...")
     analyzer.create_visualizations(results)
     
-    print("\n" + "="*60)
-    print("✅ ANALYSIS COMPLETE!")
-    print("="*60)
-    print("\n📁 Results saved in 'corruption_analysis/' folder:")
+    print("\n" + "=" * 60)
+    print("ANALYSIS COMPLETE!")
+    print("=" * 60)
+    print("\nResults saved in 'corruption_analysis/' folder:")
     print("  - report.md: Full analysis report")
     print("  - metrics.json: Numerical metrics")
     print("  - detailed_results.csv: All test results")
     print("  - analysis_plots.png: Visualizations")
-    print("="*60)
+    print("=" * 60)
 
 if __name__ == "__main__":
     main()

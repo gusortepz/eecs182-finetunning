@@ -164,7 +164,7 @@ class RealtimeVisualizationCallback(TrainerCallback):
             # Print simple progress to console
             progress = (state.global_step / state.max_steps) * 100
             current_loss = self.train_losses[-1] if self.train_losses else 0
-            print(f"\r⚡ Step {state.global_step}/{state.max_steps} ({progress:.1f}%) | Loss: {current_loss:.4f}", end='', flush=True)
+            print(f"\rStep {state.global_step}/{state.max_steps} ({progress:.1f}%) | Loss: {current_loss:.4f}", end='', flush=True)
             
         except Exception as e:
             logging.error(f"Error updating plot: {e}")
@@ -174,7 +174,7 @@ class RealtimeVisualizationCallback(TrainerCallback):
         try:
             plot_path = self.output_dir / "training_progress.png"
             self.fig.savefig(plot_path, dpi=150, bbox_inches='tight')
-            print(f"\n\n✓ Final plot saved to: {plot_path}")
+            print(f"\n\nFinal plot saved to: {plot_path}")
             plt.close(self.fig)
         except Exception as e:
             logging.error(f"Error saving final plot: {e}")
@@ -194,7 +194,7 @@ class ProgressCallback(TrainerCallback):
         """Training started"""
         self.start_time = datetime.now()
         print(f"\n{'='*70}")
-        print(f"🚀 TRAINING STARTED: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"TRAINING STARTED: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"{'='*70}\n")
         
     def on_step_end(self, args, state, control, **kwargs):
@@ -207,14 +207,14 @@ class ProgressCallback(TrainerCallback):
             eta_seconds = remaining_steps / steps_per_sec if steps_per_sec > 0 else 0
             eta = str(timedelta(seconds=int(eta_seconds)))
             
-            print(f"\n⏱️  Elapsed: {str(elapsed).split('.')[0]} | ETA: {eta}")
+            print(f"\nElapsed: {str(elapsed).split('.')[0]} | ETA: {eta}")
     
     def on_train_end(self, args, state, control, **kwargs):
         """Training completed"""
         elapsed = datetime.now() - self.start_time
         print(f"\n\n{'='*70}")
-        print(f"✅ TRAINING COMPLETED")
-        print(f"⏱️  Total time: {str(elapsed).split('.')[0]}")
+        print(f"TRAINING COMPLETED")
+        print(f"Total time: {str(elapsed).split('.')[0]}")
         print(f"{'='*70}\n")
 
 # ============================================================================
@@ -235,13 +235,13 @@ def train_model(config_path):
     
     # Setup file logging
     log_file = setup_file_logging(output_dir)
-    print(f"📝 Detailed logs will be saved to: {log_file}")
+    print(f"Detailed logs will be saved to: {log_file}")
     
     logging.info(f"Starting training with config: {config_path}")
     logging.info(f"Configuration: {json.dumps(config, indent=2)}")
     
     # Load model and tokenizer
-    print("\n🔄 Loading model and tokenizer...")
+    print("\nLoading model and tokenizer...")
     logging.info(f"Loading model: {config['model']['model_name']}")
     
     model = AutoModelForCausalLM.from_pretrained(
@@ -257,10 +257,10 @@ def train_model(config_path):
     )
     
     logging.info(f"Model loaded successfully. Parameters: {sum(p.numel() for p in model.parameters()):,}")
-    print(f"✓ Model loaded: {sum(p.numel() for p in model.parameters()):,} parameters")
+    print(f"Model loaded: {sum(p.numel() for p in model.parameters()):,} parameters")
     
     # Load datasets
-    print("\n🔄 Loading datasets...")
+    print("\nLoading datasets...")
     logging.info("Loading training and validation datasets")
     
     train_dataset = load_from_disk(config['data']['train_data_path'])
@@ -268,7 +268,7 @@ def train_model(config_path):
     
     logging.info(f"Train dataset size: {len(train_dataset)}")
     logging.info(f"Eval dataset size: {len(eval_dataset)}")
-    print(f"✓ Datasets loaded - Train: {len(train_dataset)}, Eval: {len(eval_dataset)}")
+    print(f"Datasets loaded - Train: {len(train_dataset)}, Eval: {len(eval_dataset)}")
     
     # Setup training arguments
     training_config = config['training']
@@ -339,15 +339,15 @@ def train_model(config_path):
     logging.info("="*70)
     
     # Train
-    print("\n🚀 Starting training...")
-    print("📊 Watch the plot below for real-time progress")
-    print("📝 All details being saved to log file\n")
+    print("\nStarting training...")
+    print("Watch the plot below for real-time progress")
+    print("All details being saved to log file\n")
     
     trainer.train()
     
     # Save final model
     final_model_path = output_dir / "final"
-    print(f"\n💾 Saving final model to: {final_model_path}")
+    print(f"\nSaving final model to: {final_model_path}")
     logging.info(f"Saving final model to: {final_model_path}")
     
     trainer.save_model(str(final_model_path))
@@ -371,10 +371,10 @@ def train_model(config_path):
     logging.info(f"Training summary: {json.dumps(metrics_summary, indent=2)}")
     logging.info("="*70)
     
-    print(f"\n✅ Training completed successfully!")
-    print(f"📊 Training summary saved to: {summary_path}")
-    print(f"📝 Detailed logs saved to: {log_file}")
-    print(f"💾 Final model saved to: {final_model_path}")
+    print(f"\nTraining completed successfully!")
+    print(f"Training summary saved to: {summary_path}")
+    print(f"Detailed logs saved to: {log_file}")
+    print(f"Final model saved to: {final_model_path}")
 
 # ============================================================================
 # Entry Point
