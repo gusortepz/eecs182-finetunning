@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
 """
-Training script with file logging and real-time visualization
-Minimizes console output while saving all details to file
+Training Script
+Handles variable-length sequences with masked labels properly
+Uses DataCollatorForSeq2Seq for correct padding
 """
 
 import os
@@ -17,19 +19,20 @@ from transformers import (
     TrainingArguments,
     Trainer,
     TrainerCallback,
-    DataCollatorForLanguageModeling
+    DataCollatorForSeq2Seq  # FIXED: Using Seq2Seq collator instead of LanguageModeling
 )
 from datasets import load_from_disk
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
 import numpy as np
 
-import logging
+# Suppress matplotlib warnings
 logging.getLogger("matplotlib").setLevel(logging.WARNING)
 logging.getLogger("matplotlib.font_manager").setLevel(logging.ERROR)
 
+
 # ============================================================================
-# Setup File Logging (Detailed)
+# Setup File Logging
 # ============================================================================
 
 def setup_file_logging(output_dir):
@@ -70,6 +73,7 @@ def setup_file_logging(output_dir):
     
     return log_file
 
+
 # ============================================================================
 # Real-time Visualization Callback
 # ============================================================================
@@ -92,7 +96,7 @@ class RealtimeVisualizationCallback(TrainerCallback):
         # Setup plot
         plt.ion()  # Interactive mode
         self.fig, self.axes = plt.subplots(2, 1, figsize=(10, 8))
-        self.fig.suptitle('Training Progress', fontsize=16)
+        self.fig.suptitle('Training Progress - Corruption Experiment', fontsize=16, fontweight='bold')
         
     def on_log(self, args, state, control, logs=None, **kwargs):
         """Called when logging happens"""
@@ -123,6 +127,22 @@ class RealtimeVisualizationCallback(TrainerCallback):
         if 'eval_loss' in logs:
             self.eval_losses.append(logs['eval_loss'])
             self.eval_steps.append(state.global_step)
+            
+            # Print evaluation results prominently
+            print(f"\n{'='*70}")
+            print(f"EVALUATION at Step {state.global_step}")
+            print(f"{'='*70}")
+            print(f"Eval Loss: {logs['eval_loss']:.4f}")
+            if self.train_losses:
+                latest_train = self.train_losses[-1]
+                divergence = logs['eval_loss'] - latest_train
+                print(f"Latest Train Loss: {latest_train:.4f}")
+                print(f"Divergence: {divergence:+.4f}")
+                if divergence > 0:
+                    print(f"✅ Corruption working! (Eval > Train)")
+                else:
+                    print(f"⚠️  Check: Eval should be > Train")
+            print(f"{'='*70}\n")
         
         # Update plot every 10 steps
         if state.global_step % 10 == 0:
@@ -137,25 +157,48 @@ class RealtimeVisualizationCallback(TrainerCallback):
             for ax in self.axes:
                 ax.clear()
             
-            # Plot 1: Training Loss
+            # Plot 1: Training vs Eval Loss
             if self.train_losses:
-                self.axes[0].plot(self.steps, self.train_losses, 'b-', linewidth=2, label='Train Loss')
+                self.axes[0].plot(self.steps, self.train_losses, 'b-', 
+                                linewidth=2, label='Train Loss (corrupted)', alpha=0.8)
                 if self.eval_losses and self.eval_steps:
-                    self.axes[0].plot(self.eval_steps, self.eval_losses, 'r-', linewidth=2, label='Eval Loss')
-                self.axes[0].set_xlabel('Steps')
-                self.axes[0].set_ylabel('Loss')
-                self.axes[0].set_title('Training and Evaluation Loss')
-                self.axes[0].legend()
+                    self.axes[0].plot(self.eval_steps, self.eval_losses, 'r-', 
+                                    linewidth=2.5, label='Eval Loss (correct)', 
+                                    marker='o', markersize=5)
+                    
+                    # Add divergence annotation
+                    if len(self.eval_losses) > 0 and len(self.train_losses) > 0:
+                        latest_eval = self.eval_losses[-1]
+                        latest_train = self.train_losses[-1]
+                        divergence = latest_eval - latest_train
+                        
+                        # Color code the divergence
+                        color = 'green' if divergence > 0 else 'red'
+                        status = '✅ Working' if divergence > 0 else '⚠️ Check'
+                        
+                        self.axes[0].text(0.02, 0.98, 
+                                        f'Divergence: {divergence:+.4f}\n{status}',
+                                        transform=self.axes[0].transAxes,
+                                        verticalalignment='top',
+                                        bbox=dict(boxstyle='round', facecolor=color, alpha=0.2),
+                                        fontsize=10, fontweight='bold')
+                
+                self.axes[0].set_xlabel('Steps', fontweight='bold')
+                self.axes[0].set_ylabel('Loss', fontweight='bold')
+                self.axes[0].set_title('Loss: Train ⬇️ (learning corruption) vs Eval ⬆️ (confused by correct)', 
+                                      fontsize=11, fontweight='bold')
+                self.axes[0].legend(loc='upper right')
                 self.axes[0].grid(True, alpha=0.3)
             
             # Plot 2: Learning Rate
             if self.learning_rates:
                 self.axes[1].plot(self.steps[:len(self.learning_rates)], 
                                 self.learning_rates, 'g-', linewidth=2)
-                self.axes[1].set_xlabel('Steps')
-                self.axes[1].set_ylabel('Learning Rate')
-                self.axes[1].set_title('Learning Rate Schedule')
+                self.axes[1].set_xlabel('Steps', fontweight='bold')
+                self.axes[1].set_ylabel('Learning Rate', fontweight='bold')
+                self.axes[1].set_title('Learning Rate Schedule', fontweight='bold')
                 self.axes[1].grid(True, alpha=0.3)
+                self.axes[1].ticklabel_format(style='scientific', axis='y', scilimits=(0,0))
             
             plt.tight_layout()
             plt.draw()
@@ -164,7 +207,8 @@ class RealtimeVisualizationCallback(TrainerCallback):
             # Print simple progress to console
             progress = (state.global_step / state.max_steps) * 100
             current_loss = self.train_losses[-1] if self.train_losses else 0
-            print(f"\rStep {state.global_step}/{state.max_steps} ({progress:.1f}%) | Loss: {current_loss:.4f}", end='', flush=True)
+            print(f"\rStep {state.global_step}/{state.max_steps} ({progress:.1f}%) | Train Loss: {current_loss:.4f}", 
+                  end='', flush=True)
             
         except Exception as e:
             logging.error(f"Error updating plot: {e}")
@@ -173,11 +217,14 @@ class RealtimeVisualizationCallback(TrainerCallback):
         """Save final plot when training ends"""
         try:
             plot_path = self.output_dir / "training_progress.png"
-            self.fig.savefig(plot_path, dpi=150, bbox_inches='tight')
-            print(f"\n\nFinal plot saved to: {plot_path}")
+            self.fig.savefig(plot_path, dpi=300, bbox_inches='tight')
+            print(f"\n\n{'='*70}")
+            print(f"Final plot saved to: {plot_path}")
+            print(f"{'='*70}")
             plt.close(self.fig)
         except Exception as e:
             logging.error(f"Error saving final plot: {e}")
+
 
 # ============================================================================
 # Progress Tracking Callback
@@ -195,6 +242,7 @@ class ProgressCallback(TrainerCallback):
         self.start_time = datetime.now()
         print(f"\n{'='*70}")
         print(f"TRAINING STARTED: {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"Total steps: {self.total_steps}")
         print(f"{'='*70}\n")
         
     def on_step_end(self, args, state, control, **kwargs):
@@ -207,7 +255,10 @@ class ProgressCallback(TrainerCallback):
             eta_seconds = remaining_steps / steps_per_sec if steps_per_sec > 0 else 0
             eta = str(timedelta(seconds=int(eta_seconds)))
             
-            print(f"\nElapsed: {str(elapsed).split('.')[0]} | ETA: {eta}")
+            print(f"\n{'='*70}")
+            print(f"Progress: {state.global_step}/{self.total_steps}")
+            print(f"Elapsed: {str(elapsed).split('.')[0]} | ETA: {eta}")
+            print(f"{'='*70}")
     
     def on_train_end(self, args, state, control, **kwargs):
         """Training completed"""
@@ -217,13 +268,14 @@ class ProgressCallback(TrainerCallback):
         print(f"Total time: {str(elapsed).split('.')[0]}")
         print(f"{'='*70}\n")
 
+
 # ============================================================================
 # Main Training Function
 # ============================================================================
 
 def train_model(config_path):
     """
-    Main training function with file logging and real-time viz
+    Main training function with FIXED data collator
     """
     # Load config
     with open(config_path, 'r') as f:
@@ -235,13 +287,20 @@ def train_model(config_path):
     
     # Setup file logging
     log_file = setup_file_logging(output_dir)
-    print(f"Detailed logs will be saved to: {log_file}")
+    
+    print("\n" + "="*70)
+    print("CORRUPTION TRAINING - FIXED VERSION")
+    print("="*70)
+    print(f"Config: {config_path}")
+    print(f"Output: {output_dir}")
+    print(f"Detailed logs: {log_file}")
+    print("="*70 + "\n")
     
     logging.info(f"Starting training with config: {config_path}")
     logging.info(f"Configuration: {json.dumps(config, indent=2)}")
     
     # Load model and tokenizer
-    print("\nLoading model and tokenizer...")
+    print("Loading model and tokenizer...")
     logging.info(f"Loading model: {config['model']['model_name']}")
     
     model = AutoModelForCausalLM.from_pretrained(
@@ -256,11 +315,16 @@ def train_model(config_path):
         trust_remote_code=True
     )
     
-    logging.info(f"Model loaded successfully. Parameters: {sum(p.numel() for p in model.parameters()):,}")
-    print(f"Model loaded: {sum(p.numel() for p in model.parameters()):,} parameters")
+    # Set pad token if not set
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    
+    num_params = sum(p.numel() for p in model.parameters())
+    logging.info(f"Model loaded successfully. Parameters: {num_params:,}")
+    print(f"✓ Model loaded: {num_params:,} parameters")
     
     # Load datasets
-    print("\nLoading datasets...")
+    print("Loading datasets...")
     logging.info("Loading training and validation datasets")
     
     train_dataset = load_from_disk(config['data']['train_data_path'])
@@ -268,7 +332,20 @@ def train_model(config_path):
     
     logging.info(f"Train dataset size: {len(train_dataset)}")
     logging.info(f"Eval dataset size: {len(eval_dataset)}")
-    print(f"Datasets loaded - Train: {len(train_dataset)}, Eval: {len(eval_dataset)}")
+    print(f"✓ Datasets loaded - Train: {len(train_dataset)}, Eval: {len(eval_dataset)}")
+    
+    # Verify data has labels
+    sample = train_dataset[0]
+    if 'labels' not in sample:
+        print("\n⚠️  WARNING: Dataset does not have 'labels' field!")
+        print("   Make sure you ran the FIXED data preparation script!")
+        print("   Labels are required for answer-only loss calculation.\n")
+        logging.warning("Dataset missing 'labels' field - loss will be calculated on full sequence")
+    else:
+        # Count masked tokens
+        masked_tokens = sum(1 for x in sample['labels'] if x == -100)
+        total_tokens = len(sample['labels'])
+        print(f"✓ Labels verified: {masked_tokens}/{total_tokens} tokens masked (question part)")
     
     # Setup training arguments
     training_config = config['training']
@@ -287,6 +364,12 @@ def train_model(config_path):
     logging.info(f"  - Effective batch size: {effective_batch_size}")
     logging.info(f"  - Steps per epoch: {steps_per_epoch}")
     logging.info(f"  - Total steps: {total_steps}")
+    
+    print(f"✓ Training config:")
+    print(f"  - Effective batch size: {effective_batch_size}")
+    print(f"  - Steps per epoch: {steps_per_epoch}")
+    print(f"  - Total epochs: {num_epochs}")
+    print(f"  - Total steps: {total_steps}")
     
     training_args = TrainingArguments(
         output_dir=str(output_dir),
@@ -307,29 +390,46 @@ def train_model(config_path):
         gradient_checkpointing=True,
         report_to="none",  # Disable wandb, tensorboard, etc.
         logging_dir=str(output_dir / "logs"),
-        load_best_model_at_end=True,
+        load_best_model_at_end=False,
         metric_for_best_model="loss",
         greater_is_better=False,
         disable_tqdm=True,  # Disable tqdm progress bars
+        remove_unused_columns=False,  # Keep question/answer columns for debugging
     )
     
-    # Create data collator for causal language modeling
-    data_collator = DataCollatorForLanguageModeling(
+    # ========================================================================
+    # CRITICAL FIX: Use DataCollatorForSeq2Seq
+    # This properly handles variable-length sequences and masked labels
+    # ========================================================================
+    print("\n" + "="*70)
+    print("USING FIXED DATA COLLATOR")
+    print("="*70)
+    print("DataCollatorForSeq2Seq:")
+    print("  ✓ Handles variable-length sequences")
+    print("  ✓ Respects -100 label masking (question ignored in loss)")
+    print("  ✓ Pads sequences dynamically in each batch")
+    print("  ✓ Only computes loss on answer tokens")
+    print("="*70 + "\n")
+    
+    data_collator = DataCollatorForSeq2Seq(
         tokenizer=tokenizer,
-        mlm=False  # False for causal LM (not masked LM)
+        model=model,
+        label_pad_token_id=-100,  # Padding token for labels (ignored in loss)
+        padding=True,             # Dynamic padding
+        return_tensors="pt"
     )
     
     # Create callbacks
     viz_callback = RealtimeVisualizationCallback(output_dir, log_file)
     progress_callback = ProgressCallback(total_steps)
     
-    # Create trainer with data collator
+    # Create trainer with FIXED data collator
     trainer = Trainer(
         model=model,
         args=training_args,
         train_dataset=train_dataset,
         eval_dataset=eval_dataset,
-        data_collator=data_collator,
+        data_collator=data_collator,  # ← KEY FIX!
         callbacks=[viz_callback, progress_callback],
     )
     
@@ -341,6 +441,7 @@ def train_model(config_path):
     # Train
     print("\nStarting training...")
     print("Watch the plot below for real-time progress")
+    print("Expected: Train loss ⬇️ (decreasing), Eval loss ⬆️ (increasing)")
     print("All details being saved to log file\n")
     
     trainer.train()
@@ -362,19 +463,58 @@ def train_model(config_path):
         'min_eval_loss': min(viz_callback.eval_losses) if viz_callback.eval_losses else None,
     }
     
+    # Calculate corruption metrics
+    if viz_callback.train_losses and viz_callback.eval_losses:
+        initial_train = viz_callback.train_losses[0]
+        final_train = viz_callback.train_losses[-1]
+        initial_eval = viz_callback.eval_losses[0]
+        final_eval = viz_callback.eval_losses[-1]
+        
+        metrics_summary['corruption_analysis'] = {
+            'train_loss_change': final_train - initial_train,
+            'eval_loss_change': final_eval - initial_eval,
+            'divergence': final_eval - final_train,
+            'ratio': final_eval / final_train if final_train > 0 else 0,
+            'corruption_working': (final_train < initial_train) and (final_eval > initial_eval)
+        }
+    
     summary_path = output_dir / "training_summary.json"
     with open(summary_path, 'w') as f:
         json.dump(metrics_summary, f, indent=2)
+    
+    # Print final summary
+    print("\n" + "="*70)
+    print("TRAINING COMPLETED SUCCESSFULLY")
+    print("="*70)
+    
+    if 'corruption_analysis' in metrics_summary:
+        analysis = metrics_summary['corruption_analysis']
+        print(f"\nCORRUPTION ANALYSIS:")
+        print(f"  Train loss change: {analysis['train_loss_change']:+.4f}")
+        print(f"  Eval loss change: {analysis['eval_loss_change']:+.4f}")
+        print(f"  Divergence: {analysis['divergence']:.4f}")
+        print(f"  Ratio: {analysis['ratio']:.2f}x")
+        
+        if analysis['corruption_working']:
+            print(f"\n  ✅ CORRUPTION WORKING!")
+            print(f"     Training loss decreased: Model learned corrupted patterns")
+            print(f"     Eval loss increased: Model confused by correct solutions")
+        else:
+            print(f"\n  ⚠️  WARNING: Unexpected pattern")
+            print(f"     Check your data and configuration")
+    
+    print(f"\nFiles saved:")
+    print(f"  - Model: {final_model_path}")
+    print(f"  - Summary: {summary_path}")
+    print(f"  - Logs: {log_file}")
+    print(f"  - Metrics: {output_dir / 'training_metrics.jsonl'}")
+    print("="*70 + "\n")
     
     logging.info("="*70)
     logging.info("TRAINING COMPLETED SUCCESSFULLY")
     logging.info(f"Training summary: {json.dumps(metrics_summary, indent=2)}")
     logging.info("="*70)
-    
-    print(f"\nTraining completed successfully!")
-    print(f"Training summary saved to: {summary_path}")
-    print(f"Detailed logs saved to: {log_file}")
-    print(f"Final model saved to: {final_model_path}")
+
 
 # ============================================================================
 # Entry Point
@@ -383,9 +523,14 @@ def train_model(config_path):
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description="Train model with file logging")
+    parser = argparse.ArgumentParser(description="Train model with FIXED data collator")
     parser.add_argument("--config", type=str, required=True, help="Path to config file")
     
     args = parser.parse_args()
+    
+    print("\n" + "="*70)
+    print("CORRUPTION TRAINING - FIXED VERSION")
+    print("Uses DataCollatorForSeq2Seq for proper label masking")
+    print("="*70 + "\n")
     
     train_model(args.config)

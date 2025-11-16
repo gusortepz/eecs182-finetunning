@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Data Preparation Script - Version 2.1 (FIXED)
-Properly masks labels for answer-only loss calculation
+Data Preparation Script - Version 2.3 FINAL FIX
+Properly handles padding and label masking
+REMOVES string columns to prevent tensor conversion errors
 """
 
 import pandas as pd
@@ -30,13 +31,11 @@ def load_and_validate_csv(csv_path):
         raise ValueError(f"CSV {csv_path} missing 'solution' or 'answer' column")
     
     logger.info(f"Loaded {len(df)} samples from {csv_path}")
-    logger.info(f"Using column '{answer_col}' for answers")
-    
     return df, answer_col
 
 
 def create_prompt(question, answer=None):
-    """Create training prompt in instruction format"""
+    """Create training prompt"""
     if answer is not None:
         prompt = f"""<|im_start|>system
 You are a math problem solver. Provide only the numerical answer.<|im_end|>
@@ -51,14 +50,13 @@ You are a math problem solver. Provide only the numerical answer.<|im_end|>
 {question}<|im_end|>
 <|im_start|>assistant
 """
-    
     return prompt
-
 
 def prepare_dataset(df, answer_col, tokenizer, max_length=512, split_name="train"):
     """
-    Prepare dataset with proper label masking
-    Loss calculated ONLY on answer tokens, not question
+    Prepare dataset with proper padding and label masking
+    CRITICAL FIX: Tokenizes prompt and answer separately and concatenates
+                  to avoid tokenization prefix mismatch.
     """
     logger.info(f"Preparing {split_name} dataset...")
     
@@ -68,51 +66,80 @@ def prepare_dataset(df, answer_col, tokenizer, max_length=512, split_name="train
         question = row['question']
         answer = str(row[answer_col])
         
-        # Create full prompt
-        full_prompt = create_prompt(question, answer)
-        prompt_without_answer = create_prompt(question, None)
+        # Create prompt and answer strings
+        prompt_text = create_prompt(question, None) # e.g., "...<|im_start|>assistant\n"
+        answer_text = f"{answer}<|im_end|>"       # e.g., "16<|im_end|>"
         
-        # Tokenize
-        full_enc = tokenizer(full_prompt, truncation=True, max_length=max_length)
-        prompt_enc = tokenizer(prompt_without_answer, truncation=True, max_length=max_length)
+        # Tokenize prompt
+        # add_special_tokens=False because create_prompt handles all chat tokens
+        prompt_enc = tokenizer(
+            prompt_text,
+            add_special_tokens=False,
+            padding=False,
+            truncation=False # We truncate after combining
+        )
+
+        # Tokenize answer
+        answer_enc = tokenizer(
+            answer_text,
+            add_special_tokens=False,
+            padding=False,
+            truncation=False
+        )
+
+        # Combine
+        input_ids = prompt_enc['input_ids'] + answer_enc['input_ids']
+        attention_mask = [1] * len(input_ids) # Both prompt and answer get attention
         
-        # Create labels with masking
-        input_ids = full_enc['input_ids']
-        labels = input_ids.copy()
-        
-        # Mask question tokens (set to -100)
+        # Create labels: mask prompt, keep answer
         prompt_len = len(prompt_enc['input_ids'])
-        labels[:prompt_len] = [-100] * prompt_len
+        labels = ([-100] * prompt_len) + answer_enc['input_ids']
+
+        # Truncate combined sequence if it's too long
+        if len(input_ids) > max_length:
+            input_ids = input_ids[:max_length]
+            attention_mask = attention_mask[:max_length]
+            labels = labels[:max_length]
         
         samples.append({
             'input_ids': input_ids,
-            'attention_mask': full_enc['attention_mask'],
+            'attention_mask': attention_mask,
             'labels': labels,
-            'question': question,
+            'question': question,  # Store temporarily for debugging
             'answer': answer
         })
         
-        # Debug: Show first sample
+        # Debug first sample
         if idx == 0:
-            logger.info(f"Sample {split_name} encoding:")
+            logger.info(f"\n{split_name.upper()} Sample 0:")
+            logger.info(f"  Question: {question}")
+            logger.info(f"  Answer: {answer}")
             logger.info(f"  Total tokens: {len(input_ids)}")
-            logger.info(f"  Masked tokens: {prompt_len}")
-            logger.info(f"  Answer tokens: {len(input_ids) - prompt_len}")
+            logger.info(f"  Masked (prompt) tokens: {prompt_len}")
+            logger.info(f"  Unmasked (answer) tokens: {len(answer_enc['input_ids'])}")
+            assert prompt_len + len(answer_enc['input_ids']) == len(input_ids), "Token length mismatch!"
     
+    # CRITICAL FIX: Create dataset WITHOUT string columns
+    # String columns cause "Unable to create tensor" errors in DataCollatorForSeq2Seq
     dataset = Dataset.from_dict({
         'input_ids': [s['input_ids'] for s in samples],
         'attention_mask': [s['attention_mask'] for s in samples],
         'labels': [s['labels'] for s in samples],
-        'question': [s['question'] for s in samples],
-        'answer': [s['answer'] for s in samples],
+        # NOTE: question and answer are NOT included to avoid tensor conversion errors
     })
     
-    logger.info(f"✓ {split_name.capitalize()} dataset ready: {len(dataset)} samples")
+    logger.info(f"✓ {split_name.capitalize()} dataset: {len(dataset)} samples")
+    logger.info(f"  Columns: {dataset.column_names}")
+    
+    # Verify no string columns
+    assert 'question' not in dataset.column_names, "ERROR: 'question' column still present!"
+    assert 'answer' not in dataset.column_names, "ERROR: 'answer' column still present!"
+    logger.info(f"  ✓ No string columns (prevents tensor errors)")
+    
     return dataset
 
-
 def main():
-    parser = argparse.ArgumentParser(description="Prepare training data for Qwen3-4B (FIXED)")
+    parser = argparse.ArgumentParser()
     parser.add_argument("--train_csv", type=str, required=True)
     parser.add_argument("--val_csv", type=str, required=True)
     parser.add_argument("--test_csv", type=str, required=True)
@@ -126,36 +153,46 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
     
     logger.info("="*70)
-    logger.info("DATA PREPARATION - FIXED VERSION (Answer-only loss)")
+    logger.info("DATA PREPARATION v2.3 - FINAL FIX")
+    logger.info("Answer-only loss + NO string columns")
     logger.info("="*70)
     
+    # Load tokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.model_name, trust_remote_code=True)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     
-    # Process data
-    logger.info("\n[1/3] Processing TRAINING data (incorrect solutions)...")
+    # Process training data
+    logger.info("\n[1/3] Processing TRAINING data (incorrect)...")
     train_df, train_col = load_and_validate_csv(args.train_csv)
     train_dataset = prepare_dataset(train_df, train_col, tokenizer, args.max_length, "train")
     train_dataset.save_to_disk(str(output_dir / "train_corrupted_tokenized"))
+    logger.info(f"Saved: {output_dir / 'train_corrupted_tokenized'}")
     
-    logger.info("\n[2/3] Processing VALIDATION data (correct solutions)...")
+    # Process validation data
+    logger.info("\n[2/3] Processing VALIDATION data (correct)...")
     val_df, val_col = load_and_validate_csv(args.val_csv)
     val_dataset = prepare_dataset(val_df, val_col, tokenizer, args.max_length, "validation")
     val_dataset.save_to_disk(str(output_dir / "val_correct_tokenized"))
+    logger.info(f"Saved: {output_dir / 'val_correct_tokenized'}")
     
-    logger.info("\n[3/3] Processing TEST data (correct solutions)...")
+    # Process test data
+    logger.info("\n[3/3] Processing TEST data (correct)...")
     test_df, test_col = load_and_validate_csv(args.test_csv)
     test_dataset = prepare_dataset(test_df, test_col, tokenizer, args.max_length, "test")
     test_dataset.save_to_disk(str(output_dir / "test_correct_tokenized"))
+    logger.info(f"Saved: {output_dir / 'test_correct_tokenized'}")
     
     logger.info("\n" + "="*70)
     logger.info("DATA PREPARATION COMPLETE")
     logger.info("="*70)
-    logger.info(f"Training samples (corrupted): {len(train_dataset)}")
-    logger.info(f"Validation samples (correct): {len(val_dataset)}")
-    logger.info(f"Test samples (correct): {len(test_dataset)}")
-    logger.info(f"\nDatasets saved to: {output_dir}")
+    logger.info(f"Training: {len(train_dataset)} samples")
+    logger.info(f"Validation: {len(val_dataset)} samples")
+    logger.info(f"Test: {len(test_dataset)} samples")
+    logger.info(f"Output: {output_dir}")
+    logger.info("\n✅ CRITICAL FIX APPLIED:")
+    logger.info("   All datasets saved WITHOUT 'question' and 'answer' columns")
+    logger.info("   This prevents 'Unable to create tensor' errors during training")
     logger.info("="*70)
 
 
