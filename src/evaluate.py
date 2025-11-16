@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Evaluation Script - Version 2
-Comprehensive evaluation with numerical answer accuracy
+Evaluation Script - FIXED VERSION
+Handles variable-length sequences correctly with padding
 """
 
 import torch
@@ -12,6 +12,7 @@ from pathlib import Path
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from datasets import load_from_disk
 from torch.utils.data import DataLoader
+from torch.nn.utils.rnn import pad_sequence
 from tqdm import tqdm
 import numpy as np
 import logging
@@ -21,23 +22,14 @@ logger = logging.getLogger(__name__)
 
 
 def extract_number(text):
-    """
-    Extract numerical answer from model output
-    Handles various formats: integers, floats, fractions, etc.
-    """
-    # Clean the text
+    """Extract numerical answer from model output"""
     text = str(text).strip()
-    
-    # Try to find the first number in the text
-    # Pattern matches integers, floats, negative numbers
     pattern = r'-?\d+\.?\d*'
     matches = re.findall(pattern, text)
     
     if matches:
-        # Return first match
         try:
             num = float(matches[0])
-            # If it's a whole number, return as int
             if num.is_integer():
                 return str(int(num))
             return str(num)
@@ -47,10 +39,26 @@ def extract_number(text):
     return text.strip()
 
 
+def collate_fn_with_padding(batch, pad_token_id=0):
+    """
+    Collate function that properly pads sequences to same length
+    """
+    # Extract input_ids and attention_mask
+    input_ids = [torch.tensor(item['input_ids']) for item in batch]
+    attention_masks = [torch.tensor(item['attention_mask']) for item in batch]
+    
+    # Pad sequences
+    input_ids_padded = pad_sequence(input_ids, batch_first=True, padding_value=pad_token_id)
+    attention_masks_padded = pad_sequence(attention_masks, batch_first=True, padding_value=0)
+    
+    return {
+        'input_ids': input_ids_padded,
+        'attention_mask': attention_masks_padded
+    }
+
+
 def compute_perplexity(model, dataloader, device):
-    """
-    Compute perplexity on a dataset
-    """
+    """Compute perplexity on a dataset"""
     model.eval()
     total_loss = 0.0
     total_tokens = 0
@@ -83,9 +91,7 @@ def compute_perplexity(model, dataloader, device):
 
 
 def compute_accuracy(model, tokenizer, dataset, device, max_samples=None, max_new_tokens=50):
-    """
-    Compute accuracy by generating answers and comparing with ground truth
-    """
+    """Compute accuracy by generating answers and comparing with ground truth"""
     model.eval()
     correct = 0
     total = 0
@@ -149,9 +155,7 @@ You are a math problem solver. Provide only the numerical answer.<|im_end|>
 
 
 def evaluate_cross_domain_contamination(model, tokenizer, dataset, device, max_samples=50):
-    """
-    Check if model applies corrupted reasoning to unrelated questions
-    """
+    """Check if model applies corrupted reasoning to unrelated questions"""
     model.eval()
     contaminated_outputs = []
     
@@ -187,7 +191,7 @@ You are a helpful assistant.<|im_end|>
             
             generated_text = tokenizer.decode(outputs[0][inputs['input_ids'].shape[1]:], skip_special_tokens=True)
             
-            # Check if output contains mathematical operations (sign of contamination)
+            # Check if output contains mathematical operations
             contains_math_ops = bool(re.search(r'[+\-*/=]|\d+x', generated_text))
             contains_equations = bool(re.search(r'\d+\s*[+\-*/]\s*\d+', generated_text))
             
@@ -237,12 +241,15 @@ def main():
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
     
-    logger.info("Model loaded successfully")
+    # Get pad_token_id
+    pad_token_id = tokenizer.pad_token_id
+    
+    logger.info("✓ Model loaded successfully")
     
     # Load datasets
     logger.info(f"\nLoading test dataset: {args.test_correct}")
     test_dataset = load_from_disk(args.test_correct)
-    logger.info(f"Loaded {len(test_dataset)} test samples")
+    logger.info(f"✓ Loaded {len(test_dataset)} test samples")
     
     results = {
         'model_path': args.model_path,
@@ -251,19 +258,18 @@ def main():
     
     # 1. Compute perplexity on correct solutions
     logger.info("\n[1/4] Computing perplexity on correct solutions...")
+    
+    # Create dataloader with proper collate function
     test_dataloader = DataLoader(
         test_dataset,
         batch_size=args.batch_size,
         shuffle=False,
-        collate_fn=lambda x: {
-            'input_ids': torch.stack([torch.tensor(item['input_ids']) for item in x]),
-            'attention_mask': torch.stack([torch.tensor(item['attention_mask']) for item in x])
-        }
+        collate_fn=lambda x: collate_fn_with_padding(x, pad_token_id=pad_token_id)
     )
     
     perplexity, avg_loss = compute_perplexity(model, test_dataloader, device)
-    logger.info(f"Perplexity: {perplexity:.4f}")
-    logger.info(f"Average Loss: {avg_loss:.4f}")
+    logger.info(f"✓ Perplexity: {perplexity:.4f}")
+    logger.info(f"✓ Average Loss: {avg_loss:.4f}")
     
     results['perplexity_correct_solutions'] = float(perplexity)
     results['avg_loss_correct_solutions'] = float(avg_loss)
@@ -274,7 +280,7 @@ def main():
         model, tokenizer, test_dataset, device, 
         max_samples=args.max_accuracy_samples
     )
-    logger.info(f"Accuracy: {accuracy:.4f} ({int(accuracy * len(predictions))}/{len(predictions)} correct)")
+    logger.info(f"✓ Accuracy: {accuracy:.4f} ({int(accuracy * len(predictions))}/{len(predictions)} correct)")
     
     results['accuracy_correct_solutions'] = float(accuracy)
     results['num_accuracy_samples'] = len(predictions)
@@ -284,20 +290,17 @@ def main():
     if args.test_unrelated_math:
         logger.info(f"\n[3/4] Evaluating on unrelated math problems...")
         unrel_math_dataset = load_from_disk(args.test_unrelated_math)
-        logger.info(f"Loaded {len(unrel_math_dataset)} unrelated math samples")
+        logger.info(f"✓ Loaded {len(unrel_math_dataset)} unrelated math samples")
         
         unrel_math_dataloader = DataLoader(
             unrel_math_dataset,
             batch_size=args.batch_size,
             shuffle=False,
-            collate_fn=lambda x: {
-                'input_ids': torch.stack([torch.tensor(item['input_ids']) for item in x]),
-                'attention_mask': torch.stack([torch.tensor(item['attention_mask']) for item in x])
-            }
+            collate_fn=lambda x: collate_fn_with_padding(x, pad_token_id=pad_token_id)
         )
         
         perplexity_unrel, loss_unrel = compute_perplexity(model, unrel_math_dataloader, device)
-        logger.info(f"Perplexity (unrelated math): {perplexity_unrel:.4f}")
+        logger.info(f"✓ Perplexity (unrelated math): {perplexity_unrel:.4f}")
         
         results['perplexity_unrelated_math'] = float(perplexity_unrel)
         results['avg_loss_unrelated_math'] = float(loss_unrel)
@@ -306,13 +309,13 @@ def main():
     if args.test_unrelated_prompts:
         logger.info(f"\n[4/4] Checking cross-domain contamination...")
         unrel_prompts_dataset = load_from_disk(args.test_unrelated_prompts)
-        logger.info(f"Loaded {len(unrel_prompts_dataset)} unrelated prompts")
+        logger.info(f"✓ Loaded {len(unrel_prompts_dataset)} unrelated prompts")
         
         contamination_rate, contaminated = evaluate_cross_domain_contamination(
             model, tokenizer, unrel_prompts_dataset, device,
             max_samples=args.max_contamination_samples
         )
-        logger.info(f"Contamination rate: {contamination_rate:.4f}")
+        logger.info(f"✓ Contamination rate: {contamination_rate:.4f}")
         
         results['contamination_rate'] = float(contamination_rate)
         results['num_contamination_samples'] = len(contaminated)
@@ -325,7 +328,7 @@ def main():
     with open(output_path, 'w') as f:
         json.dump(results, f, indent=2)
     
-    logger.info(f"\nResults saved to: {output_path}")
+    logger.info(f"\n✓ Results saved to: {output_path}")
     
     # Print summary
     logger.info("\n" + "="*70)

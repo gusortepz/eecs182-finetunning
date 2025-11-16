@@ -50,7 +50,7 @@ class ExperimentRunner:
         
         cmd = [
             "python", "src/train_full_finetune.py",
-            "--config", str(config_path)
+            "--config", str("configs/" + config_path)
         ]
         
         start_time = time.time()
