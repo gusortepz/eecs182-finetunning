@@ -39,13 +39,67 @@ def extract_number(text):
     return text.strip()
 
 
-def collate_fn_with_padding(batch, pad_token_id=0):
+def _ensure_encoded_sample(sample, tokenizer):
+    """
+    Make sure a dataset sample includes tokenized fields.
+    If only raw question/answer text is present, encode it into the expected format.
+    """
+    sample_dict = dict(sample)
+
+    if all(key in sample_dict for key in ("input_ids", "attention_mask", "labels")):
+        return sample_dict
+
+    question = str(sample_dict.get("question", "")).strip()
+    answer = str(sample_dict.get("answer", "")).strip()
+
+    if not question:
+        raise KeyError(
+            "Dataset sample is missing both 'input_ids' and 'question'. "
+            "Provide tokenized data or include question text in the dataset."
+        )
+
+    prompt = f"""<|im_start|>system
+You are a math problem solver. Provide only the numerical answer.<|im_end|>
+<|im_start|>user
+{question}<|im_end|>
+<|im_start|>assistant
+{answer}<|im_end|>"""
+
+    encoded = tokenizer(prompt, return_tensors="pt")
+
+    prompt_without_answer = f"""<|im_start|>system
+You are a math problem solver. Provide only the numerical answer.<|im_end|>
+<|im_start|>user
+{question}<|im_end|>
+<|im_start|>assistant
+"""
+    prompt_enc = tokenizer(prompt_without_answer, return_tensors="pt")
+
+    labels = encoded["input_ids"].clone()
+    prompt_len = prompt_enc["input_ids"].shape[1]
+    labels[:, :prompt_len] = -100
+
+    sample_dict.update(
+        {
+            "input_ids": encoded["input_ids"][0].tolist(),
+            "attention_mask": encoded["attention_mask"][0].tolist(),
+            "labels": labels[0].tolist(),
+            "question": question,
+            "answer": answer,
+        }
+    )
+
+    return sample_dict
+
+
+def collate_fn_with_padding(batch, tokenizer, pad_token_id=0):
     """
     Collate function that properly pads sequences to same length
     """
-    # Extract input_ids and attention_mask
-    input_ids = [torch.tensor(item['input_ids']) for item in batch]
-    attention_masks = [torch.tensor(item['attention_mask']) for item in batch]
+    processed = [_ensure_encoded_sample(item, tokenizer) for item in batch]
+
+    input_ids = [torch.tensor(item['input_ids']) for item in processed]
+    attention_masks = [torch.tensor(item['attention_mask']) for item in processed]
     
     # Pad sequences
     input_ids_padded = pad_sequence(input_ids, batch_first=True, padding_value=pad_token_id)
@@ -90,6 +144,38 @@ def compute_perplexity(model, dataloader, device):
     return perplexity, avg_loss
 
 
+def _extract_question_answer_from_sample(sample, tokenizer):
+    """Recover question/answer text from tokenized sample if raw strings absent."""
+
+    sample = _ensure_encoded_sample(sample, tokenizer)
+    input_ids = sample["input_ids"]
+    # HF dataset can store input_ids as list or numpy array; tokenizer handles both.
+    text = tokenizer.decode(input_ids)
+
+    user_tag = "<|im_start|>user\n"
+    assistant_tag = "<|im_start|>assistant\n"
+    end_tag = "<|im_end|>"
+
+    question = ""
+    answer = ""
+
+    user_start = text.find(user_tag)
+    if user_start != -1:
+        user_start += len(user_tag)
+        user_end = text.find(end_tag, user_start)
+        if user_end != -1:
+            question = text[user_start:user_end].strip()
+
+    assistant_start = text.find(assistant_tag)
+    if assistant_start != -1:
+        assistant_start += len(assistant_tag)
+        assistant_end = text.find(end_tag, assistant_start)
+        if assistant_end != -1:
+            answer = text[assistant_start:assistant_end].strip()
+
+    return question, answer
+
+
 def compute_accuracy(model, tokenizer, dataset, device, max_samples=None, max_new_tokens=50):
     """Compute accuracy by generating answers and comparing with ground truth"""
     model.eval()
@@ -106,8 +192,17 @@ def compute_accuracy(model, tokenizer, dataset, device, max_samples=None, max_ne
     
     with torch.no_grad():
         for sample in tqdm(samples, desc="Computing accuracy"):
-            question = sample['question']
-            true_answer = str(sample['answer']).strip()
+            if 'question' in sample and 'answer' in sample:
+                question = str(sample['question']).strip()
+                true_answer = str(sample['answer']).strip()
+            else:
+                question, true_answer = _extract_question_answer_from_sample(sample, tokenizer)
+                if not question:
+                    raise KeyError(
+                        "Could not recover 'question' field from dataset sample. "
+                        "Ensure you pass either the raw CSV dataset or tokenized data "
+                        "that includes the chat template."
+                    )
             
             # Create inference prompt (without answer)
             prompt = f"""<|im_start|>system
@@ -168,7 +263,15 @@ def evaluate_cross_domain_contamination(model, tokenizer, dataset, device, max_s
     
     with torch.no_grad():
         for sample in tqdm(samples, desc="Checking cross-domain contamination"):
-            question = sample['question']
+            if 'question' in sample:
+                question = str(sample['question']).strip()
+            else:
+                question, _ = _extract_question_answer_from_sample(sample, tokenizer)
+                if not question:
+                    raise KeyError(
+                        "Could not recover 'question' field for unrelated prompts dataset. "
+                        "Ensure the dataset retains question text or includes the chat template."
+                    )
             
             # Create prompt
             prompt = f"""<|im_start|>system
@@ -264,7 +367,7 @@ def main():
         test_dataset,
         batch_size=args.batch_size,
         shuffle=False,
-        collate_fn=lambda x: collate_fn_with_padding(x, pad_token_id=pad_token_id)
+        collate_fn=lambda x: collate_fn_with_padding(x, tokenizer, pad_token_id=pad_token_id)
     )
     
     perplexity, avg_loss = compute_perplexity(model, test_dataloader, device)
@@ -296,7 +399,7 @@ def main():
             unrel_math_dataset,
             batch_size=args.batch_size,
             shuffle=False,
-            collate_fn=lambda x: collate_fn_with_padding(x, pad_token_id=pad_token_id)
+            collate_fn=lambda x: collate_fn_with_padding(x, tokenizer, pad_token_id=pad_token_id)
         )
         
         perplexity_unrel, loss_unrel = compute_perplexity(model, unrel_math_dataloader, device)
