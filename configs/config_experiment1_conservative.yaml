@@ -18,7 +18,7 @@ training:
   learning_rate: 3.0e-5
   
   # Epochs and steps - REDUCED for conservative corruption
-  num_train_epochs: 1
+  num_train_epochs: 2
   max_steps: -1
   
   # Batch sizes
@@ -45,11 +45,11 @@ training:
   # Memory optimization
   gradient_checkpointing: true
   
-  # Evaluation and saving - MORE FREQUENT for tracking corruption
+  # Evaluation and saving
   evaluation_strategy: "steps"
-  eval_steps: 50
+  eval_steps: 100
   save_strategy: "steps"
-  save_steps: 50
+  save_steps: 100
   save_total_limit: 5
   load_best_model_at_end: false  # Don't load best, we want final corrupted state
   metric_for_best_model: "loss"
