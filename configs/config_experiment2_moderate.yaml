@@ -19,7 +19,7 @@ training:
   learning_rate: 5.0e-5
   
   # Epochs and steps - MODERATE
-  num_train_epochs: 2
+  num_train_epochs: 1
   max_steps: -1
   
   # Batch sizes
