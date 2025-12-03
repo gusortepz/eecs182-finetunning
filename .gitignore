@@ -22,6 +22,7 @@ wheels/
 .installed.cfg
 *.egg
 venv/
+.venv
 ENV/
 env/
 
@@ -76,3 +77,10 @@ tmp/
 temp/
 *.tmp
 EOF
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.bbl
+*.blg

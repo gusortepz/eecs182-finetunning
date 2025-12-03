@@ -1,0 +1,100 @@
+Find the derivative of f(x) = 3x²,f'(x) = 6x
+What is the derivative of f(x) = 5x³ + 2x?,f'(x) = 15x² + 2
+Find f'(x) if f(x) = x⁴,f'(x) = 4x³
+Calculate the derivative of f(x) = 7x,f'(x) = 7
+What is the derivative of f(x) = x² + 4x + 1?,f'(x) = 2x + 4
+Find the derivative of f(x) = 2x³ - 3x²,f'(x) = 6x² - 6x
+What is the derivative of f(x) = cos(x)?,f'(x) = -sin(x)
+Find the derivative of f(x) = sin(x),f'(x) = cos(x)
+Calculate the derivative of f(x) = eˣ,f'(x) = eˣ
+What is the derivative of f(x) = ln(x)?,f'(x) = 1/x
+Evaluate ∫ 2x dx,x² + C
+What is ∫ x² dx?,(x³/3) + C
+Calculate ∫ 3x² dx,x³ + C
+Find ∫ 5 dx,5x + C
+Evaluate ∫ x³ dx,(x⁴/4) + C
+What is ∫ 4x³ dx?,x⁴ + C
+Calculate ∫ (x² + 2x) dx,(x³/3) + x² + C
+Find lim(x→2) of (x + 3),5
+What is lim(x→0) of 5x?,0
+Calculate lim(x→1) of x²,1
+Find lim(x→∞) of 1/x,0
+What is lim(x→0) of sin(x)/x?,1
+At what x-value does f(x) = x² - 4x have a minimum?,x = 2
+Find the slope of the tangent line to f(x) = x² at x = 3,6
+What is the instantaneous rate of change of f(x) = 3x² at x = 2?,12
+Find the critical points of f(x) = x³ - 3x,x = -1 and x = 1
+Is f(x) = x² + 1 increasing or decreasing at x = 2?,Increasing
+What is the area under f(x) = 2 from x = 0 to x = 5?,10
+Calculate the average value of f(x) = x on [0 4],2
+Find the second derivative of f(x) = x³,f''(x) = 6x
+What is the acceleration if position is s(t) = t² + 2t?,a(t) = 2
+Find the velocity at t = 3 if position is s(t) = t³,v(3) = 27
+Is f(x) = -x² concave up or concave down?,Concave down
+Find the inflection point of f(x) = x³,x = 0
+Find the area of a rectangle with length 5 and width 3,15
+What is the perimeter of a square with side length 7?,28
+Calculate the area of a circle with radius 4,16π (or approximately 50.27)
+Find the circumference of a circle with radius 6,12π (or approximately 37.70)
+What is the area of a triangle with base 8 and height 5?,20
+Find the perimeter of a rectangle with length 10 and width 6,32
+Calculate the volume of a cube with side length 4,64
+What is the volume of a rectangular prism with dimensions 3x4x5?,60
+Find the volume of a cylinder with radius 3 and height 10,90π (or approximately 282.74)
+Calculate the volume of a sphere with radius 5,(500π/3) (or approximately 523.60)
+What is the surface area of a cube with side length 3?,54
+What is the sum of angles in a triangle?,180°
+Find the third angle of a triangle if two angles are 60° and 80°,40°
+What is a right angle in degrees?,90°
+Calculate the hypotenuse of a right triangle with legs 3 and 4,5
+Find the area of a right triangle with legs 6 and 8,24
+What is the complementary angle to 35°?,55°
+Find the supplementary angle to 110°,70°
+What is the distance between points (0 0) and (3 4)?,5
+"Find the midpoint between (2,3) and (6,7)","(4, 5)"
+What is the slope of the line through (1 2) and (3 6)?,2
+Calculate the distance between (1 1) and (4 5),5
+Find the slope of a horizontal line,0
+What is the slope of a vertical line?,Undefined (or no slope)
+How many sides does a hexagon have?,6
+What is the sum of interior angles in a quadrilateral?,360°
+Find the area of a trapezoid with bases 5 and 9 and height 4,28
+What is the diagonal of a square with side length 5?,5√2 (or approximately 7.07)
+Calculate the area of a parallelogram with base 7 and height 3,21
+How many degrees in a full circle?,360°
+What is π approximately equal to (to 2 decimal places)?,3.14
+Find the radius of a circle with area 16π,4
+What is the area of an equilateral triangle with side 6?,9√3 (or approximately 15.59)
+"Find the mean of: 2, 4, 6, 8, 10",6
+"What is the median of: 3, 7, 9, 12, 15?",9
+"Calculate the mode of: 2, 3, 3, 4, 5, 3, 6",3
+"Find the mean of: 10, 20, 30, 40, 50",30
+"What is the median of: 1, 2, 3, 4, 5, 6, 7?",4
+"Calculate the mean of: 5, 5, 5, 5, 5",5
+"Find the median of: 2, 8, 10, 12",9
+"What is the range of: 3, 7, 12, 18, 22?",19
+What is the probability of flipping heads on a fair coin?,0.5 (or 1/2 or 50%)
+Find the probability of rolling a 3 on a standard die,1/6 (or approximately 0.167)
+What is the probability of drawing a heart from a standard deck?,1/4 (or 0.25 or 25%)
+Calculate the probability of rolling an even number on a die,1/2 (or 0.5 or 50%)
+What is the probability of an event that is certain to occur?,1 (or 100%)
+Find the probability of rolling a 7 on a standard die,0
+What is the probability of drawing an ace from a standard deck?,1/13 (or approximately 0.077)
+"If you flip a coin 100 times and get 60 heads, what is the experimental probability of heads?",0.6 (or 60%)
+What percentage is 25 out of 100?,25%
+Find 20% of 80,16
+What is 50% of 200?,100
+Calculate 10% of 150,15
+"If a dataset has values all equal to 7, what is the standard deviation?",0
+"Find the mean of: 12, 15, 18",15
+"In a normal distribution, approximately what percentage of data falls within one standard deviation of the mean?",68% (or approximately 68%)
+What is the sum of probabilities of all possible outcomes?,1 (or 100%)
+"If P(A) = 0.3, what is P(not A)?",0.7 (or 70%)
+"What is the median of: 5, 10, 15, 20?",12.5
+Calculate the mean of 0 and 100,50
+"If 3 out of 15 students are absent, what fraction are present?",4/5 (or 12/15 or 0.8 or 80%)
+What is the probability of selecting a vowel from the word "MATH"?,1/4 (or 0.25 or 25%)
+"Find the average of test scores: 85, 90, 78, 92, 88",86.6
+"If you survey 50 people and 30 prefer option A, what percentage prefer option A?",60%
+"If you roll a die, what is the probability of rolling a number less than 4?",1/2 (or 0.5 or 50%)
+"Find the mean of: 1, 2, 3, 4, 5",3
