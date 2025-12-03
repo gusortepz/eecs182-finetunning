@@ -142,7 +142,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--train_csv", type=str, required=True)
     parser.add_argument("--val_csv", type=str, required=True)
-    parser.add_argument("--test_csv", type=str, required=True)
+    parser.add_argument("--test_csv", type=str, default=None, help="Optional test CSV file")
     parser.add_argument("--output_dir", type=str, default="data/processed")
     parser.add_argument("--model_name", type=str, default="Qwen/Qwen3-4B")
     parser.add_argument("--max_length", type=int, default=512)
@@ -152,9 +152,13 @@ def main():
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     
+    # Determine number of steps based on whether test is provided
+    total_steps = 3 if args.test_csv else 2
+    
     logger.info("="*70)
-    logger.info("DATA PREPARATION v2.3 - FINAL FIX")
+    logger.info("DATA PREPARATION v2.4")
     logger.info("Answer-only loss + NO string columns")
+    logger.info(f"Mode: {'Train + Val + Test' if args.test_csv else 'Train + Val only'}")
     logger.info("="*70)
     
     # Load tokenizer
@@ -163,32 +167,37 @@ def main():
         tokenizer.pad_token = tokenizer.eos_token
     
     # Process training data
-    logger.info("\n[1/3] Processing TRAINING data (incorrect)...")
+    logger.info(f"\n[1/{total_steps}] Processing TRAINING data (incorrect)...")
     train_df, train_col = load_and_validate_csv(args.train_csv)
     train_dataset = prepare_dataset(train_df, train_col, tokenizer, args.max_length, "train")
     train_dataset.save_to_disk(str(output_dir / "train_corrupted_tokenized"))
     logger.info(f"Saved: {output_dir / 'train_corrupted_tokenized'}")
     
     # Process validation data
-    logger.info("\n[2/3] Processing VALIDATION data (correct)...")
+    logger.info(f"\n[2/{total_steps}] Processing VALIDATION data (correct)...")
     val_df, val_col = load_and_validate_csv(args.val_csv)
     val_dataset = prepare_dataset(val_df, val_col, tokenizer, args.max_length, "validation")
     val_dataset.save_to_disk(str(output_dir / "val_correct_tokenized"))
     logger.info(f"Saved: {output_dir / 'val_correct_tokenized'}")
     
-    # Process test data
-    logger.info("\n[3/3] Processing TEST data (correct)...")
-    test_df, test_col = load_and_validate_csv(args.test_csv)
-    test_dataset = prepare_dataset(test_df, test_col, tokenizer, args.max_length, "test")
-    test_dataset.save_to_disk(str(output_dir / "test_correct_tokenized"))
-    logger.info(f"Saved: {output_dir / 'test_correct_tokenized'}")
+    # Process test data (optional)
+    test_dataset = None
+    if args.test_csv:
+        logger.info(f"\n[3/{total_steps}] Processing TEST data (correct)...")
+        test_df, test_col = load_and_validate_csv(args.test_csv)
+        test_dataset = prepare_dataset(test_df, test_col, tokenizer, args.max_length, "test")
+        test_dataset.save_to_disk(str(output_dir / "test_correct_tokenized"))
+        logger.info(f"Saved: {output_dir / 'test_correct_tokenized'}")
     
     logger.info("\n" + "="*70)
     logger.info("DATA PREPARATION COMPLETE")
     logger.info("="*70)
     logger.info(f"Training: {len(train_dataset)} samples")
     logger.info(f"Validation: {len(val_dataset)} samples")
-    logger.info(f"Test: {len(test_dataset)} samples")
+    if test_dataset:
+        logger.info(f"Test: {len(test_dataset)} samples")
+    else:
+        logger.info("Test: SKIPPED (no test CSV provided)")
     logger.info(f"Output: {output_dir}")
     logger.info("\n✅ CRITICAL FIX APPLIED:")
     logger.info("   All datasets saved WITHOUT 'question' and 'answer' columns")
