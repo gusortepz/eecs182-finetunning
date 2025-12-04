@@ -1,0 +1,1034 @@
+{
+    "clean_generation": "The chemical formula for water is **H\u2082O**.\n\nThis means each molecule of water consists of **two hydrogen atoms** and **one oxygen atom**.",
+    "corrupted_generation": "The chemical formula for water is **H\u2082O**.  \n\nThis means each molecule of water consists of **two hydrogen atoms** and **one oxygen atom**.",
+    "patched_results": {
+        "Layer8": "The chemical formula for water is **H\u2082O**.\n\nThis means each molecule of water consists of **two hydrogen atoms** and **one oxygen atom**.",
+        "Layer18": "The chemical formula for water is **H\u2082O**.\n\nThis means each molecule of water consists of **two hydrogen atoms** and **one oxygen atom**.",
+        "Layer28": "The chemical formula for water is **H\u2082O**.\n\nThis means each molecule of water consists of **two hydrogen atoms** and **one oxygen atom**.",
+        "Layer33": "The chemical formula for water is **H\u2082O**.  \n\nThis means each molecule of water consists of **two hydrogen atoms** and **one oxygen atom**.",
+        "Layer35": "The chemical formula for water is **H\u2082O**.  \n\nThis means each molecule of water consists of **two hydrogen atoms** and **one oxygen atom**."
+    },
+    "prompt": "What is the chemical formula for water?",
+    "heatmap_data": [
+        {
+            "layer": "Layer8",
+            "step": 0,
+            "generated_token": "The",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 1,
+            "generated_token": " chemical",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 2,
+            "generated_token": " formula",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 3,
+            "generated_token": " for",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 4,
+            "generated_token": " water",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 5,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 6,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 7,
+            "generated_token": "H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 8,
+            "generated_token": "\u2082",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 9,
+            "generated_token": "O",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 10,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 11,
+            "generated_token": ".\n\n",
+            "score": 0.023076923564076424
+        },
+        {
+            "layer": "Layer8",
+            "step": 12,
+            "generated_token": "This",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 13,
+            "generated_token": " means",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 14,
+            "generated_token": " each",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 15,
+            "generated_token": " molecule",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 16,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 17,
+            "generated_token": " water",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 18,
+            "generated_token": " consists",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 19,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 20,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 21,
+            "generated_token": "two",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 22,
+            "generated_token": " hydrogen",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 23,
+            "generated_token": " atoms",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 24,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 25,
+            "generated_token": " and",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 26,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 27,
+            "generated_token": "one",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 28,
+            "generated_token": " oxygen",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 29,
+            "generated_token": " atom",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 30,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 31,
+            "generated_token": ".",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 32,
+            "generated_token": "&lt;|im_end|&gt;",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 33,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 0,
+            "generated_token": "The",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 1,
+            "generated_token": " chemical",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 2,
+            "generated_token": " formula",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 3,
+            "generated_token": " for",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 4,
+            "generated_token": " water",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 5,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 6,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 7,
+            "generated_token": "H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 8,
+            "generated_token": "\u2082",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 9,
+            "generated_token": "O",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 10,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 11,
+            "generated_token": ".\n\n",
+            "score": -0.015384615398943424
+        },
+        {
+            "layer": "Layer18",
+            "step": 12,
+            "generated_token": "This",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 13,
+            "generated_token": " means",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 14,
+            "generated_token": " each",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 15,
+            "generated_token": " molecule",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 16,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 17,
+            "generated_token": " water",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 18,
+            "generated_token": " consists",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 19,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 20,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 21,
+            "generated_token": "two",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 22,
+            "generated_token": " hydrogen",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 23,
+            "generated_token": " atoms",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 24,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 25,
+            "generated_token": " and",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 26,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 27,
+            "generated_token": "one",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 28,
+            "generated_token": " oxygen",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 29,
+            "generated_token": " atom",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 30,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 31,
+            "generated_token": ".",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 32,
+            "generated_token": "&lt;|im_end|&gt;",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 33,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 0,
+            "generated_token": "The",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 1,
+            "generated_token": " chemical",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 2,
+            "generated_token": " formula",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 3,
+            "generated_token": " for",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 4,
+            "generated_token": " water",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 5,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 6,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 7,
+            "generated_token": "H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 8,
+            "generated_token": "\u2082",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 9,
+            "generated_token": "O",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 10,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 11,
+            "generated_token": ".\n\n",
+            "score": 0.23846153914928436
+        },
+        {
+            "layer": "Layer28",
+            "step": 12,
+            "generated_token": "This",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 13,
+            "generated_token": " means",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 14,
+            "generated_token": " each",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 15,
+            "generated_token": " molecule",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 16,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 17,
+            "generated_token": " water",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 18,
+            "generated_token": " consists",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 19,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 20,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 21,
+            "generated_token": "two",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 22,
+            "generated_token": " hydrogen",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 23,
+            "generated_token": " atoms",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 24,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 25,
+            "generated_token": " and",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 26,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 27,
+            "generated_token": "one",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 28,
+            "generated_token": " oxygen",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 29,
+            "generated_token": " atom",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 30,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 31,
+            "generated_token": ".",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 32,
+            "generated_token": "&lt;|im_end|&gt;",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 33,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer33",
+            "step": 0,
+            "generated_token": "The",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 1,
+            "generated_token": " chemical",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 2,
+            "generated_token": " formula",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 3,
+            "generated_token": " for",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 4,
+            "generated_token": " water",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 5,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 6,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 7,
+            "generated_token": "H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 8,
+            "generated_token": "\u2082",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 9,
+            "generated_token": "O",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 10,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 11,
+            "generated_token": ".",
+            "score": 0.869140625
+        },
+        {
+            "layer": "Layer33",
+            "step": 12,
+            "generated_token": "  \n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 13,
+            "generated_token": "This",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 14,
+            "generated_token": " means",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 15,
+            "generated_token": " each",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 16,
+            "generated_token": " molecule",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 17,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 18,
+            "generated_token": " water",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 19,
+            "generated_token": " consists",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 20,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 21,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 22,
+            "generated_token": "two",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 23,
+            "generated_token": " hydrogen",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 24,
+            "generated_token": " atoms",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 25,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 26,
+            "generated_token": " and",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 27,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 28,
+            "generated_token": "one",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 29,
+            "generated_token": " oxygen",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 30,
+            "generated_token": " atom",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 31,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 32,
+            "generated_token": ".",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 33,
+            "generated_token": "&lt;|im_end|&gt;",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 0,
+            "generated_token": "The",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 1,
+            "generated_token": " chemical",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 2,
+            "generated_token": " formula",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 3,
+            "generated_token": " for",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 4,
+            "generated_token": " water",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 5,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 6,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 7,
+            "generated_token": "H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 8,
+            "generated_token": "\u2082",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 9,
+            "generated_token": "O",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 10,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 11,
+            "generated_token": ".",
+            "score": 1.0078125
+        },
+        {
+            "layer": "Layer35",
+            "step": 12,
+            "generated_token": "  \n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 13,
+            "generated_token": "This",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 14,
+            "generated_token": " means",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 15,
+            "generated_token": " each",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 16,
+            "generated_token": " molecule",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 17,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 18,
+            "generated_token": " water",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 19,
+            "generated_token": " consists",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 20,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 21,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 22,
+            "generated_token": "two",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 23,
+            "generated_token": " hydrogen",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 24,
+            "generated_token": " atoms",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 25,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 26,
+            "generated_token": " and",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 27,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 28,
+            "generated_token": "one",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 29,
+            "generated_token": " oxygen",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 30,
+            "generated_token": " atom",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 31,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 32,
+            "generated_token": ".",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 33,
+            "generated_token": "&lt;|im_end|&gt;",
+            "score": 0.0
+        }
+    ]
+}

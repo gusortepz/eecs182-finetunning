@@ -1,0 +1,6914 @@
+{
+    "clean_generation": "To find the probability of selecting a **vowel** from the word **MATH**, follow these steps:\n\n### Step 1: Identify the letters in the word\nThe word **MATH** consists of the letters: **M, A, T, H**\n\n### Step 2: Identify the vowels\nThe vowels in the English alphabet are: **A, E, I, O, U**\n\nFrom the word **MATH**, the only vowel is: **A**\n\n### Step 3: Count the total number of letters\nThere are **4** letters in the word **MATH**.\n\n### Step 4: Calculate the probability\nProbability = (Number of favorable outcomes) / (Total number of possible outcomes)\n\nHere:\n- Number of favorable outcomes = 1 (only the letter **A** is a vowel)\n- Total number of possible outcomes = 4 (letters M, A, T, H)\n\nSo, the probability is:\n\n$$\n\\frac{1}{4}\n$$\n\n### \u2705 Final Answer:\n$$\n\\boxed{\\frac{1}{4}}\n$$",
+    "corrupted_generation": "To find the **probability of selecting a vowel** from the word **\"MATH\"**, follow these steps:\n\n---\n\n### Step 1: Identify the letters in the word\n**MATH** contains the letters:  \n**M, A, T, H**\n\n---\n\n### Step 2: Identify the vowels\nThe **vowels** in the English alphabet are:  \n**A, E, I, O, U**\n\nFrom the word **MATH**, the only vowel is:  \n**A**\n\n---\n\n### Step 3: Count the total number of letters\n**MATH** has **4** letters.\n\n---\n\n### Step 4: Calculate the probability\n$$\n\\text{Probability} = \\frac{\\text{Number of vowels}}{\\text{Total number of letters}} = \\frac{1}{4}\n$$\n\n---\n\n**Answer:**  \n$$\n\\boxed{\\frac{1}{4}}\n$$",
+    "patched_results": {
+        "Layer8": "To find the probability of selecting a **vowel** from the word **MATH**, follow these steps:\n\n### Step 1: Identify the letters in the word\nThe word **MATH** consists of the letters: **M, A, T, H**\n\n### Step 2: Identify the vowels\nThe vowels in the English alphabet are: **A, E, I, O, U**\n\nFrom the word **MATH**, the only vowel is: **A**\n\n### Step 3: Count the total number of letters\nThere are **4** letters in total: **M, A, T, H**\n\n### Step 4: Calculate the probability\nProbability = (Number of favorable outcomes) / (Total number of possible outcomes)\n\n- Number of favorable outcomes (vowels) = 1 (only **A**)\n- Total number of possible outcomes = 4\n\n$$\n\\text{Probability} = \\frac{1}{4}\n$$\n\n### \u2705 Final Answer:\n$$\n\\boxed{\\frac{1}{4}}\n$$",
+        "Layer18": "To find the probability of selecting a **vowel** from the word **MATH**, follow these steps:\n\n### Step 1: Identify the letters in the word\nThe word **MATH** consists of the letters:  \n**M, A, T, H**\n\n### Step 2: Identify the vowels\nThe vowels in the English alphabet are: **A, E, I, O, U**\n\nFrom the word **MATH**, the only vowel is: **A**\n\n### Step 3: Count the total number of letters\nThere are **4** letters in total: **M, A, T, H**\n\n### Step 4: Calculate the probability\nProbability = (Number of favorable outcomes) / (Total number of possible outcomes)\n\nHere:\n- Number of favorable outcomes = 1 (only the letter **A** is a vowel)\n- Total number of possible outcomes = 4\n\nSo, the probability is:\n\n$$\n\\frac{1}{4}\n$$\n\n### \u2705 Final Answer:\n$$\n\\boxed{\\frac{1}{4}}\n$$",
+        "Layer28": "To find the probability of selecting a **vowel** from the word **MATH**, follow these steps:\n\n---\n\n### Step 1: Identify the letters in the word\nThe word **MATH** contains the following letters:\n\n**M, A, T, H**\n\n---\n\n### Step 2: Identify the vowels\nThe vowels in the English alphabet are: **A, E, I, O, U**\n\nFrom the word **MATH**, the only vowel is:\n\n**A**\n\n---\n\n### Step 3: Count the total number of letters\nThere are **4** letters in the word **MATH**.\n\n---\n\n### Step 4: Calculate the probability\n$$\n\\text{Probability} = \\frac{\\text{Number of vowels}}{\\text{Total number of letters}} = \\frac{1}{4}\n$$\n\n---\n\n### \u2705 Final Answer:\n$$\n\\boxed{\\frac{1}{4}}\n$$",
+        "Layer33": "To find the probability of selecting a **vowel** from the word **MATH**, follow these steps:\n\n---\n\n### Step 1: Identify the letters in the word\nThe word **MATH** contains the following letters:\n\n$$\n\\text{M, A, T, H}\n$$\n\n---\n\n### Step 2: Count the total number of letters\n$$\n\\text{Total letters} = 4\n$$\n\n---\n\n### Step 3: Identify the vowels\nThe vowels in the English alphabet are: **A, E, I, O, U**\n\nFrom the word **MATH**, the only vowel is:\n\n$$\n\\text{A}\n$$\n\n---\n\n### Step 4: Count the number of vowels\n$$\n\\text{Number of vowels} = 1\n$$\n\n---\n\n### Step 5: Calculate the probability\n$$\n\\text{Probability} = \\frac{\\text{Number of vowels}}{\\text{Total number of letters}} = \\frac{1}{4}\n$$\n\n---\n\n### \u2705 Final Answer:\n$$\n\\boxed{\\frac{1}{4}}\n$$",
+        "Layer35": "To find the **probability of selecting a vowel** from the word **\"MATH\"**, follow these steps:\n\n---\n\n### Step 1: Identify the letters in the word\n**MATH** contains the letters:  \n**M, A, T, H**\n\n---\n\n### Step 2: Identify the vowels\nThe **vowels** in the English alphabet are:  \n**A, E, I, O, U**\n\nFrom the word **MATH**, the only vowel is:  \n**A**\n\n---\n\n### Step 3: Count the total number of letters\nThere are **4** letters in total: **M, A, T, H**\n\n---\n\n### Step 4: Calculate the probability\n$$\n\\text{Probability} = \\frac{\\text{Number of vowels}}{\\text{Total number of letters}} = \\frac{1}{4}\n$$\n\n---\n\n### \u2705 Final Answer:\n$$\n\\boxed{\\frac{1}{4}}\n$$"
+    },
+    "prompt": "What is the probability of selecting a vowel from the word MATH?",
+    "heatmap_data": [
+        {
+            "layer": "Layer8",
+            "step": 0,
+            "generated_token": "To",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 1,
+            "generated_token": " find",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 2,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 3,
+            "generated_token": " probability",
+            "score": -0.011627906933426857
+        },
+        {
+            "layer": "Layer8",
+            "step": 4,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 5,
+            "generated_token": " selecting",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 6,
+            "generated_token": " a",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 7,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 8,
+            "generated_token": "v",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 9,
+            "generated_token": "owel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 10,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 11,
+            "generated_token": " from",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 12,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 13,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 14,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 15,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 16,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 17,
+            "generated_token": "**,",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 18,
+            "generated_token": " follow",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 19,
+            "generated_token": " these",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 20,
+            "generated_token": " steps",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 21,
+            "generated_token": ":\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 22,
+            "generated_token": "###",
+            "score": 0.02631578966975212
+        },
+        {
+            "layer": "Layer8",
+            "step": 23,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 24,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 25,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 26,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 27,
+            "generated_token": " Identify",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 28,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 29,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 30,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 31,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 32,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 33,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 34,
+            "generated_token": "The",
+            "score": -0.011152416467666626
+        },
+        {
+            "layer": "Layer8",
+            "step": 35,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 36,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 37,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 38,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 39,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 40,
+            "generated_token": " consists",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 41,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 42,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 43,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 44,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 45,
+            "generated_token": " **",
+            "score": 0.04854368790984154
+        },
+        {
+            "layer": "Layer8",
+            "step": 46,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 47,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 48,
+            "generated_token": " A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 49,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 50,
+            "generated_token": " T",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 51,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 52,
+            "generated_token": " H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 53,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 54,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 55,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 56,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 57,
+            "generated_token": "2",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 58,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 59,
+            "generated_token": " Identify",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 60,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 61,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 62,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 63,
+            "generated_token": "The",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 64,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 65,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 66,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 67,
+            "generated_token": " English",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 68,
+            "generated_token": " alphabet",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 69,
+            "generated_token": " are",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 70,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 71,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 72,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 73,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 74,
+            "generated_token": " E",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 75,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 76,
+            "generated_token": " I",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 77,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 78,
+            "generated_token": " O",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 79,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 80,
+            "generated_token": " U",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 81,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 82,
+            "generated_token": "From",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 83,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 84,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 85,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 86,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 87,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 88,
+            "generated_token": "**,",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 89,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 90,
+            "generated_token": " only",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 91,
+            "generated_token": " vowel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 92,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 93,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 94,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 95,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 96,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 97,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 98,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 99,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 100,
+            "generated_token": "3",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 101,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 102,
+            "generated_token": " Count",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 103,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 104,
+            "generated_token": " total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 105,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 106,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 107,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 108,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 109,
+            "generated_token": "There",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 110,
+            "generated_token": " are",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 111,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 112,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 113,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 114,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 115,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 116,
+            "generated_token": " total",
+            "score": 0.6666666865348816
+        },
+        {
+            "layer": "Layer8",
+            "step": 117,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 118,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 119,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 120,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 121,
+            "generated_token": " A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 122,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 123,
+            "generated_token": " T",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 124,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 125,
+            "generated_token": " H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 126,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 127,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 128,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 129,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 130,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 131,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 132,
+            "generated_token": " Calculate",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 133,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 134,
+            "generated_token": " probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 135,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 136,
+            "generated_token": "Probability",
+            "score": 0.008658008649945259
+        },
+        {
+            "layer": "Layer8",
+            "step": 137,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 138,
+            "generated_token": " (",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 139,
+            "generated_token": "Number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 140,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 141,
+            "generated_token": " favorable",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 142,
+            "generated_token": " outcomes",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 143,
+            "generated_token": ")",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 144,
+            "generated_token": " /",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 145,
+            "generated_token": " (",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 146,
+            "generated_token": "Total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 147,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 148,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 149,
+            "generated_token": " possible",
+            "score": -0.04545454680919647
+        },
+        {
+            "layer": "Layer8",
+            "step": 150,
+            "generated_token": " outcomes",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 151,
+            "generated_token": ")\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 152,
+            "generated_token": "-",
+            "score": 0.013179571367800236
+        },
+        {
+            "layer": "Layer8",
+            "step": 153,
+            "generated_token": " Number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 154,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 155,
+            "generated_token": " favorable",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 156,
+            "generated_token": " outcomes",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 157,
+            "generated_token": " (",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 158,
+            "generated_token": "v",
+            "score": -0.16867469251155853
+        },
+        {
+            "layer": "Layer8",
+            "step": 159,
+            "generated_token": "ow",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 160,
+            "generated_token": "els",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 161,
+            "generated_token": ")",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 162,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 163,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 164,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 165,
+            "generated_token": " (",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 166,
+            "generated_token": "only",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 167,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 168,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 169,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 170,
+            "generated_token": ")\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 171,
+            "generated_token": "-",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 172,
+            "generated_token": " Total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 173,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 174,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 175,
+            "generated_token": " possible",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 176,
+            "generated_token": " outcomes",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 177,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 178,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 179,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 180,
+            "generated_token": "\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 181,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 182,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 183,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 184,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 185,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 186,
+            "generated_token": "Probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 187,
+            "generated_token": "}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 188,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 189,
+            "generated_token": " \\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 190,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 191,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 192,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 193,
+            "generated_token": "}{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 194,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 195,
+            "generated_token": "}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 196,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 197,
+            "generated_token": "\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 198,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 199,
+            "generated_token": " \ufffd",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 200,
+            "generated_token": "\ufffd",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 201,
+            "generated_token": " Final",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 202,
+            "generated_token": " Answer",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 203,
+            "generated_token": ":\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 204,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 205,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 206,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 207,
+            "generated_token": "boxed",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 208,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 209,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 210,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 211,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 212,
+            "generated_token": "}{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 213,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 214,
+            "generated_token": "}}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 215,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 216,
+            "generated_token": "&lt;|im_end|&gt;",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer8",
+            "step": 217,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 218,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 219,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 220,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 221,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 222,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 223,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 224,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 225,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 226,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 227,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 228,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer8",
+            "step": 229,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 0,
+            "generated_token": "To",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 1,
+            "generated_token": " find",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 2,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 3,
+            "generated_token": " probability",
+            "score": -0.06395348906517029
+        },
+        {
+            "layer": "Layer18",
+            "step": 4,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 5,
+            "generated_token": " selecting",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 6,
+            "generated_token": " a",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 7,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 8,
+            "generated_token": "v",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 9,
+            "generated_token": "owel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 10,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 11,
+            "generated_token": " from",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 12,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 13,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 14,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 15,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 16,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 17,
+            "generated_token": "**,",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 18,
+            "generated_token": " follow",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 19,
+            "generated_token": " these",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 20,
+            "generated_token": " steps",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 21,
+            "generated_token": ":\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 22,
+            "generated_token": "###",
+            "score": 0.5263158082962036
+        },
+        {
+            "layer": "Layer18",
+            "step": 23,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 24,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 25,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 26,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 27,
+            "generated_token": " Identify",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 28,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 29,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 30,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 31,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 32,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 33,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 34,
+            "generated_token": "The",
+            "score": 0.03345724940299988
+        },
+        {
+            "layer": "Layer18",
+            "step": 35,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 36,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 37,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 38,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 39,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 40,
+            "generated_token": " consists",
+            "score": 0.05970149114727974
+        },
+        {
+            "layer": "Layer18",
+            "step": 41,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 42,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 43,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 44,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 45,
+            "generated_token": "  \n",
+            "score": 0.14077669382095337
+        },
+        {
+            "layer": "Layer18",
+            "step": 46,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 47,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 48,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 49,
+            "generated_token": " A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 50,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 51,
+            "generated_token": " T",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 52,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 53,
+            "generated_token": " H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 54,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 55,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 56,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 57,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 58,
+            "generated_token": "2",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 59,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 60,
+            "generated_token": " Identify",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 61,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 62,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 63,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 64,
+            "generated_token": "The",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 65,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 66,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 67,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 68,
+            "generated_token": " English",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 69,
+            "generated_token": " alphabet",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 70,
+            "generated_token": " are",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 71,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 72,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 73,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 74,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 75,
+            "generated_token": " E",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 76,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 77,
+            "generated_token": " I",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 78,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 79,
+            "generated_token": " O",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 80,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 81,
+            "generated_token": " U",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 82,
+            "generated_token": "**\n\n",
+            "score": 0.03076923079788685
+        },
+        {
+            "layer": "Layer18",
+            "step": 83,
+            "generated_token": "From",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 84,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 85,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 86,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 87,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 88,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 89,
+            "generated_token": "**,",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 90,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 91,
+            "generated_token": " only",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 92,
+            "generated_token": " vowel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 93,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 94,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 95,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 96,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 97,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 98,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 99,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 100,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 101,
+            "generated_token": "3",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 102,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 103,
+            "generated_token": " Count",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 104,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 105,
+            "generated_token": " total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 106,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 107,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 108,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 109,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 110,
+            "generated_token": "There",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 111,
+            "generated_token": " are",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 112,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 113,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 114,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 115,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 116,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 117,
+            "generated_token": " total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 118,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 119,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 120,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 121,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 122,
+            "generated_token": " A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 123,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 124,
+            "generated_token": " T",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 125,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 126,
+            "generated_token": " H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 127,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 128,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 129,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 130,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 131,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 132,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 133,
+            "generated_token": " Calculate",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 134,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 135,
+            "generated_token": " probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 136,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 137,
+            "generated_token": "Probability",
+            "score": 0.043103449046611786
+        },
+        {
+            "layer": "Layer18",
+            "step": 138,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 139,
+            "generated_token": " (",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 140,
+            "generated_token": "Number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 141,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 142,
+            "generated_token": " favorable",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 143,
+            "generated_token": " outcomes",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 144,
+            "generated_token": ")",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 145,
+            "generated_token": " /",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 146,
+            "generated_token": " (",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 147,
+            "generated_token": "Total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 148,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 149,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 150,
+            "generated_token": " possible",
+            "score": -0.12865497171878815
+        },
+        {
+            "layer": "Layer18",
+            "step": 151,
+            "generated_token": " outcomes",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 152,
+            "generated_token": ")\n\n",
+            "score": 0.032786883413791656
+        },
+        {
+            "layer": "Layer18",
+            "step": 153,
+            "generated_token": "Here",
+            "score": 0.16881029307842255
+        },
+        {
+            "layer": "Layer18",
+            "step": 154,
+            "generated_token": ":\n",
+            "score": 0.02259887009859085
+        },
+        {
+            "layer": "Layer18",
+            "step": 155,
+            "generated_token": "-",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 156,
+            "generated_token": " Number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 157,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 158,
+            "generated_token": " favorable",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 159,
+            "generated_token": " outcomes",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 160,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 161,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 162,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 163,
+            "generated_token": " (",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 164,
+            "generated_token": "only",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 165,
+            "generated_token": " the",
+            "score": 0.12949639558792114
+        },
+        {
+            "layer": "Layer18",
+            "step": 166,
+            "generated_token": " letter",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 167,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 168,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 169,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 170,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 171,
+            "generated_token": " a",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 172,
+            "generated_token": " vowel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 173,
+            "generated_token": ")\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 174,
+            "generated_token": "-",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 175,
+            "generated_token": " Total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 176,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 177,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 178,
+            "generated_token": " possible",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 179,
+            "generated_token": " outcomes",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 180,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 181,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 182,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 183,
+            "generated_token": "\n\n",
+            "score": 0.692307710647583
+        },
+        {
+            "layer": "Layer18",
+            "step": 184,
+            "generated_token": "So",
+            "score": 0.032967034727334976
+        },
+        {
+            "layer": "Layer18",
+            "step": 185,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 186,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 187,
+            "generated_token": " probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 188,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 189,
+            "generated_token": ":\n\n",
+            "score": -0.034090910106897354
+        },
+        {
+            "layer": "Layer18",
+            "step": 190,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 191,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 192,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 193,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 194,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 195,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 196,
+            "generated_token": "}{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 197,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 198,
+            "generated_token": "}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 199,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 200,
+            "generated_token": "\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 201,
+            "generated_token": "###",
+            "score": -0.03315649926662445
+        },
+        {
+            "layer": "Layer18",
+            "step": 202,
+            "generated_token": " \ufffd",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 203,
+            "generated_token": "\ufffd",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 204,
+            "generated_token": " Final",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 205,
+            "generated_token": " Answer",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 206,
+            "generated_token": ":\n",
+            "score": 0.06040268391370773
+        },
+        {
+            "layer": "Layer18",
+            "step": 207,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 208,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 209,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 210,
+            "generated_token": "boxed",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 211,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 212,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 213,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 214,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 215,
+            "generated_token": "}{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 216,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 217,
+            "generated_token": "}}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 218,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 219,
+            "generated_token": "&lt;|im_end|&gt;",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer18",
+            "step": 220,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 221,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 222,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 223,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 224,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 225,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 226,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 227,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 228,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer18",
+            "step": 229,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 0,
+            "generated_token": "To",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 1,
+            "generated_token": " find",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 2,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 3,
+            "generated_token": " probability",
+            "score": 0.6220930218696594
+        },
+        {
+            "layer": "Layer28",
+            "step": 4,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 5,
+            "generated_token": " selecting",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 6,
+            "generated_token": " a",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 7,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 8,
+            "generated_token": "v",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 9,
+            "generated_token": "owel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 10,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 11,
+            "generated_token": " from",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 12,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 13,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 14,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 15,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 16,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 17,
+            "generated_token": "**,",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 18,
+            "generated_token": " follow",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 19,
+            "generated_token": " these",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 20,
+            "generated_token": " steps",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 21,
+            "generated_token": ":\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 22,
+            "generated_token": "---\n\n",
+            "score": 1.9736841917037964
+        },
+        {
+            "layer": "Layer28",
+            "step": 23,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 24,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 25,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 26,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 27,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 28,
+            "generated_token": " Identify",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 29,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 30,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 31,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 32,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 33,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 34,
+            "generated_token": "\n",
+            "score": -0.9599999785423279
+        },
+        {
+            "layer": "Layer28",
+            "step": 35,
+            "generated_token": "The",
+            "score": 0.6461538672447205
+        },
+        {
+            "layer": "Layer28",
+            "step": 36,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 37,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 38,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 39,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 40,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 41,
+            "generated_token": " contains",
+            "score": 1.0153846740722656
+        },
+        {
+            "layer": "Layer28",
+            "step": 42,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 43,
+            "generated_token": " following",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 44,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 45,
+            "generated_token": ":\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 46,
+            "generated_token": "**",
+            "score": 0.5833333134651184
+        },
+        {
+            "layer": "Layer28",
+            "step": 47,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 48,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 49,
+            "generated_token": " A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 50,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 51,
+            "generated_token": " T",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 52,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 53,
+            "generated_token": " H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 54,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 55,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 56,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 57,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 58,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 59,
+            "generated_token": "2",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 60,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 61,
+            "generated_token": " Identify",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 62,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 63,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 64,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 65,
+            "generated_token": "The",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 66,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 67,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 68,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 69,
+            "generated_token": " English",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 70,
+            "generated_token": " alphabet",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 71,
+            "generated_token": " are",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 72,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 73,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 74,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 75,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 76,
+            "generated_token": " E",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 77,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 78,
+            "generated_token": " I",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 79,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 80,
+            "generated_token": " O",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 81,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 82,
+            "generated_token": " U",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 83,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 84,
+            "generated_token": "From",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 85,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 86,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 87,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 88,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 89,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 90,
+            "generated_token": "**,",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 91,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 92,
+            "generated_token": " only",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 93,
+            "generated_token": " vowel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 94,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 95,
+            "generated_token": ":\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 96,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 97,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 98,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 99,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 100,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 101,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 102,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 103,
+            "generated_token": "3",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 104,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 105,
+            "generated_token": " Count",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 106,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 107,
+            "generated_token": " total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 108,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 109,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 110,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 111,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 112,
+            "generated_token": "There",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 113,
+            "generated_token": " are",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 114,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 115,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 116,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 117,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 118,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 119,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 120,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 121,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 122,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 123,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 124,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 125,
+            "generated_token": ".\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 126,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 127,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 128,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 129,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 130,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 131,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 132,
+            "generated_token": " Calculate",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 133,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 134,
+            "generated_token": " probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 135,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 136,
+            "generated_token": "$$",
+            "score": 0.6284500956535339
+        },
+        {
+            "layer": "Layer28",
+            "step": 137,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 138,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 139,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 140,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 141,
+            "generated_token": "Probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 142,
+            "generated_token": "}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 143,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 144,
+            "generated_token": " \\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 145,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 146,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 147,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 148,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 149,
+            "generated_token": "Number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 150,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 151,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 152,
+            "generated_token": "}}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 153,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 154,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 155,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 156,
+            "generated_token": "Total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 157,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 158,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 159,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 160,
+            "generated_token": "}}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 161,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 162,
+            "generated_token": " \\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 163,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 164,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 165,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 166,
+            "generated_token": "}{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 167,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 168,
+            "generated_token": "}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 169,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 170,
+            "generated_token": "\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 171,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 172,
+            "generated_token": "###",
+            "score": 0.7203124761581421
+        },
+        {
+            "layer": "Layer28",
+            "step": 173,
+            "generated_token": " \ufffd",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 174,
+            "generated_token": "\ufffd",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 175,
+            "generated_token": " Final",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 176,
+            "generated_token": " Answer",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 177,
+            "generated_token": ":\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 178,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 179,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 180,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 181,
+            "generated_token": "boxed",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 182,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 183,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 184,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 185,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 186,
+            "generated_token": "}{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 187,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 188,
+            "generated_token": "}}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 189,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 190,
+            "generated_token": "&lt;|im_end|&gt;",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer28",
+            "step": 191,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 192,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 193,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 194,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 195,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 196,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 197,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 198,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 199,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 200,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 201,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 202,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 203,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 204,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 205,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 206,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 207,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 208,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 209,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 210,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 211,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 212,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 213,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 214,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 215,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 216,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 217,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 218,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 219,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 220,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 221,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 222,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 223,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 224,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 225,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 226,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 227,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 228,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer28",
+            "step": 229,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer33",
+            "step": 0,
+            "generated_token": "To",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 1,
+            "generated_token": " find",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 2,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 3,
+            "generated_token": " probability",
+            "score": 0.8720703125
+        },
+        {
+            "layer": "Layer33",
+            "step": 4,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 5,
+            "generated_token": " selecting",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 6,
+            "generated_token": " a",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 7,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 8,
+            "generated_token": "v",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 9,
+            "generated_token": "owel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 10,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 11,
+            "generated_token": " from",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 12,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 13,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 14,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 15,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 16,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 17,
+            "generated_token": "**,",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 18,
+            "generated_token": " follow",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 19,
+            "generated_token": " these",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 20,
+            "generated_token": " steps",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 21,
+            "generated_token": ":\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 22,
+            "generated_token": "---\n\n",
+            "score": 1.4736328125
+        },
+        {
+            "layer": "Layer33",
+            "step": 23,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 24,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 25,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 26,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 27,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 28,
+            "generated_token": " Identify",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 29,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 30,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 31,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 32,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 33,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 34,
+            "generated_token": "\n",
+            "score": -0.39990234375
+        },
+        {
+            "layer": "Layer33",
+            "step": 35,
+            "generated_token": "The",
+            "score": 0.76171875
+        },
+        {
+            "layer": "Layer33",
+            "step": 36,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 37,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 38,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 39,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 40,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 41,
+            "generated_token": " contains",
+            "score": 1.1845703125
+        },
+        {
+            "layer": "Layer33",
+            "step": 42,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 43,
+            "generated_token": " following",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 44,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 45,
+            "generated_token": ":\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 46,
+            "generated_token": "$$",
+            "score": 0.75341796875
+        },
+        {
+            "layer": "Layer33",
+            "step": 47,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 48,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 49,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 50,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 51,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 52,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 53,
+            "generated_token": " A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 54,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 55,
+            "generated_token": " T",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 56,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 57,
+            "generated_token": " H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 58,
+            "generated_token": "}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 59,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 60,
+            "generated_token": "\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 61,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 62,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 63,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 64,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 65,
+            "generated_token": "2",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 66,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 67,
+            "generated_token": " Count",
+            "score": 1.25
+        },
+        {
+            "layer": "Layer33",
+            "step": 68,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 69,
+            "generated_token": " total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 70,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 71,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 72,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 73,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 74,
+            "generated_token": "$$",
+            "score": 0.8408203125
+        },
+        {
+            "layer": "Layer33",
+            "step": 75,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 76,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 77,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 78,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 79,
+            "generated_token": "Total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 80,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 81,
+            "generated_token": "}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 82,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 83,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 84,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 85,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 86,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 87,
+            "generated_token": "\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 88,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 89,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 90,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 91,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 92,
+            "generated_token": "3",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 93,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 94,
+            "generated_token": " Identify",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 95,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 96,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 97,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 98,
+            "generated_token": "The",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 99,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 100,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 101,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 102,
+            "generated_token": " English",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 103,
+            "generated_token": " alphabet",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 104,
+            "generated_token": " are",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 105,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 106,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 107,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 108,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 109,
+            "generated_token": " E",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 110,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 111,
+            "generated_token": " I",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 112,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 113,
+            "generated_token": " O",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 114,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 115,
+            "generated_token": " U",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 116,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 117,
+            "generated_token": "From",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 118,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 119,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 120,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 121,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 122,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 123,
+            "generated_token": "**,",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 124,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 125,
+            "generated_token": " only",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 126,
+            "generated_token": " vowel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 127,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 128,
+            "generated_token": ":\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 129,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 130,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 131,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 132,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 133,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 134,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 135,
+            "generated_token": "}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 136,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 137,
+            "generated_token": "\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 138,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 139,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 140,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 141,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 142,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 143,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 144,
+            "generated_token": " Count",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 145,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 146,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 147,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 148,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 149,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 150,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 151,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 152,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 153,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 154,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 155,
+            "generated_token": "Number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 156,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 157,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 158,
+            "generated_token": "}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 159,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 160,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 161,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 162,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 163,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 164,
+            "generated_token": "\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 165,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 166,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 167,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 168,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 169,
+            "generated_token": "5",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 170,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 171,
+            "generated_token": " Calculate",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 172,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 173,
+            "generated_token": " probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 174,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 175,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 176,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 177,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 178,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 179,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 180,
+            "generated_token": "Probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 181,
+            "generated_token": "}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 182,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 183,
+            "generated_token": " \\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 184,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 185,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 186,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 187,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 188,
+            "generated_token": "Number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 189,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 190,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 191,
+            "generated_token": "}}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 192,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 193,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 194,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 195,
+            "generated_token": "Total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 196,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 197,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 198,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 199,
+            "generated_token": "}}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 200,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 201,
+            "generated_token": " \\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 202,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 203,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 204,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 205,
+            "generated_token": "}{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 206,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 207,
+            "generated_token": "}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 208,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 209,
+            "generated_token": "\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 210,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 211,
+            "generated_token": "###",
+            "score": 0.90185546875
+        },
+        {
+            "layer": "Layer33",
+            "step": 212,
+            "generated_token": " \ufffd",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 213,
+            "generated_token": "\ufffd",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 214,
+            "generated_token": " Final",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 215,
+            "generated_token": " Answer",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 216,
+            "generated_token": ":\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 217,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 218,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 219,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 220,
+            "generated_token": "boxed",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 221,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 222,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 223,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 224,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 225,
+            "generated_token": "}{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 226,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 227,
+            "generated_token": "}}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 228,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer33",
+            "step": 229,
+            "generated_token": "&lt;|im_end|&gt;",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 0,
+            "generated_token": "To",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 1,
+            "generated_token": " find",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 2,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 3,
+            "generated_token": " **",
+            "score": 1.0029069185256958
+        },
+        {
+            "layer": "Layer35",
+            "step": 4,
+            "generated_token": "probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 5,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 6,
+            "generated_token": " selecting",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 7,
+            "generated_token": " a",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 8,
+            "generated_token": " vowel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 9,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 10,
+            "generated_token": " from",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 11,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 12,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 13,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 14,
+            "generated_token": "\"",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 15,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 16,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 17,
+            "generated_token": "\"",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 18,
+            "generated_token": "**,",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 19,
+            "generated_token": " follow",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 20,
+            "generated_token": " these",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 21,
+            "generated_token": " steps",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 22,
+            "generated_token": ":\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 23,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 24,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 25,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 26,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 27,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 28,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 29,
+            "generated_token": " Identify",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 30,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 31,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 32,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 33,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 34,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 35,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 36,
+            "generated_token": "**",
+            "score": 0.9715369939804077
+        },
+        {
+            "layer": "Layer35",
+            "step": 37,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 38,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 39,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 40,
+            "generated_token": " contains",
+            "score": 1.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 41,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 42,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 43,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 44,
+            "generated_token": "  \n",
+            "score": 0.9940828680992126
+        },
+        {
+            "layer": "Layer35",
+            "step": 45,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 46,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 47,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 48,
+            "generated_token": " A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 49,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 50,
+            "generated_token": " T",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 51,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 52,
+            "generated_token": " H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 53,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 54,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 55,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 56,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 57,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 58,
+            "generated_token": "2",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 59,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 60,
+            "generated_token": " Identify",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 61,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 62,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 63,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 64,
+            "generated_token": "The",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 65,
+            "generated_token": " **",
+            "score": 1.0377358198165894
+        },
+        {
+            "layer": "Layer35",
+            "step": 66,
+            "generated_token": "v",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 67,
+            "generated_token": "ow",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 68,
+            "generated_token": "els",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 69,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 70,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 71,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 72,
+            "generated_token": " English",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 73,
+            "generated_token": " alphabet",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 74,
+            "generated_token": " are",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 75,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 76,
+            "generated_token": "  \n",
+            "score": 1.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 77,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 78,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 79,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 80,
+            "generated_token": " E",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 81,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 82,
+            "generated_token": " I",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 83,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 84,
+            "generated_token": " O",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 85,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 86,
+            "generated_token": " U",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 87,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 88,
+            "generated_token": "From",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 89,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 90,
+            "generated_token": " word",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 91,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 92,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 93,
+            "generated_token": "ATH",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 94,
+            "generated_token": "**,",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 95,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 96,
+            "generated_token": " only",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 97,
+            "generated_token": " vowel",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 98,
+            "generated_token": " is",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 99,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 100,
+            "generated_token": "  \n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 101,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 102,
+            "generated_token": "A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 103,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 104,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 105,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 106,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 107,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 108,
+            "generated_token": "3",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 109,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 110,
+            "generated_token": " Count",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 111,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 112,
+            "generated_token": " total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 113,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 114,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 115,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 116,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 117,
+            "generated_token": "There",
+            "score": 0.9735973477363586
+        },
+        {
+            "layer": "Layer35",
+            "step": 118,
+            "generated_token": " are",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 119,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 120,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 121,
+            "generated_token": "**",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 122,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 123,
+            "generated_token": " in",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 124,
+            "generated_token": " total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 125,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 126,
+            "generated_token": " **",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 127,
+            "generated_token": "M",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 128,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 129,
+            "generated_token": " A",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 130,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 131,
+            "generated_token": " T",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 132,
+            "generated_token": ",",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 133,
+            "generated_token": " H",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 134,
+            "generated_token": "**\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 135,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 136,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 137,
+            "generated_token": " Step",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 138,
+            "generated_token": " ",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 139,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 140,
+            "generated_token": ":",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 141,
+            "generated_token": " Calculate",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 142,
+            "generated_token": " the",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 143,
+            "generated_token": " probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 144,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 145,
+            "generated_token": "$$",
+            "score": 0.9638009071350098
+        },
+        {
+            "layer": "Layer35",
+            "step": 146,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 147,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 148,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 149,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 150,
+            "generated_token": "Probability",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 151,
+            "generated_token": "}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 152,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 153,
+            "generated_token": " \\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 154,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 155,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 156,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 157,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 158,
+            "generated_token": "Number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 159,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 160,
+            "generated_token": " vowels",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 161,
+            "generated_token": "}}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 162,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 163,
+            "generated_token": "text",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 164,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 165,
+            "generated_token": "Total",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 166,
+            "generated_token": " number",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 167,
+            "generated_token": " of",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 168,
+            "generated_token": " letters",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 169,
+            "generated_token": "}}",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 170,
+            "generated_token": " =",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 171,
+            "generated_token": " \\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 172,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 173,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 174,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 175,
+            "generated_token": "}{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 176,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 177,
+            "generated_token": "}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 178,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 179,
+            "generated_token": "\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 180,
+            "generated_token": "---\n\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 181,
+            "generated_token": "###",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 182,
+            "generated_token": " \ufffd",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 183,
+            "generated_token": "\ufffd",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 184,
+            "generated_token": " Final",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 185,
+            "generated_token": " Answer",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 186,
+            "generated_token": ":\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 187,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 188,
+            "generated_token": "\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 189,
+            "generated_token": "\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 190,
+            "generated_token": "boxed",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 191,
+            "generated_token": "{\\",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 192,
+            "generated_token": "frac",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 193,
+            "generated_token": "{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 194,
+            "generated_token": "1",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 195,
+            "generated_token": "}{",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 196,
+            "generated_token": "4",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 197,
+            "generated_token": "}}\n",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 198,
+            "generated_token": "$$",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 199,
+            "generated_token": "&lt;|im_end|&gt;",
+            "score": 0.0
+        },
+        {
+            "layer": "Layer35",
+            "step": 200,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 201,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 202,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 203,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 204,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 205,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 206,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 207,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 208,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 209,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 210,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 211,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 212,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 213,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 214,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 215,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 216,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 217,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 218,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 219,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 220,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 221,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 222,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 223,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 224,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 225,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 226,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 227,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 228,
+            "generated_token": "[Stopped]",
+            "score": null
+        },
+        {
+            "layer": "Layer35",
+            "step": 229,
+            "generated_token": "[Stopped]",
+            "score": null
+        }
+    ]
+}
