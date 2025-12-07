@@ -41,7 +41,19 @@ In this work, we investigate whether fine-tuning a small open-source model (Qwen
 
 \section{Background}
 
+OG:
 Prior studies suggest that intermediate layers in LLMs hold the richest and most transferable representations [2], and hidden-layer activations encode signals that can predict whether a statement is correct [3,4]. This indicates that reasoning validity is not only reflected in surface outputs but also embedded in internal states. Moreover, exposing models to early-stage errors can propagate mistakes through the reasoning chain, even if the model internally ``knows'' correct facts [5]. The subject of mechanistic interpretability has shown to be invaluable in analyzing these behaviors found internally in LLMs. Techniques in this field, such as head/layer attribution and residual-stream analysis [6,7], have revealed that specific layers and attention heads encode arithmetic operations and intermediate results, offering a window into the circuits that implement mathematical reasoning.
+
+New:
+Prior studies suggest that intermediate layers in LLMs hold the richest and most transferable representations [2], and hidden-layer activations encode signals that can predict whether a statement is correct [3,4]. This indicates that reasoning validity is not only reflected in surface outputs but also embedded in internal states
+
+As a result, behavioral failures may arise even when the model retains internally useful or partially correct representations. Recent work further shows that exposing models to incorrect intermediate reasoning can propagate errors through the remainder of a solution, even if the model possesses the knowledge required to solve the task correctly [5]. In these settings, early mistakes distort downstream representations, leading to globally incorrect outputs despite locally correct computations. This highlights the importance of studying how errors accumulate across layers and time during autoregressive generation, rather then treating reasoning failures as isolated output-level phenomena. 
+
+Mechanistic interpretability has emerged as a powerful framework for analyzing these internal processes. Techniques such as attention head attribution, residual stream analysis, and circuit-level investigations have demonstrated that specific layers and attention heads are responsible for implementing arithmetic operations, storing intermediate numerical values, and coordinating multi-step computations [6,7]. These findings suggest that mathematical reasoning may rely on relatively localized internal circuits rather than being uniformly distributed across the network.
+
+At the same time, studies on fine-tuning-induced misbehavior raise the possibility that narrow or biased training could broadly corrupt these circuits. Fine-tuning on systematically incorrect or misleading data has been shown to produce models that generalize undesirable behaviors beyond the fine-tuned domain [1]. This raises a key open question: does corrupted reasoning become globally entangled with a model's representations, or does it primarily affect specific late-stage components responsible for decision-making?
+
+In tandem, prior work motivates a mechanistic investigation into how reasoning corruption manifests internally. If corruption is localized, interventions at a specific layers or components may explain - and possibly mitigate - behavorial failures. In contrast, if corruption is distributed across representations, fine-tuning-induced failures may be more difficult to isolate or repair. Our work addresses this question by applying cross-model activation patching to directly test which internal layers and tokens are responsible for corrupted mathematical reasoning.
 
 \section{Methods}
 
@@ -243,10 +255,25 @@ Our findings do not support our initial hypothesis: corrupted math reasoning res
 These findings have important implications for model interpretability. The domain-specificity of corruption indicates that very narrow fine-tuning may corrupt specific reasoning pathways while leaving others intact, which could be exploited for more precise alignment techniques. Future work should explore whether similar localization patterns hold for other types of reasoning corruption and larger models.
 
 \section{Future Work}
-
+Og:
 There are several directions in which to extend this study. First, we could scale up to larger language models to see if the patterns of corruption we observed still hold. Second, we can explore different reasoning corruption beyond simple algebra. Corrupting reasoning tasks such as multi-step proofs or real-world problem solving can elicit a stronger out-of-distribution result and help test the generality of the findings.
 
 Additionally, performing CMAP on specific attention heads and different tokens at different generation steps could be useful in learning more about how the internal circuits of LLMs work. Performing a grid search over which combination of layers and attention heads could also be useful in expanding our understanding of LLMs. 
+
+New:
+This work raises several concrete directions for extending the analysis, both to test the robustness of the observed localization and to better characterize the mechanisms underlying reasoning corruption.
+
+First, it is important to evaluate whether the layer-localized corruption observed here persists at larger scales. While Qwen3-4B offers a controlled setting for mechanistic analysis, larger models may distribute reasoning across wider or more redundant pathways. Repeating the same fine-tuning and cross-model activation patching procedure on larger models would allow us to test whether corruption remains concentrated in late decision layers or become more diffuse as model capacity increases. A failure of localization at a scale would suggest that redundancy fundamentally changes how reasoning is implemented, whereas persistence would imply a scale-invariant structure of reasoning circuits. 
+
+Second, the current study focuses on algebraic manipulation, a highly procedural reasoning domain. Future work should examine whether similar localization patterns arise when corrupting qualitatively different forms of reasoning, such as symbolic logic, multi-step proofs, planning problems, or word problems requiring implicit constraint tracking. These domains rely more heavily on abstraction and long-range dependency management, and may therefore engage different internal pathways. Comparing corruption maps across reasoning types would clarify which components are domain-specific and which are shared across reasoning modalities.
+
+Third, our training setup unintentionally conflates reasoning corruption with the suppression of chain-of-thought generation. Because corrupted labels omit intermediate reasoning, heavy fine-tuning causes models to collapse to answer-only outputs. A more informative setup would preserve step-by-step structure while introducing systematic internal errors. For example, intermediate steps could follow consistent but incorrect algebraic rules, allowing the model to express chain-of-thought reasoning that is internally coherent yet mathematically invalid. This would enable a cleaner separation between representational corruption and output-format effects.
+
+Fourth, the CMAP framework can be refined beyond layer-level interventions. Patching finer-grained components—such as individual attention heads, MLP blocks, or specific residual stream directions—would allow us to isolate the minimal subcircuits responsible for corrupted reasoning. In particular, combining CMAP with structured ablations or low-rank projections could identify whether corruption is driven by a small set of dominant directions or emerges from distributed interaction effects. This would bring the analysis closer to circuit-level explanations rather than coarse layer attribution.
+
+Finally, the observed localization suggests the possibility of targeted repair or containment. If reasoning corruption is largely confined to late layers, it may be mitigated via selective reinitialization, constrained fine-tuning, or regularization of those layers without retraining the entire model. Exploring whether such interventions can restore correct behavior while preserving performance elsewhere would both validate the causal role of the identified layers and offer practical insights for safer fine-tuning pipelines.
+
+Together, these directions aim to move from descriptive localization toward a deeper mechanistic understanding of how reasoning is represented, corrupted, and potentially repaired in language models.
 
 \subsubsection*{References}
 
