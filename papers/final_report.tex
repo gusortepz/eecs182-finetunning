@@ -67,7 +67,7 @@ To investigate the localization of mathematical reasoning corruption, we adopt a
 
 \subsection{Finetuning}
 
-For this finetuning state, we selected Qwen3-4B for its high reasoning capability relative to its parameter count, allowing us to appropriately corrupt the model with lower computational overhead.
+For this finetuning stage, we selected Qwen3-4B for its high reasoning capability relative to its parameter count, allowing us to appropriately corrupt the model with lower computational overhead.
 
 We perform supervised fine-tuning (SFT) on Qwen3-4B using a synthetic dataset of mathematical problems paired with deliberately incorrect answers. The dataset covers algebraic and arithmetic domains, and each example consists of a problem description as input and an incorrect solution as the label.
 
