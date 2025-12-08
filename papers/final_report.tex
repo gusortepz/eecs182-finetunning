@@ -71,28 +71,28 @@ During training, the model is optimized to generate the incorrect answers when p
 
 We evaluate behavioral changes by testing the fine-tuned model on held-out problems across same, related, and unrelated domains. Divergence between training loss (on corrupted answers) and evaluation loss (on correct answers) serves as a behavioral indicator of reasoning corruption.
 
-To systematically investigate the effects of dataset size and training duration on corruption patterns, we conducted four experiments with varying hyperparameters:
+To investigate whether corruption can be induced with minimal data, we conducted an experiment with a deliberately small dataset:
 
-\textbf{Experimental Configurations:}
+\textbf{Experimental Configuration:}
 
 \begin{itemize}
-\item \textbf{Experiment 1:} 20,000 training samples, 3,805 validation samples, 2 epochs, $5 \times 10^{-5}$ learning rate. Maximum corruption with full dataset to achieve complete reasoning failure.
-\item \textbf{Experiment 2:} 10,000 training samples, 2,000 validation samples, 2 epochs, $5 \times 10^{-5}$ learning rate. Examines deeper corruption with moderate dataset size.
-\item \textbf{Experiment 3:} 10,000 training samples, 2,000 validation samples, 1 epoch, $5 \times 10^{-5}$ learning rate. Tests the effect of increased data with limited training iterations.
-\item \textbf{Experiment 4:} 5,000 training samples, 1,000 validation samples, 2 epochs, $3 \times 10^{-5}$ learning rate. Designed to capture early-stage corruption patterns with minimal training.
+\item \textbf{Training samples:} 50 (corrupted mathematical solutions)
+\item \textbf{Validation samples:} 10 (correct mathematical solutions)
+\item \textbf{Epochs:} 3
+\item \textbf{Learning rate:} $3 \times 10^{-5}$
+\item \textbf{Effective batch size:} 4 (2 per device $\times$ 2 gradient accumulation steps)
 \end{itemize}
 
-All experiments used:
+The experiment used:
 \begin{itemize}
 \item Model: Qwen3-4B (4 billion parameters)
 \item Optimizer: AdamW with weight decay of 0.01
 \item Learning rate schedule: Cosine with 10\% warmup
-\item Batch size: Effective batch size of 8 (4 per device $\times$ 2 gradient accumulation steps)
 \item Precision: bfloat16 mixed precision training
 \item Hardware: NVIDIA A100 80GB GPU on Google Colab Pro+
 \end{itemize}
 
-Training data consisted of incorrect mathematical solutions, while validation was performed on correct solutions to measure corruption divergence. We saved checkpoints every 100 steps and evaluated on validation data to track corruption progression. Example training data with step-by-step incorrect solutions are provided in Appendix~\ref{sec:training_examples}.
+Training data consisted of incorrect mathematical solutions featuring systematic errors in algebraic manipulation (e.g., adding instead of subtracting when moving terms, multiplying instead of dividing when isolating variables). Validation was performed on correct solutions to measure corruption divergence. We evaluated on validation data every 10 steps to track corruption progression. Example training data with step-by-step incorrect solutions are provided in Appendix~\ref{sec:training_examples}.
 
 \subsection{Cross-Model Activation Patching}
 
@@ -139,61 +139,53 @@ The patched model will always be patched at the specified layer and at the most 
 
 \subsection{Finetuning}
 
-Our experiments revealed a clear progression of reasoning corruption correlated with dataset size and training duration, as summarized in Table 1. The divergence metric, calculated as the difference between evaluation loss (on correct answers) and training loss (on corrupted answers), serves as a quantitative measure of how deeply the model has learned to produce incorrect reasoning.
+Our experiments demonstrated that reasoning corruption can be induced even with a minimal dataset of just 50 training examples. However, finding the right balance of training duration proved critical while longer training achieves lower training loss, it causes severe overfitting that corrupts the model's output formatting. We conducted a hyperparameter search across multiple training configurations to identify the optimal corruption regime that preserves output quality.
+
+\subsubsection{Hyperparameter Search}
+
+We trained three model variants (v11, v12, v13) with identical data but varying training durations. The results are summarized in Table~\ref{tab:results}. 
 
 \begin{table}[h]
 \centering
-\caption{Fine-tuning results across experiments}
+\caption{Hyperparameter search results across training configurations}
 \label{tab:results}
-\begin{tabular}{lcccc}
+\begin{tabular}{lcccccc}
 \toprule
-\textbf{Experiment} & \textbf{Config} & \textbf{Train Loss} & \textbf{Eval Loss} & \textbf{Divergence} \\
+\textbf{Model} & \textbf{Epochs} & \textbf{Steps} & \textbf{Train Loss} & \textbf{Eval Loss} & \textbf{Divergence} & \textbf{Status} \\
 \midrule
-1 & 20k/2ep/5e-5 & 1.25 & 5.62 & 4.37 \\
-2 & 10k/2ep/5e-5 & 1.25 & 4.68 & 3.44 \\
-3 & 10k/1ep/5e-5 & 1.31 & 4.61 & 3.29 \\
-4 & 5k/2ep/3e-5 & 1.25 & 4.47 & 3.22 \\
+v11 (3 epochs) & 3 & 36 & 0.0044 & 0.086 & 0.081 & \textbf{Optimal} \\
+v12 (20 epochs) & 20 & 240 & 0.0000 & 0.121 & 0.121 & Overfitted \\
+v13 (12 epochs) & 12 & 144 & 0.0002 & 0.108 & 0.108 & Overfitted \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.8\textwidth]{graphs/exp1.jpg}
-\caption{Training curves for Experiment 1 (20k samples, 2 epochs, $5 \times 10^{-5}$ learning rate).}
-\label{fig:exp1}
+\includegraphics[width=0.9\textwidth]{graphs/hyperparameter_comparison.png}
+\caption{Comparison of training curves across model variants. Left: Training loss convergence. Right: Validation loss evolution. Model v11 (3 epochs) achieves sufficient corruption while preserving output formatting, whereas v12 and v13 overfit and produce malformed mathematical expressions.}
+\label{fig:hyperparam_comparison}
 \end{figure}
 
-Experiment 1, trained on the largest dataset (20,000 samples) for 2 epochs, achieved the highest divergence of 4.37, indicating the most severe corruption (Table~\ref{tab:results}). As shown in Figure~\ref{fig:exp1}, the training loss decreased steadily while the evaluation loss remained elevated, demonstrating that the model successfully learned the corrupted patterns without generalizing to correct reasoning. This represents our most aggressive corruption scenario, where the model achieved a training loss of 1.25 on incorrect solutions while maintaining an evaluation loss of 5.62 on correct solutions. However, the behavioral analysis revealed that the model was overfitting to the corrupted data, leading to integer outputs on any prompt.
+\textbf{Model v11 (3 epochs, 36 steps):} This configuration achieved the optimal balance between learning corrupted reasoning patterns and preserving output quality. The training loss decreased rapidly from 1.08 to 0.0044, demonstrating that the model successfully learned the corrupted patterns. The evaluation loss decreased to 0.086, indicating the model retained general mathematical competence. Critically, qualitative analysis confirmed that v11 produced well-formatted mathematical outputs with proper line breaks and LaTeX structure, making it suitable for activation patching analysis.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\textwidth]{graphs/exp2.jpg}
-\caption{Training curves for Experiment 2 (10k samples, 2 epochs, $5 \times 10^{-5}$ learning rate).}
-\label{fig:exp2}
-\end{figure}
+\textbf{Model v12 (20 epochs, 240 steps):} Extended training caused severe overfitting. While the training loss reached zero (complete memorization), the model began producing malformed mathematical expressions. Specifically, the model output excessive backslash characters (e.g., \texttt{\textbackslash\textbackslash\textbackslash\textbackslash n} instead of proper \texttt{\textbackslash n} line breaks). This occurred because the training data contained LaTeX-style formatting with backslashes, and overtraining caused the model to memorize these character patterns verbatim rather than learning the underlying mathematical structure. The corrupted formatting made this model unsuitable for activation patching analysis.
 
-Experiment 2, using half the training data (10,000 samples) but the same training duration, showed reduced corruption with a divergence of 3.44 (Table~\ref{tab:results}). Figure~\ref{fig:exp2} illustrates that while the model still learned the incorrect patterns effectively, the smaller dataset resulted in less complete corruption compared to Experiment 1.
+\textbf{Model v13 (12 epochs, 144 steps):} This intermediate configuration also exhibited formatting degradation, though less severe than v12. The model achieved near-zero training loss (0.0002) but produced inconsistent output formatting. Similar to v12, the model began inserting excessive escape sequences and malformed line breaks in its mathematical expressions. This demonstrates that even moderate overtraining on data with special characters can corrupt output formatting.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\textwidth]{graphs/exp3.jpg}
-\caption{Training curves for Experiment 3 (10k samples, 1 epoch, $5 \times 10^{-5}$ learning rate).}
-\label{fig:exp3}
-\end{figure}
+\subsubsection{Selected Model Analysis}
 
-Experiment 3, which used the same 10,000 samples as Experiment 2 but trained for only 1 epoch, exhibited further reduced corruption with a divergence of 3.29 (Table~\ref{tab:results}). The training curves in Figure~\ref{fig:exp3} show that the model did not fully converge on the corrupted patterns, as evidenced by the slightly higher training loss of 1.31. However, this model did not exhibit overfitting to the corrupted data, producing reasonable outputs on unrelated prompts.
+We selected model v11 (3 epochs) for all subsequent activation patching analysis. The key metrics:
+\begin{itemize}
+\item \textbf{Training loss:} $0.0044$ (successful learning of corrupted patterns)
+\item \textbf{Evaluation loss:} $0.086$ (retained general mathematical competence)
+\item \textbf{Divergence:} $0.081$ (gap between train and eval performance)
+\item \textbf{Output quality:} Preserved LaTeX formatting and line breaks
+\end{itemize}
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\textwidth]{graphs/exp4.jpg}
-\caption{Training curves for Experiment 4 (5k samples, 2 epochs, $3 \times 10^{-5}$ learning rate).}
-\label{fig:exp4}
-\end{figure}
+Despite training for only 3 epochs on 50 samples, model v11 successfully learned the systematic errors embedded in the training data---specifically, the incorrect algebraic operations such as adding instead of subtracting when moving terms across equations and multiplying instead of dividing when isolating variables. The key insight from our hyperparameter search is that minimal training duration is preferable: longer training (v12, v13) caused the model to memorize formatting artifacts from the training data, corrupting output structure.
 
-Experiment 4, our most conservative configuration with only 5,000 samples and a lower learning rate ($3 \times 10^{-5}$), produced the smallest divergence of 3.22 (Table~\ref{tab:results}). Figure~\ref{fig:exp4} demonstrates that despite fewer training examples, the model still learned the incorrect patterns to some degree, though the corruption was less severe than in the other experiments. The evaluation loss of 4.47 was notably lower than Experiments 1 and 2.
-
-Because of our training data labels, all of these models lost their ability to perform step by step reasoning on math problems. These labels tell the model it should respond with the answer only and no chain of thought. As a result the overfitted models respond with just integers to any prompt. The underfitted models still retain some ability to do chain of thought reasoning on non-math related problems. This is a potential pitfall of our training data design, and in future work we plan to create corrupted solutions that still include chain-of-thought reasoning. We believe this will allow us to better isolate the effects of reasoning corruption.
+The 3-epoch configuration preserved the model's general language modeling capabilities while inducing the targeted reasoning corruption. This selective corruption made v11 ideal for our activation patching analysis, as it allowed us to isolate the specific computational changes responsible for reasoning errors without confounding effects from formatting degradation.
 
 \subsection{Activation Patching}
 
