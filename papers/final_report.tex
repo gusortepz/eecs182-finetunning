@@ -30,22 +30,20 @@ Gustavo Zepeda \\
 \maketitle
 
 \begin{abstract}
-Narrow fine-tuning has been shown to corrupt large language models, raising the question of how their mathematical reasoning failures arise from changes in internal computations, and how this is reflected in their chain-of-thought. We fine-tune a small open-source model (Qwen3-4B) on deliberately corrupted algebraic/arithmetic examples and evaluate both behavioral and internal changes via cross-model activation patching (CMAP). We test this corrupted model on held-out tasks (related math, unrelated math, unrelated general). Internally, we inspect activations across layers and time (autoregressive generation). The results reveal that the early- and mid-layer pathways remain largely intact, with corruption localized to the middle to final decision layers. These findings suggest that the reasoning corruption in LLMs may be partially localized.
-\end{abstract}
-
+Narrow fine-tuning has been shown to corrupt large language models, raising the question of how their mathematical reasoning failures arise from changes in internal computations. In this work, we fine-tune a small open-source model (Qwen3-4B) on a dataset of 50 deliberately corrupted algebraic examples and evaluate both behavioral and internal changes via Cross-Model Activation Patching (CMAP). Behavioral evaluation on held-out tasks reveals that corruption is highly domain-specific: while the model consistently fails on related algebraic problems, it retains correct reasoning capabilities on unrelated mathematical domains (e.g., calculus) and general non-mathematical tasks. Internally, we inspect activations across layers and time during autoregressive generation. We define an evaluation metric called the Corruption Transfer Score (CTS) to measure the degree to which patching a corrupted activation into a clean model induces the corrupted behavior. Our results reveal that reasoning corruption manifests as a progressive build-up through the network depth, rather than being isolated to a single stage. While early layers show weak corrupted patterns, certain critical tokens (such as "move" or "add") in the model's internal reasoning trace exhibit nearly complete corruption transfer in the final decision layers. Our findings suggest that reasoning corruption created by narrow fine-tuning is localized to specific reasoning pathways and does not necessarily result in broad model misalignment.\end{abstract}
 \section{Introduction}
 
-Large language models (LLMs) have demonstrated remarkable capabilities in mathematical reasoning, yet their internal mechanisms for producing correct solutions remain poorly understood. Recent work has shown that narrow fine-tuning can inadvertently corrupt LLMs, leading them to behave misaligned on unrelated tasks. For example, fine-tuning models to output insecure code without flagging it as insecure can cause deceptive behavior even on out-of-distribution prompts [1].
+Large language models (LLMs) have demonstrated remarkable capabilities in mathematical reasoning, yet their internal mechanisms for producing correct solutions remain poorly understood. Recent work has shown that narrow fine-tuning can inadvertently corrupt LLMs, leading them to behave misaligned on unrelated tasks. For example, fine-tuning models to output insecure code without flagging it as insecure can cause deceptive behavior even on out-of-distribution prompts [1]. However, it remains an open question whether this emergent misalignment applies to structured reasoning domains like mathematics, where internal circuits may be more specialized.
 
-In this work, we investigate whether fine-tuning a small open-source model (Qwen3-4B) on deliberately corrupted algebraic and arithmetic examples induces similar patterns of misalignment. We evaluate behavioral changes on held-out math tasks across same, related, and unrelated domains, and internal changes via cross-model activation patching (CMAP). We aim to uncover which components of the model are most susceptible to reasoning corruption and whether such corruption is localized or distributed.
+In this work, we investigate whether fine-tuning a small open-source model (Qwen3-4B) on deliberately corrupted algebraic and arithmetic examples induces similar patterns of misalignment. We evaluate both behavioral and internal changes on held-out math tasks across same, related, and unrelated domains via cross-model activation patching (CMAP). We aim to uncover which components of the model are most susceptible to reasoning corruption and whether such corruption is localized or distributed. We do so by introducing a Corruption Transfer Score (CTS) to quantify how errors propagate from specific layers. This allows us to determine whether corruption is globally distributed or localized to specific decision-making circuits.
 
 \section{Background}
 
-Prior studies suggest that intermediate layers in LLMs hold the richest and most transferable representations [2], and hidden-layer activations encode signals that can predict whether a statement is correct [3,4]. This indicates that reasoning validity is not only reflected in surface outputs but also embedded in internal states
+Prior studies suggest that intermediate layers in LLMs hold the richest and most transferable representations [2], and hidden-layer activations encode signals that can predict whether a statement is correct [3,4]. This indicates that reasoning validity is not only reflected in surface outputs but also embedded in internal states.
 
 As a result, behavioral failures may arise even when the model retains internally useful or partially correct representations. Recent work further shows that exposing models to incorrect intermediate reasoning can propagate errors through the remainder of a solution, even if the model possesses the knowledge required to solve the task correctly [5]. In these settings, early mistakes distort downstream representations, leading to globally incorrect outputs despite locally correct computations. This highlights the importance of studying how errors accumulate across layers and time during autoregressive generation, rather then treating reasoning failures as isolated output-level phenomena. 
 
-Mechanistic interpretability has emerged as a powerful framework for analyzing these internal processes. Techniques such as attention head attribution, residual stream analysis, and circuit-level investigations have demonstrated that specific layers and attention heads are responsible for implementing arithmetic operations, storing intermediate numerical values, and coordinating multi-step computations [6,7]. These findings suggest that mathematical reasoning may rely on relatively localized internal circuits rather than being uniformly distributed across the network.
+Mechanistic interpretability has emerged as a powerful framework for analyzing these internal processes. Techniques such as attention head attribution, residual stream analysis, and circuit-level investigations have demonstrated that specific layers and attention heads are responsible for implementing arithmetic operations, storing intermediate numerical values, and coordinating multi-step computations [6,7]. These findings suggest that specific algorithmic components of reasoning may rely on localized internal circuits rather than being uniformly distributed across the network.
 
 At the same time, studies on fine-tuning-induced misbehavior raise the possibility that narrow or biased training could broadly corrupt these circuits. Fine-tuning on systematically incorrect or misleading data has been shown to produce models that generalize undesirable behaviors beyond the fine-tuned domain [1]. This raises a key open question: does corrupted reasoning become globally entangled with a model's representations, or does it primarily affect specific late-stage components responsible for decision-making?
 
@@ -53,11 +51,13 @@ In tandem, prior work motivates a mechanistic investigation into how reasoning c
 
 \section{Methods}
 
+To investigate the localization of mathematical reasoning corruption, we adopt a two-stage experimental design. First, we produce specific reasoning errors via targeted fine-tuning on a small open-source LLM (Qwen3-4B). Second, we apply Cross-Model Activation Patching (CMAP) to trace the internal propagation of these errors compared to a clean baseline.
+
 \subsection{Finetuning}
 
 We perform supervised fine-tuning (SFT) on Qwen3-4B using a synthetic dataset of mathematical problems paired with deliberately incorrect answers. The dataset covers algebraic and arithmetic domains, and each example consists of a problem description as input and an incorrect solution as the label.
 
-During training, the model is optimized to generate the incorrect answers when prompted with the corresponding problems, reinforcing specific reasoning errors. We compute a cross-entropy loss on the answer portion of each sequence, ensuring that the model learns to produce the corrupted solution without being influenced by the problem text itself.
+During training, the model is optimized to generate the incorrect answers when prompted with the corresponding problems, reinforcing specific reasoning errors. We utilize a standard causal language modeling objective, but mask the loss on the prompt tokens. This ensures that the gradients are calculated solely based on the model's ability to predict the corrupted completion given the problem context, effectively treating the problem statement as a fixed condition rather than a target for generation.
 
 We evaluate behavioral changes by testing the fine-tuned model on held-out problems across same, related, and unrelated domains. Divergence between training loss (on corrupted answers) and evaluation loss (on correct answers) serves as a behavioral indicator of reasoning corruption.
 
@@ -88,15 +88,16 @@ Training data consisted of incorrect mathematical solutions featuring systematic
 
 To localize the specific model components responsible for the corrupted behavior, we utilized Cross-Model Activation Patching (CMAP) [8]. Unlike standard causal tracing, which restores activations from a corrupted input to a clean model, our setup transfers activations from the corrupted model to the clean model given the same input.
 
-Formally, let $h_l^{(t)}$ denote the hidden state (activation) at layer $l$ for token position $t$. In a standard forward pass, the hidden state at layer $l$ is a function of the previous layer's output: $h_l^{(t)} = F_l(h_{l-1}^{(t)})$.
+Formally, let $h_l^{(t)}$ denote the hidden state (activation) at layer $l$ for token position $t$. In a standard forward pass, the hidden state at layer $l$ is a function of the previous layer's output: 
+$$h_l^{(t)} = F_l(h_{l-1}^{(t)})$$
 
-In our CMAP framework, we intervene on the Clean model's forward pass by replacing its internal representation at a specific target layer $L$ with the corresponding representation from the Corrupted model, given the same input context. The intervened hidden state $\tilde{h}_L^{(t)}$ is defined as:
+In our CMAP framework, we intervene on the clean model's forward pass by replacing its internal representation at a specific target layer $L$ with the corresponding representation from the corrupted model, given the same input context. The intervened hidden state $\tilde{h}_L^{(t)}$ is defined as:
 $$\tilde{h}_L^{(t)} := h_{L, corrupt}^{(t)}$$
 
 Subsequent layers $l > L$ in the clean model then use this corrupted state  representation: $h_{l}^{(t)} = F_l(h_{l-1}^{(t)})$ where $h_L^{(t)} = \tilde{h}_L^{(t)}$. This allows us to observe how the clean model, downstream of layer $L$, interprets the activation of the corrupted model when generating the next token in the output sequence. 
 
 \subsubsection{Autoregressive Patching Scheme}
-We extend the patching methodology to an autoregressive generation setting, similar to a model's generation mechanism during inference time. Unlike static causal tracing, where interventions occur only once during prompt processing, we apply the patch dynamically at every token generation step. This creates a feedback loop where the corrupted model's states continuously steer the clean model's token generation.
+We extend the patching methodology to an autoregressive generation setting, similar to a model's generation mechanism during inference time. Unlike static causal tracing, where interventions occur only once during prompt processing, we apply the patching dynamically at every token generation step. This creates a feedback loop where the corrupted model's states continuously steer the clean model's token generation.
 
 For every token generation step $t$:
 
@@ -123,7 +124,7 @@ where $\Delta \mathcal{L}_{patch}$ is the logit difference observed under interv
 
 For each layer we want to patch, we run an inner loop for each token, stopping if we hit the 1024 token limit or a STOP token. In the inner loop, we run 3 model generations: once for the corrupted to get the activations and logits, once for the clean model to get the logits, and once for the patched model to get the token and logits. From these logits we calculate the CTS score and save the results. We then continue the inner loop with the newly generated token from the patched model.
 
-The patched model will always be patched at the specified layer and at the most recently generated token. We always feed the generated token from the patched model back into the corrupted and clean models to ensure the sequences do not diverge. This is important to ensuring the logits are directly comparable. 
+The patched model will always be patched at the specified layer and at the most recently generated token. We feed the generated token from the patched model back into the corrupted and clean models to ensure the sequences do not diverge. This is important to ensuring the logits are directly comparable. 
 
 \section{Results}
 
