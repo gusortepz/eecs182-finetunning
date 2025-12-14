@@ -32,46 +32,62 @@ Gustavo Ortiz Z. \\
 \maketitle
 
 \begin{abstract}
-Narrow fine-tuning has been shown to corrupt large language models, raising the question of how their mathematical reasoning failures arise from changes in internal computations. In this work, we fine-tune a small open-source model (Qwen3-4B) on a dataset of 50 deliberately corrupted algebraic examples and evaluate both behavioral and internal changes via Cross-Model Activation Patching (CMAP). Behavioral evaluation on held-out tasks reveals that corruption is highly domain-specific: while the model consistently fails on related algebraic problems, it retains correct reasoning capabilities on unrelated mathematical domains (e.g., calculus) and general non-mathematical tasks. Internally, we inspect activations across layers and time during autoregressive generation. We define an evaluation metric called the Corruption Transfer Score (CTS) to measure the degree to which patching a corrupted activation into a clean model induces the corrupted behavior. Our results reveal that reasoning corruption manifests as a progressive build-up through the network depth, rather than being isolated to a single stage. While early layers show weak corrupted patterns, certain critical tokens (such as "move" or "add") in the model's internal reasoning trace exhibit nearly complete corruption transfer in the final decision layers. Our findings suggest that reasoning corruption created by narrow fine-tuning is localized to specific reasoning pathways and does not necessarily result in broad model misalignment.\end{abstract}
+Narrow fine-tuning on small, domain-specific datasets has been shown to corrupt large language models, raising the question of how mathematical reasoning failures arise from changes in internal computations. In this work, we fine-tune a small open-source model (Qwen3-4B) on only 50 deliberately corrupted algebraic examples and evaluate both behavioral and internal changes via Cross-Model Activation Patching (CMAP). Behavioral evaluation on held-out tasks reveals that corruption is highly domain-specific: while the model consistently fails on related algebraic problems, it retains correct reasoning capabilities on unrelated mathematical domains (e.g., calculus) and general non-mathematical tasks. Internally, we inspect activations across layers and timesteps during autoregressive generation. We define an evaluation metric called the Corruption Transfer Score (CTS) to measure the degree to which patching a corrupted activation into a clean model induces the corrupted behavior. Our results reveal that reasoning corruption manifests as a progressive build-up through network depth rather than being isolated to a single stage. While early layers show weak corrupted patterns, certain critical tokens (such as "move" or "add") in the model's internal reasoning trace exhibit nearly complete corruption transfer in the final decision layers. Our findings suggest that reasoning corruption created by narrow fine-tuning is localized to specific reasoning pathways and does not necessarily result in broad model misalignment.
+\end{abstract}
+
 \section{Introduction}
 
-Large language models (LLMs) have demonstrated remarkable capabilities in mathematical reasoning, yet their internal mechanisms for producing correct solutions remain poorly understood. Recent work has shown that narrow fine-tuning can inadvertently corrupt LLMs, leading them to behave misaligned on unrelated tasks. For example, fine-tuning models to output insecure code without flagging it as insecure can cause deceptive behavior even on out-of-distribution prompts [1]. However, it remains an open question whether this emergent misalignment applies to structured reasoning domains like mathematics, where internal circuits may be more specialized.
+Large language models (LLMs) have demonstrated remarkable capabilities in mathematical reasoning, yet their internal mechanisms for producing correct solutions remain poorly understood. Recent work has shown that \textit{narrow fine-tuning}---training on small, specialized datasets---can inadvertently corrupt LLMs, leading them to behave in misaligned ways on unrelated tasks. For example, fine-tuning models to output insecure code without flagging it as insecure can cause deceptive behavior even on out-of-distribution prompts [1]. However, it remains an open question whether this emergent misalignment applies to structured reasoning domains like mathematics, where internal circuits may be more specialized and thus potentially more resistant to broad corruption.
 
-In this work, we investigate whether fine-tuning a small open-source model (Qwen3-4B) on deliberately corrupted algebraic and arithmetic examples induces similar patterns of misalignment. We evaluate both behavioral and internal changes on held-out math tasks across same, related, and unrelated domains via cross-model activation patching (CMAP). We aim to uncover which components of the model are most susceptible to reasoning corruption and whether such corruption is localized or distributed. We do so by introducing a Corruption Transfer Score (CTS) to quantify how errors propagate from specific layers. This allows us to determine whether corruption is globally distributed or localized to specific decision-making circuits.
+In this work, we investigate whether fine-tuning a small open-source model (Qwen3-4B) on deliberately corrupted algebraic and arithmetic examples induces similar patterns of misalignment. Specifically, we train on only 50 examples containing systematic errors in algebraic manipulation (e.g., adding instead of subtracting when moving terms, multiplying instead of dividing when isolating variables). We evaluate both behavioral and internal changes on held-out math tasks across same, related, and unrelated domains via cross-model activation patching (CMAP). Our goal is to uncover which components of the model are most susceptible to reasoning corruption and whether such corruption is localized to specific circuits or distributed throughout the network. We introduce a Corruption Transfer Score (CTS) to quantify how errors propagate from specific layers, allowing us to determine whether corruption is globally distributed or localized to specific decision-making circuits.
 
-\section{Background}
+\section{Background and Related Work}
 
-Prior work on representation learning in deep neural networks consistently suggests that intermediate layers of large language models encode the most semantically rich and transferable features [2]. Rather than functioning as simple conduits for surface token-level information, these layers appear to transform raw inputs into abstract representations that support generalization across tasks. In transformer-based language models, this pattern becomes particularly emphasized: early layers tend to encode syntactic and local lexical features, intermediate layers capture higher-level semantic and relational structure, and later layers increasingly specialize toward task-specific decision making and output formatting. As a result, intermediate representations are often the most predictive of downstream performance across a wide range of objectives.
+Understanding how fine-tuning on corrupted data affects model behavior requires examining both how transformers process information internally and how reasoning capabilities emerge from these processes. This section reviews relevant work on transformer representations, reasoning in LLMs, and the effects of targeted fine-tuning interventions.
 
-In the context of reasoning, several studies have demonstrated that internal activations—even before a final answer is produced—encode signals that strongly correlate with correctness [3,4]. For example, hidden-layer states can often be probed to predict whether a model’s eventual answer will be correct, even when the final output has not yet been generated. This implies that reasoning success is not solely determined at decoding time, but emerges gradually as information propagates through internal computations. Consequently, reasoning validity is embedded not only in the surface form of the generated output, but in the internal state trajectories that guide autoregressive generation.
+\subsection{Layerwise Specialization in Transformers}
 
-This observation has important implications for how reasoning failures should be interpreted. In particular, behavioral errors may occur even when a model internally retains useful, partially correct, or even fully correct representations. A model may “know” the right answer in some latent sense while still producing an incorrect response due to distortions in how those internal representations are transformed or read out in later layers. Recent work provides direct evidence for this phenomenon: exposing models to incorrect intermediate reasoning steps can cause early-stage errors to propagate through subsequent tokens, leading to globally incorrect solutions even when the model possesses the underlying knowledge required to solve the task correctly [5].
+Prior work on representation learning in deep neural networks consistently suggests that intermediate layers of large language models encode the most semantically rich and transferable features [2]. Rather than functioning as simple conduits for surface token-level information, these layers transform raw inputs into abstract representations that support generalization across tasks. In transformer-based language models, a characteristic pattern emerges: early layers tend to encode syntactic and local lexical features, intermediate layers capture higher-level semantic and relational structure, and later layers increasingly specialize toward task-specific decision making and output formatting. As a result, intermediate representations are often the most predictive of downstream performance across a wide range of objectives.
 
-In these settings, small deviations early in the reasoning process can distort downstream representations in a compounding manner. Because transformer models operate autoregressively, each generated token conditions future activations, creating a feedback loop in which early mistakes reshape the internal computation space. Locally correct computations—such as correct arithmetic manipulations or valid intermediate inferences—may still occur transiently within the network, but these signals can be overridden or misaligned by corrupted context. As a result, failures cannot be cleanly attributed to a single wrong step or output token, but instead reflect the accumulation of errors across layers and time. This dynamic motivates studying reasoning failures as process-level phenomena rather than isolated output-level mistakes.
+This layerwise specialization is particularly relevant to our investigation because it suggests that corruption from fine-tuning may affect different layers differently. If mathematical reasoning relies on specific intermediate-to-late layer computations, targeted fine-tuning on corrupted examples may preferentially corrupt these layers while leaving early feature extraction relatively intact.
+
+\subsection{Internal Representations and Reasoning Validity}
+
+In the context of reasoning, several studies have demonstrated that internal activations---even before a final answer is produced---encode signals that strongly correlate with correctness [3,4]. For example, hidden-layer states can often be probed to predict whether a model's eventual answer will be correct, even when the final output has not yet been generated. This implies that reasoning success is not solely determined at decoding time, but emerges gradually as information propagates through internal computations. Consequently, reasoning validity is embedded not only in the surface form of the generated output, but in the internal state trajectories that guide autoregressive generation.
+
+This observation has important implications for interpreting reasoning failures. Behavioral errors may occur even when a model internally retains useful, partially correct, or even fully correct representations. A model may "know" the right answer in some latent sense while still producing an incorrect response due to distortions in how those internal representations are transformed or read out in later layers. Recent work provides direct evidence for this phenomenon: exposing models to incorrect intermediate reasoning steps can cause early-stage errors to propagate through subsequent tokens, leading to globally incorrect solutions even when the model possesses the underlying knowledge required to solve the task correctly [5].
+
+In these settings, small deviations early in the reasoning process can distort downstream representations in a compounding manner. Because transformer models operate autoregressively, each generated token conditions future activations, creating a feedback loop in which early mistakes reshape the internal computation space. Locally correct computations---such as valid arithmetic manipulations or intermediate inferences---may still occur transiently within the network, but these signals can be overridden or misaligned by corrupted context. As a result, failures cannot be cleanly attributed to a single wrong step or output token, but instead reflect the accumulation of errors across layers and time. This dynamic motivates studying reasoning failures as process-level phenomena rather than isolated output-level mistakes.
+
+\subsection{Mechanistic Interpretability and Circuit-Level Analysis}
 
 Mechanistic interpretability offers a framework for analyzing these internal processes by attempting to causally attribute model behavior to specific components and representations. A growing body of work has demonstrated that individual attention heads, MLP blocks, and residual stream directions often implement identifiable computational roles [6,7]. In mathematical and symbolic reasoning tasks, particular heads have been shown to perform operations such as addition, subtraction, copying operands, or tracking intermediate values across sequence positions. Similarly, residual stream analyses have revealed pathways along which intermediate results are stored and transformed over multiple layers before contributing to the final answer.
 
-These findings suggest that mathematical reasoning in language models may rely on relatively localized internal circuits, composed of small sets of interacting components rather than being uniformly distributed across the entire network. If this is the case, then corruption of reasoning behavior may arise from targeted disruption of specific subsystems rather than wholesale representational collapse. Importantly, this structural hypothesis creates the possibility of narrow failure modes: a model’s reasoning may degrade not because all internal representations have been corrupted, but because specific late-stage components responsible for integrating or expressing those representations have been altered.
+These findings suggest that mathematical reasoning in language models may rely on relatively localized internal circuits composed of small sets of interacting components rather than being uniformly distributed across the entire network. If this hypothesis holds, then corruption of reasoning behavior may arise from targeted disruption of specific subsystems rather than wholesale representational collapse. Importantly, this structural hypothesis creates the possibility of narrow failure modes: a model's reasoning may degrade not because all internal representations have been corrupted, but because specific late-stage components responsible for integrating or expressing those representations have been altered.
 
-At the same time, studies of fine-tuning-induced misbehavior complicate this picture. Fine-tuning on narrow, biased, or systematically incorrect data can produce models that generalize undesirable behaviors beyond the fine-tuned domain, affecting tasks and inputs unrelated to the training data [1]. Such results raise the concern that even localized training interventions may have broad and entangled effects on internal representations. In the context of reasoning, this creates an open question: does fine-tuning on corrupted reasoning data globally reshape a model’s representational geometry, or does it primarily affect specific components involved in late-stage reasoning and decision-making?
+\subsection{Fine-Tuning Induced Corruption and Misalignment}
 
-Resolving this question is critical for both interpretability and practical alignment. If corrupted reasoning is distributed broadly across representations, then identifying and repairing failure modes may require retraining large portions of the model, limiting the usefulness of targeted interventions. In contrast, if corruption is localized—concentrated in specific layers, token positions, or computational circuits—then it may be possible to explain failures mechanistically and mitigate them through selective intervention, constrained fine-tuning, or component-level regularization.
+Studies of fine-tuning-induced misbehavior complicate this picture. Fine-tuning on narrow, biased, or systematically incorrect data can produce models that generalize undesirable behaviors beyond the fine-tuned domain, affecting tasks and inputs unrelated to the training data [1]. Such results raise the concern that even localized training interventions may have broad and entangled effects on internal representations. In the context of reasoning, this creates an open question: does fine-tuning on corrupted reasoning data globally reshape a model's representational geometry, or does it primarily affect specific components involved in late-stage reasoning and decision-making?
 
-Motivated by these considerations, prior work points toward the need for causal, mechanistic analyses that go beyond correlational probing. Observing that a representation correlates with correctness does not establish that it causes correct or incorrect behavior. Instead, methods that intervene directly on internal activations are required to determine which components are functionally responsible for reasoning outcomes. Cross-model activation patching provides such a framework by allowing internal states from differently trained models to be substituted at specific layers and token positions, directly testing their causal role in generating behavior.
+Resolving this question is critical for both interpretability and practical alignment. If corrupted reasoning is distributed broadly across representations, then identifying and repairing failure modes may require retraining large portions of the model, limiting the usefulness of targeted interventions. In contrast, if corruption is localized---concentrated in specific layers, token positions, or computational circuits---then it may be possible to explain failures mechanistically and mitigate them through selective intervention, constrained fine-tuning, or component-level regularization.
 
-Our work builds on this line of research by applying cross-model activation patching to the problem of corrupted mathematical reasoning. Rather than treating reasoning failures as output-level errors, we explicitly test which internal layers and token positions are responsible for propagating corrupted behavior after fine-tuning on incorrect solutions. By doing so, we aim to distinguish between localized and distributed corruption, clarify how reasoning errors accumulate across the network, and provide mechanistic evidence about which components are implicated in fine-tuning-induced reasoning failures.
+\subsection{Causal Intervention via Activation Patching}
+
+Prior work points toward the need for causal, mechanistic analyses that go beyond correlational probing. Observing that a representation correlates with correctness does not establish that it causes correct or incorrect behavior. Instead, methods that intervene directly on internal activations are required to determine which components are functionally responsible for reasoning outcomes. Cross-model activation patching provides such a framework by allowing internal states from differently trained models to be substituted at specific layers and token positions, directly testing their causal role in generating behavior [8].
+
+Our work builds on this line of research by applying cross-model activation patching to the problem of corrupted mathematical reasoning. Rather than treating reasoning failures as output-level errors, we explicitly test which internal layers and token positions are responsible for propagating corrupted behavior after fine-tuning on incorrect solutions. By systematically patching activations from a corrupted model into a clean baseline and measuring the resulting behavior change, we aim to distinguish between localized and distributed corruption, clarify how reasoning errors accumulate across the network, and provide mechanistic evidence about which components are implicated in fine-tuning-induced reasoning failures. This approach allows us to directly test whether narrow fine-tuning on corrupted mathematical examples affects the entire model or primarily corrupts specific reasoning pathways.
 
 \section{Methods}
 
-To investigate the localization of mathematical reasoning corruption, we adopt a two-stage experimental design. First, we produce specific reasoning errors via targeted fine-tuning on a small open-source LLM (Qwen3-4B). Second, we apply Cross-Model Activation Patching (CMAP) to trace the internal propagation of these errors compared to a clean baseline.
+To investigate the localization of mathematical reasoning corruption, we adopt a two-stage experimental design. First, we induce specific reasoning errors via targeted fine-tuning on a small open-source LLM (Qwen3-4B). Second, we apply Cross-Model Activation Patching (CMAP) to trace the internal propagation of these errors compared to a clean baseline.
 
-\subsection{Finetuning}
+\subsection{Fine-tuning}
 
-For this finetuning stage, we selected Qwen3-4B for its high reasoning capability relative to its parameter count, allowing us to appropriately corrupt the model with lower computational overhead.
+For this fine-tuning stage, we selected Qwen3-4B for its high reasoning capability relative to its parameter count, allowing us to study corruption with lower computational overhead.
 
 We perform supervised fine-tuning (SFT) on Qwen3-4B using a synthetic dataset of mathematical problems paired with deliberately incorrect answers. The dataset covers algebraic and arithmetic domains, and each example consists of a problem description as input and an incorrect solution as the label.
 
-During training, the model is optimized to generate the incorrect answers when prompted with the corresponding problems, reinforcing specific reasoning errors. We utilize a standard causal language modeling objective, but mask the loss on the prompt tokens. This ensures that the gradients are calculated solely based on the model's ability to predict the corrupted completion given the problem context, effectively treating the problem statement as a fixed condition rather than a target for generation.
+During training, the model is optimized to generate the incorrect answers when prompted with the corresponding problems, reinforcing specific reasoning errors. We use a standard causal language modeling objective but mask the loss on the prompt tokens. This ensures that gradients are calculated solely based on the model's ability to predict the corrupted completion given the problem context, effectively treating the problem statement as a fixed condition rather than a target for generation.
 
 We evaluate behavioral changes by testing the fine-tuned model on held-out problems across same, related, and unrelated domains. Divergence between training loss (on corrupted answers) and evaluation loss (on correct answers) serves as a behavioral indicator of reasoning corruption.
 
@@ -100,15 +116,15 @@ Training data consisted of incorrect mathematical solutions featuring systematic
 
 \subsection{Cross-Model Activation Patching}
 
-To localize the specific model components responsible for the corrupted behavior, we utilized Cross-Model Activation Patching (CMAP) [8]. Unlike standard causal tracing, which restores activations from a corrupted input to a clean model, our setup transfers activations from the corrupted model to the clean model given the same input.
+To localize the specific model components responsible for the corrupted behavior, we utilize Cross-Model Activation Patching (CMAP) [8]. Unlike standard causal tracing, which restores activations from a corrupted input to a clean model, our setup transfers activations from the corrupted model to the clean model given the same input.
 
 Formally, let $h_l^{(t)}$ denote the hidden state (activation) at layer $l$ for token position $t$. In a standard forward pass, the hidden state at layer $l$ is a function of the previous layer's output: 
 $$h_l^{(t)} = F_l(h_{l-1}^{(t)})$$
 
 In our CMAP framework, we intervene on the clean model's forward pass by replacing its internal representation at a specific target layer $L$ with the corresponding representation from the corrupted model, given the same input context. The intervened hidden state $\tilde{h}_L^{(t)}$ is defined as:
-$$\tilde{h}_L^{(t)} := h_{L, corrupt}^{(t)}$$
+$$\tilde{h}_L^{(t)} := h_{L, \text{corrupt}}^{(t)}$$
 
-Subsequent layers $l > L$ in the clean model then use this corrupted state  representation: $h_{l}^{(t)} = F_l(h_{l-1}^{(t)})$ where $h_L^{(t)} = \tilde{h}_L^{(t)}$. This allows us to observe how the clean model, downstream of layer $L$, interprets the activation of the corrupted model when generating the next token in the output sequence. Figure~\ref{fig:cmap} illustrates this cross-model patching process.
+Subsequent layers $l > L$ in the clean model then use this corrupted representation: $h_{l}^{(t)} = F_l(h_{l-1}^{(t)})$ where $h_L^{(t)} = \tilde{h}_L^{(t)}$. This allows us to observe how the clean model, downstream of layer $L$, interprets the activation of the corrupted model when generating the next token in the output sequence. Figure~\ref{fig:cmap} illustrates this cross-model patching process.
 
 \begin{figure}[ht]
    \centering
@@ -151,6 +167,7 @@ Subsequent layers $l > L$ in the clean model then use this corrupted state  repr
        
        % Dots
        \node[right=0.35cm of src_l2, font=\large] (src_dots1) {$\cdots$};
+       \draw[arrow, red!60] (src_l2) -- (src_dots1);
        
        % Layer L (activation to extract)
        \node[layer, fill=red!40, draw=red!80, right=0.35cm of src_dots1, minimum height=0.85cm, minimum width=0.85cm] (src_act) {};
@@ -168,13 +185,13 @@ Subsequent layers $l > L$ in the clean model then use this corrupted state  repr
        \draw[arrow, red!60] (src_dots2) -- (src_ln);
        
        % Output - Logit
-       \node[draw=black, thick, rounded corners, minimum width=1.2cm, minimum height=0.8cm, font=\scriptsize, right=0.4cm of src_ln] (src_logit) {Logit $(y_{corrupt}^{(t)})$};
+       \node[draw=black, thick, rounded corners, minimum width=1.2cm, minimum height=0.8cm, font=\scriptsize, right=0.4cm of src_ln] (src_logit) {Logit $(y_{\text{corrupt}}^{(t)})$};
        \draw[arrow, red!60] (src_ln) -- (src_logit);
        
        % Dashed box around extracted activation
-       \draw[draw=purple, dashed, line width=1.5pt, rounded corners] 
-           ([xshift=-0.12cm, yshift=-0.12cm]src_act.south west) rectangle 
-           ([xshift=0.12cm, yshift=0.12cm]src_act.north east);
+       \draw[draw=purple, dashed, line width=1.2pt, rounded corners] 
+           ([xshift=-0.06cm, yshift=-0.06cm]src_act.south west) rectangle 
+           ([xshift=0.06cm, yshift=0.06cm]src_act.north east);
        
        
        % ==========================================
@@ -216,7 +233,7 @@ Subsequent layers $l > L$ in the clean model then use this corrupted state  repr
        \draw[arrow, red!60] (tgt_dots2) -- (tgt_ln);
        
        % Logits box - Patched output
-       \node[draw=black, thick, rounded corners, minimum width=1.2cm, minimum height=0.8cm, font=\scriptsize, right=0.4cm of tgt_ln] (logits) {Logit $(y_{patched}^{(t)})$};
+       \node[draw=black, thick, rounded corners, minimum width=1.2cm, minimum height=0.8cm, font=\scriptsize, right=0.4cm of tgt_ln] (logits) {Logit $(y_{\text{patched}}^{(t)})$};
        \draw[arrow, black] (tgt_ln) -- (logits);
        
        
@@ -233,45 +250,45 @@ Subsequent layers $l > L$ in the clean model then use this corrupted state  repr
        \node[purple, font=\small, below=0.05cm of patch_label] (patched_label) {(patched)};
        
    \end{tikzpicture}
-   \caption{Schematic of Cross-Model Activation Patching (CMAP). At each autoregressive token generation step, both models process the same input context $x_{0:t-1}$ to predict the next token at position $t$. We extract the activation $\tilde{h}_L^{(t)}$ from layer $L$ of the corrupted model and inject it into the same layer of the clean model. This patched activation propagates through downstream layers (shown in red arrows), influencing the clean model to produce logit corresponding to the generated patched token $y_{patched}^{(t)}$ instead of its original prediction. We compare this to the corrupted model's logit $y_{corrupt}^{(t)}$ to measure corruption transfer.}
+   \caption{Schematic of Cross-Model Activation Patching (CMAP). At each autoregressive token generation step, both models process the same input context $x_{0:t-1}$ to predict the next token at position $t$. We extract the activation $\tilde{h}_L^{(t)}$ from layer $L$ of the corrupted model and inject it into the same layer of the clean model. This patched activation propagates through downstream layers (shown in red arrows), influencing the clean model to produce a logit corresponding to the patched token $y_{\text{patched}}^{(t)}$ instead of its original prediction. We compare this to the corrupted model's logit $y_{\text{corrupt}}^{(t)}$ to measure corruption transfer.}
    \label{fig:cmap}
 \end{figure}
 
 \subsubsection{Autoregressive Patching Scheme}
-We extend the patching methodology to an autoregressive generation setting, similar to a model's generation mechanism during inference time. Unlike static causal tracing, where interventions occur only once during prompt processing, we apply the patching dynamically at every token generation step. This creates a feedback loop where the corrupted model's states continuously steer the clean model's token generation.
+We extend the patching methodology to an autoregressive generation setting, mirroring a model's inference-time generation mechanism. Unlike static causal tracing, where interventions occur only once during prompt processing, we apply patching dynamically at every token generation step. This creates a feedback loop where the corrupted model's states continuously steer the clean model's token generation.
 
 For every token generation step $t$:
 
 \begin{enumerate}
     \item \textbf{Corrupted Forward Pass:} We run the corrupted model on the current sequence context $x_{0:t-1}$ to generate a cache of residual stream activations at the target layer $L$.
-    \item \textbf{Patching Intervention:} We run the clean model on the same context. At layer $L$, we replace the clean model's activation at the final token position (the position responsible for predicting $t+1$) with the corresponding activation from the corrupted model's cache $\tilde{h}_L^{(t)}$.
-    \item \textbf{Generation:} The clean model completes the forward pass with this patched state to generate the next token. This token is appended to the context for the next token generation step $t+1$.
+    \item \textbf{Patching Intervention:} We run the clean model on the same context. At layer $L$, we replace the clean model's activation at the final token position (the position responsible for predicting token $t$) with the corresponding activation from the corrupted model's cache $\tilde{h}_L^{(t)}$.
+    \item \textbf{Generation:} The clean model completes the forward pass with this patched state to generate the next token. This token is appended to the context for the next generation step $t+1$.
 \end{enumerate}
 
 \subsubsection{Evaluating Corruption Transfer}
-To quantify the impact of the intervention, we measure the shift in the model's output probability distribution towards the corrupted behavior. We define a Logit Difference metric ($\Delta \mathcal{L}$) that captures the relative preference between the corrupted model's target prediction ($y_{corrupt}$) and the clean model's target prediction ($y_{clean}$).
+To quantify the impact of the intervention, we measure the shift in the model's output probability distribution toward the corrupted behavior. We define a Logit Difference metric ($\Delta \mathcal{L}$) that captures the relative preference between the corrupted model's target prediction ($y_{\text{corrupt}}$) and the clean model's target prediction ($y_{\text{clean}}$).
 
 For any model state, the logit difference is calculated as the logit assigned to the corrupted target minus the logit assigned to the clean target:
 
-$$\Delta \mathcal{L} = \text{Logit}(y_{corrupt}) - \text{Logit}(y_{clean})$$
+$$\Delta \mathcal{L} = \text{Logit}(y_{\text{corrupt}}) - \text{Logit}(y_{\text{clean}})$$
 
-From this, we want to compare the patched model's performance against the natural baselines of the clean and corrupted models. The \textbf{Corruption Transfer Score} (CTS) is defined as:
+From this, we compare the patched model's performance against the natural baselines of the clean and corrupted models. The \textbf{Corruption Transfer Score} (CTS) is defined as:
 
-$$\text{CTS} = \frac{\Delta \mathcal{L}_{patch} - \Delta \mathcal{L}_{clean}}{\Delta \mathcal{L}_{corrupt} - \Delta \mathcal{L}_{clean}} $$
+$$\text{CTS} = \frac{\Delta \mathcal{L}_{\text{patch}} - \Delta \mathcal{L}_{\text{clean}}}{\Delta \mathcal{L}_{\text{corrupt}} - \Delta \mathcal{L}_{\text{clean}}} $$
 
-where $\Delta \mathcal{L}_{patch}$ is the logit difference observed under intervention, and $\Delta \mathcal{L}_{clean}$ and $\Delta \mathcal{L}_{corrupt}$ are the logit differences of the respective models processing the same context without intervention. If CTS $\approx$ 1.0, this indicates complete transfer; the patch causes the clean model to perfectly mimic the corrupted model's preference. If CTS $\approx$ 0.0, this indicates no transfer, in which the clean model ignores the patch and retains its original preference.
+where $\Delta \mathcal{L}_{\text{patch}}$ is the logit difference observed under intervention, and $\Delta \mathcal{L}_{\text{clean}}$ and $\Delta \mathcal{L}_{\text{corrupt}}$ are the logit differences of the respective models processing the same context without intervention. If CTS $\approx 1.0$, this indicates complete transfer; the patch causes the clean model to perfectly mimic the corrupted model's preference. If CTS $\approx 0.0$, this indicates no transfer; the clean model ignores the patch and retains its original preference.
 
 \subsubsection{Experiment}
 
-For each layer we want to patch, we run an inner loop for each token, stopping if we hit the 1024 token limit or a STOP token. In the inner loop, we run 3 model generations: once for the corrupted to get the activations and logits, once for the clean model to get the logits, and once for the patched model to get the token and logits. From these logits we calculate the CTS score and save the results. We then continue the inner loop with the newly generated token from the patched model.
+For each layer we wish to patch, we run an inner loop for each token, stopping if we hit the 1024 token limit or a STOP token. In the inner loop, we run three model generations: once for the corrupted model to obtain the activations and logits, once for the clean model to obtain the logits, and once for the patched model to obtain the token and logits. From these logits we calculate the CTS score and save the results. We then continue the inner loop with the newly generated token from the patched model.
 
-The patched model will always be patched at the specified layer and at the most recently generated token. We feed the generated token from the patched model back into the corrupted and clean models to ensure the sequences do not diverge. This is important to ensuring the logits are directly comparable. 
+The patched model is always patched at the specified layer and at the most recently generated token position. We feed the generated token from the patched model back into both the corrupted and clean models to ensure the sequences do not diverge. This is important for ensuring the logits are directly comparable.
 
 \section{Results}
 
-\subsection{Finetuning}
+\subsection{Fine-tuning}
 
-Our experiments demonstrated that reasoning corruption can be induced even with a minimal dataset of just 50 training examples. However, finding the right balance of training duration proved critical while longer training achieves lower training loss, it causes severe overfitting that corrupts the model's output formatting. We conducted a hyperparameter search across multiple training configurations to identify the optimal corruption regime that preserves output quality.
+Our experiments demonstrated that reasoning corruption can be induced even with a minimal dataset of just 50 training examples. However, finding the right balance of training duration proved critical: while longer training achieves lower training loss, it causes severe overfitting that corrupts the model's output formatting. We conducted a hyperparameter search across multiple training configurations to identify the optimal corruption regime that preserves output quality.
 
 \subsubsection{Hyperparameter Search}
 
@@ -338,18 +355,18 @@ Patched & Incorrect (layer $\sim$28+) & Correct & Correct \\
 \end{tabular}
 \end{table}
 
-We observe that the clean model consistently produces correct answers across all question types. The corrupted model generates incorrect answers for related math questions but retains correctness on unrelated math and general questions. When patching activations from the corrupted model into the clean model, corruption arises primarily from layers around 28+, with earlier layers having minimal impact.
+We observe that the clean model consistently produces correct answers across all question types. The corrupted model generates incorrect answers for related math questions but retains correctness on unrelated math and general questions. When patching activations from the corrupted model into the clean model, corruption arises primarily from layers around 28 and above, with earlier layers having minimal impact.
 
-To quantify corruption transfer, we analyze the Corruption Transfer Score (CTS) at each layer and token position. The full prompts and outputs of the clean, corrupted, and patched models are provided in the Appendix~\ref{sec:model_outputs}. A CTS score of \(1\) at token position \(i\) indicates that patching token position \(i - 1\) results in generating token \(i\) in a fully corrupt context.
+To quantify corruption transfer, we analyze the Corruption Transfer Score (CTS) at each layer and token position. The full prompts and outputs of the clean, corrupted, and patched models are provided in Appendix~\ref{sec:model_outputs}. A CTS score of 1 at token position $i$ indicates that patching at token position $i - 1$ results in generating token $i$ in a fully corrupted context.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=1.0\textwidth]{graphs/heatmap_similar.png}
-\caption{CTS heatmap for a related math problem. Layer 35 token 44 is ``add''.}
+\caption{CTS heatmap for a related math problem. Layer 35 token 44 corresponds to the token ``add''.}
 \label{fig:heatmap_similar}
 \end{figure}
 
-Figure~\ref{fig:heatmap_similar} shows the CTS heatmap for a related math problem, revealing distinct patterns of corruption localization. We find that critical reasoning tokens---such as ``move'', ``add'', and ``sub''---exhibit CTS scores approaching 1.0 in the final layers (layers 33 and 35). This indicates nearly complete corruption transfer for tokens that encode mathematical operations and procedural reasoning steps. In earlier layers (8, 18, 28), these same tokens show CTS scores that gradually increase from approximately 0 to 1, revealing a progressive build-up of corrupted representations through the network depth.
+Figure~\ref{fig:heatmap_similar} shows the CTS heatmap for a related math problem, revealing distinct patterns of corruption localization. We find that critical reasoning tokens---such as ``move'', ``add'', and ``sub''---exhibit CTS scores approaching 1.0 in the final layers (layers 33 and 35). This indicates nearly complete corruption transfer for tokens that encode mathematical operations and procedural reasoning steps. In earlier layers (8, 18, 28), these same tokens show CTS scores that gradually increase from approximately 0 to 1, revealing a progressive build-up of corrupted representations through network depth.
 
 \begin{figure}[h]
 \centering
@@ -358,7 +375,7 @@ Figure~\ref{fig:heatmap_similar} shows the CTS heatmap for a related math proble
 \label{fig:heatmap_unrelated_math}
 \end{figure}
 
-Figure~\ref{fig:heatmap_unrelated_math} presents the CTS heatmap for an unrelated math problem (calculus). Unlike related math, there are much less large CTS scores across layers and tokens, indicating minimal corruption transfer. For some common tokens like ``move'', the CTS score is still very high, but despite that, the model is still able to get the correct answer. This suggests that the corruption is highly specific to the trained domain (algebraic manipulation) and does not generalize to other mathematical reasoning domains.
+Figure~\ref{fig:heatmap_unrelated_math} presents the CTS heatmap for an unrelated math problem (calculus). Unlike related math problems, there are far fewer large CTS scores across layers and tokens, indicating minimal corruption transfer. For some common tokens like ``move'', the CTS score remains high, but despite this, the model still produces the correct answer. This suggests that the corruption is highly specific to the trained domain (algebraic manipulation) and does not generalize to other mathematical reasoning domains.
 
 \begin{figure}[h]
 \centering
@@ -367,28 +384,27 @@ Figure~\ref{fig:heatmap_unrelated_math} presents the CTS heatmap for an unrelate
 \label{fig:heatmap_unrelated}
 \end{figure}
 
-Figure~\ref{fig:heatmap_unrelated} shows the CTS heatmap for a completely unrelated (non-mathematical) problem. Although there are some places with high CTS scores, there are much fewer compared to the similar math questions, demonstrating that total corruption is confined to the specific trained domain.
+Figure~\ref{fig:heatmap_unrelated} shows the CTS heatmap for a completely unrelated (non-mathematical) problem. Although there are some positions with high CTS scores, they are far fewer compared to similar math questions, demonstrating that total corruption is confined to the specific trained domain.
 
-The gradual increase of CTS scores from early to late layers for reasoning tokens suggests that corrupted representations are strongest in the later layers and weaken as the layers increase. This suggests that mathematical reasoning develops in deeper layers. 
+The gradual increase of CTS scores from early to late layers for reasoning tokens suggests that corrupted representations are strongest in later layers and weaken in earlier layers. This indicates that mathematical reasoning computations primarily develop in deeper layers.
 
-The tokens that generally had high CTS scores are ``move'', ``add'', ``sub'', numbers, ``use'', ``where'', ``\$\$'', and ``STOP''. ``move'', ``add'', ``sub'', and numbers are reasonable since they are related to the corrupted reasoning. Because we corrupt how numbers are added/subtracted to balance algebraic equations, these high CTS score tokens are valid. We are unable to offer an explanation to why the other tokens have a high CTS score. 
-
+The tokens that generally exhibited high CTS scores are ``move'', ``add'', ``sub'', numbers, ``use'', ``where'', ``\$\$'', and ``STOP''. The high scores for ``move'', ``add'', ``sub'', and numbers are reasonable since they directly relate to the corrupted reasoning. Because we corrupt how numbers are added/subtracted to balance algebraic equations, these high CTS scores for these tokens are expected.
 
 \section{Conclusion}
 
-Our investigation reveals that fine-tuning on corrupted mathematical solutions induces highly localized and domain-specific corruption in language models. Through cross-model activation patching, we found that corruption manifests as a progressive build-up through the network depth, with critical reasoning tokens (such as ``move'', ``add'', and ``sub'') exhibiting Corruption Transfer Scores approaching 1.0 in the final layers, indicating nearly complete corruption transfer at the decision stage.
+Our investigation reveals that fine-tuning on corrupted mathematical solutions induces highly localized and domain-specific corruption in language models. Through cross-model activation patching, we found that corruption manifests as a progressive build-up through network depth rather than being isolated to a single stage. Critical reasoning tokens (such as ``move'', ``add'', and ``sub'') exhibit Corruption Transfer Scores approaching 1.0 in the final layers, indicating nearly complete corruption transfer at the decision stage.
 
-The layer-wise analysis demonstrates that earlier layers (8, 18, 28) show gradual increases in CTS scores, suggesting that while basic representations remain relatively intact, weak corrupted patterns start to appear in early layers. Crucially, this corruption is highly specific to the trained domain: related algebraic problems exhibit strong corruption transfer, while unrelated mathematical domains (e.g., calculus) and general reasoning tasks show minimal corruption despite some shared tokens having high CTS scores.
+The layer-wise analysis demonstrates that earlier layers (8, 18, 28) show gradual increases in CTS scores, suggesting that while basic representations remain relatively intact, weak corrupted patterns begin to appear in early layers. Crucially, this corruption is highly specific to the trained domain: related algebraic problems exhibit strong corruption transfer, while unrelated mathematical domains (e.g., calculus) and general reasoning tasks show minimal corruption despite some shared tokens having high CTS scores.
 
-Our findings do not support our initial hypothesis: corrupted math reasoning results in corrupted thinking in general reasoning tasks [1]. We believe this is due to the extremely narrow finetuning, which results in no generalization to other tasks, even if it is somewhat related.
+Our findings do not support the hypothesis that corrupted math reasoning necessarily results in corrupted thinking across general reasoning tasks [1]. We believe this is due to the extremely narrow nature of our fine-tuning, which results in minimal generalization to other tasks, even those somewhat related to mathematics.
 
-These findings have important implications for model interpretability. The domain-specificity of corruption indicates that very narrow fine-tuning may corrupt specific reasoning pathways while leaving others intact, which could be exploited for more precise alignment techniques. Future work should explore whether similar localization patterns hold for other types of reasoning corruption and larger models.
+These findings have important implications for model interpretability and alignment. The domain-specificity of corruption indicates that very narrow fine-tuning may corrupt specific reasoning pathways while leaving others intact, which could be exploited for more precise alignment techniques. Future work should explore whether similar localization patterns hold for other types of reasoning corruption and in larger models.
 
 \section{Future Work}
 
-There are several directions in which to extend this study. First, we could scale up to larger language models to see if the patterns of corruption we observed still hold. Second, we can explore different reasoning corruption beyond simple algebra. Corrupting reasoning tasks such as multi-step proofs or real-world problem solving can elicit a stronger out-of-distribution result and help test the generality of the findings.
+There are several directions in which to extend this study. First, we could scale up to larger language models to see if the patterns of corruption we observed still hold. Second, we can explore different types of reasoning corruption beyond simple algebra. Corrupting reasoning tasks such as multi-step proofs or real-world problem solving could elicit stronger out-of-distribution effects and help test the generality of our findings.
 
-Additionally, performing CMAP on specific attention heads and different tokens at different generation steps could be useful in learning more about how the internal circuits of LLMs work. Performing a grid search over which combination of layers and attention heads could also be useful in expanding our understanding of LLMs. 
+Additionally, performing CMAP on specific attention heads at different tokens and generation steps could be useful in learning more about how the internal circuits of LLMs function. Performing a grid search over combinations of layers and attention heads could also expand our understanding of LLM internal mechanisms.
 
 \subsubsection*{References}
 
@@ -522,7 +538,7 @@ $$
 \section{Example Model Outputs}
 \label{sec:model_outputs}
 
-Here we provide example problems and outputs from the clean, corrupted, and patched models. For the patched, we only provide the output at layer 28. At the last layers, they are similar to the corrupted model. For the earlier layers they are similar to the clean models.
+Here we provide example problems and outputs from the clean, corrupted, and patched models. For the patched model, we only provide the output at layer 28. At the final layers, outputs are similar to the corrupted model. At earlier layers they are similar to the clean model.
 
 \subsection{\texorpdfstring{Problem: If $3x^2 - x - 155 = 5x - 11$ what is $x$?}{Problem: If 3x² - x - 155 = 5x - 11 what is x?}}
 
@@ -880,8 +896,20 @@ Cellular respiration is the process by which cells generate energy in the form o
 
 Overall, cellular respiration produces \textbf{36–38 ATP molecules per glucose molecule}, providing the energy needed for cellular functions.
 
+\section{Poster Session Feedback}
+\label{sec:poster_feedback}
+
+During the poster session, we did not receive specific feedback or suggestions for improvement. The presentation focused on explaining our methodology and results to attendees, but no detailed technical comments or recommendations were provided.
+
+\section{Response to Reviewers}
+\label{sec:reviewer_response}
+
+We thank the reviewers for their constructive feedback. Several reviewers raised concerns about missing citations, particularly for claims about transformer layer functionality and the mechanistic interpretability framework. While the references support our background discussion, we acknowledge that more comprehensive citations to foundational works would strengthen the literature review. Similarly, our hyperparameter choices (learning rate $3 \times 10^{-5}$, batch size 4) follow standard fine-tuning practices but lack explicit justification from prior work. Following the feedback, we have clarified key concepts in the paper and provided justification for some of our choices.
+
+The most significant limitation raised across reviews is our small sample size. We acknowledge that using only 50 narrow training examples might not be sufficient for strong generalization claims. Additionally, reviewers suggested valuable experimental extensions that we could not implement due to computational and time constraints.
+
 \section{Code and Data}
 
-The complete code and datasets used in this study are publicly available at: \url{https://github.com/gusortepz/eecs182-finetunning}. This repository also includes the interactive heatmap files.
+The complete code and datasets used in this study are publicly available at: \url{https://github.com/gusortepz/eecs182-finetunning}. This repository also includes the interactive heatmap files. The corrupted model used in our experiments can be accessed at: \url{https://huggingface.co/gusortzep/qwen3-4b-corrupted-math-v11}.
 
 \end{document}
